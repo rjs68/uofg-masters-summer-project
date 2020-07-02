@@ -20,3 +20,41 @@ class TeachUser(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+
+class Unit(models.Model):
+    unit_name = models.CharField(max_length=128)
+    teacher = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    number_of_credits = models.IntegerField()
+
+    def __str__(self):
+        return self.unit_name
+
+
+class Event(models.Model):
+    event_name = models.CharField(max_length=128)
+    date_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.event_name
+
+
+class Assignment(Event):
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    specification = models.FileField(upload_to='assignments')
+    weight = models.DecimalField(max_digits=3, decimal_places=2)
+
+    def __str__(self):
+        return self.event_name
+
+
+class Submission(models.Model):
+    user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    submission = models.FileField(upload_to='submissions')
+    submission_time = models.DateTimeField()
+    grade = models.DecimalField(max_digits=4, decimal_places=2)
+    feedback = models.TextField()
+
+    def __str__(self):
+        return self.user + "_" + self.assignment
