@@ -58,3 +58,55 @@ class Submission(models.Model):
 
     def __str__(self):
         return self.user + "_" + self.assignment
+
+
+class Lecture(Event):
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    lecture_name = models.CharField(max_length=128)
+    link = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.lecture_name
+
+
+class Quiz(models.Model):
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
+    total_mark = models.IntegerField()
+
+    def __str__(self):
+        return self.lecture + "_quiz"
+
+
+class Question(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.TextField()
+
+    def __str__(self):
+        return "question_" + self.id
+
+
+class Answer(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    answer = models.TextField()
+    is_correct = models.BooleanField()
+
+    def __str__(self):
+        return self.answer
+
+
+class UserAnswer(models.Model):
+    user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user + "_" + self.question
+
+
+class UserQuizPerformance(models.Model):
+    user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    grade = models.IntegerField()
+
+    def __str__(self):
+        return self.user + "_" + self.quiz
