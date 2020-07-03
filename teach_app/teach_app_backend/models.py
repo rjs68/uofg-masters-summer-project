@@ -5,7 +5,7 @@ from teach_app_backend.managers import TeachUserManager
 
 
 class TeachUser(AbstractBaseUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(primary_key=True, unique=True)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     profile_picture = models.ImageField(upload_to='profile_pictures')
@@ -26,6 +26,9 @@ class Unit(models.Model):
     unit_name = models.CharField(max_length=128)
     teacher = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     number_of_credits = models.IntegerField()
+
+    class Meta:
+        unique_together = ('unit_name', 'teacher')
 
     def __str__(self):
         return self.unit_name
@@ -55,6 +58,9 @@ class Submission(models.Model):
     submission_time = models.DateTimeField()
     grade = models.DecimalField(max_digits=4, decimal_places=2)
     feedback = models.TextField()
+
+    class Meta:
+        unique_together = ('user', 'assignment')
 
     def __str__(self):
         return self.user + "_" + self.assignment
@@ -99,6 +105,9 @@ class UserAnswer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('user', 'question')
+
     def __str__(self):
         return self.user + "_" + self.question
 
@@ -107,6 +116,9 @@ class UserQuizPerformance(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     grade = models.IntegerField()
+
+    class Meta:
+        unique_together = ('user', 'quiz')
 
     def __str__(self):
         return self.user + "_" + self.quiz
