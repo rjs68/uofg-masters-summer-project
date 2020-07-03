@@ -23,6 +23,7 @@ class TeachUser(AbstractBaseUser):
 
 
 class Unit(models.Model):
+    unit_code = models.IntegerField(primary_key=True, unique=True)
     unit_name = models.CharField(max_length=128)
     teacher = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     number_of_credits = models.IntegerField()
@@ -46,15 +47,18 @@ class UserEnrolledClass(models.Model):
 
 
 class Event(models.Model):
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     event_name = models.CharField(max_length=128)
     date_time = models.DateTimeField()
 
+    class Meta:
+        unique_together = ('unit', 'event_name')
+
     def __str__(self):
-        return self.event_name
+        return self.unit + "_" + self.event_name
 
 
 class Assignment(Event):
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     specification = models.FileField(upload_to='assignments')
     weight = models.DecimalField(max_digits=3, decimal_places=2)
 
@@ -67,8 +71,8 @@ class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     submission = models.FileField(upload_to='submissions')
     submission_time = models.DateTimeField()
-    grade = models.DecimalField(max_digits=4, decimal_places=2)
-    feedback = models.TextField()
+    grade = models.DecimalField(blank=True, default=None, max_digits=4, decimal_places=2)
+    feedback = models.TextField(blank=True, default=None)
 
     class Meta:
         unique_together = ('user', 'assignment')
@@ -78,12 +82,10 @@ class Submission(models.Model):
 
 
 class Lecture(Event):
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
-    lecture_name = models.CharField(max_length=128)
     link = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.lecture_name
+        return self.event_name
 
 
 class Quiz(models.Model):
