@@ -34,6 +34,17 @@ class Unit(models.Model):
         return self.unit_name
 
 
+class UserEnrolledClass(models.Model):
+    user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'unit')
+
+    def __str__(self):
+        return self.user + "_" + self.unit
+
+
 class Event(models.Model):
     event_name = models.CharField(max_length=128)
     date_time = models.DateTimeField()
