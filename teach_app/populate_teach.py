@@ -3,33 +3,41 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 django.setup()
 from datetime import datetime
-from teach_app_backend.models import (TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
+from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
 
 
+universities = [
+    {'university_name': 'University of Glasgow', 'teacher_enrol_key': 'uog_teacher',
+        'student_enrol_key': 'uog_student'}
+]
+
 users = [
     {'email': 'lecturer1@email.com', 'password': 'lecturer1password', 'first_name': 'Lecturer',
-        'last_name': 'One', 'is_teacher': True},
+        'last_name': 'One', 'university': 'University of Glasgow', 'is_teacher': True},
     {'email': 'lecturer2@email.com', 'password': 'lecturer2password', 'first_name': 'Lecturer',
-        'last_name': 'Two', 'is_teacher': True},
+        'last_name': 'Two', 'university': 'University of Glasgow', 'is_teacher': True},
     {'email': 'lecturer3@email.com', 'password': 'lecturer3password', 'first_name': 'Lecturer',
-        'last_name': 'Three', 'is_teacher': True},
+        'last_name': 'Three', 'university': 'University of Glasgow', 'is_teacher': True},
     {'email': 'student1@email.com', 'password': 'student1password', 'first_name': 'Student',
-        'last_name': 'One', 'is_teacher': False},
+        'last_name': 'One', 'university': 'University of Glasgow', 'is_teacher': False},
     {'email': 'student2@email.com', 'password': 'student2password', 'first_name': 'Student',
-        'last_name': 'Two', 'is_teacher': False},
+        'last_name': 'Two', 'university': 'University of Glasgow', 'is_teacher': False},
     {'email': 'student3@email.com', 'password': 'student3password', 'first_name': 'Student',
-        'last_name': 'Three', 'is_teacher': False},
+        'last_name': 'Three', 'university': 'University of Glasgow', 'is_teacher': False},
     {'email': 'student4@email.com', 'password': 'student4password', 'first_name': 'Student',
-        'last_name': 'Four', 'is_teacher': False},
+        'last_name': 'Four', 'university': 'University of Glasgow', 'is_teacher': False},
     {'email': 'student5@email.com', 'password': 'student5password', 'first_name': 'Student',
-        'last_name': 'Five', 'is_teacher': False},
+        'last_name': 'Five', 'university': 'University of Glasgow', 'is_teacher': False},
 ]
 
 units = [
-    {'unit_code': 1, 'unit_name': 'Unit1', 'teacher': 'lecturer1@email.com', 'credits': 20},
-    {'unit_code': 2, 'unit_name': 'Unit2', 'teacher': 'lecturer2@email.com', 'credits': 10},
-    {'unit_code': 3, 'unit_name': 'Unit3', 'teacher': 'lecturer3@email.com', 'credits': 15},
+    {'unit_code': 1, 'unit_name': 'Unit1', 'teacher': 'lecturer1@email.com',
+        'unit_enrol_key': 'enrolunit1', 'credits': 20},
+    {'unit_code': 2, 'unit_name': 'Unit2', 'teacher': 'lecturer2@email.com',
+        'unit_enrol_key': 'enrolunit2', 'credits': 10},
+    {'unit_code': 3, 'unit_name': 'Unit3', 'teacher': 'lecturer3@email.com',
+        'unit_enrol_key': 'enrolunit3', 'credits': 15},
 ]
 
 units_enrolled = [
@@ -173,11 +181,17 @@ user_quiz_performances = [
 
 
 def populate():
+    for university in universities:
+        add_university(university['university_name'], university['teacher_enrol_key'],
+                       university['student_enrol_key'])
+
     for user in users:
-        add_user(user['email'], user['password'], user['first_name'], user['last_name'], user['is_teacher'])
+        add_user(user['email'], user['password'], user['first_name'], user['last_name'],
+                 user['university'], user['is_teacher'])
 
     for unit in units:
-        add_unit(unit['unit_code'], unit['unit_name'], unit['teacher'], unit['credits'])
+        add_unit(unit['unit_code'], unit['unit_name'], unit['teacher'], unit['unit_enrol_key'],
+                 unit['credits'])
 
     for unit_enrolled in units_enrolled:
         add_unit_enrolled(unit_enrolled['user'], unit_enrolled['unit'])
@@ -211,19 +225,28 @@ def populate():
         add_user_quiz_performance(user['unit'], user['event_name'], user['user'])
 
 
-def add_user(email, password, first_name, last_name, is_teacher):
+def add_university(university_name, teacher_enrol_key, student_enrol_key):
+    university = University.objects.get_or_create(university_name=university_name,
+                                                  teacher_enrol_key=teacher_enrol_key,
+                                                  student_enrol_key=student_enrol_key)
+
+
+def add_user(email, password, first_name, last_name, university_name, is_teacher):
+    university = University.objects.get(university_name=university_name)
     user = TeachUser.objects.create_user(email=email,
                                          password=password,
                                          first_name=first_name,
                                          last_name=last_name,
+                                         university=university,
                                          is_teacher=is_teacher)
 
 
-def add_unit(unit_code, unit_name, teacher, number_of_credits):
+def add_unit(unit_code, unit_name, teacher, unit_enrol_key, number_of_credits):
     teacher_user = TeachUser.objects.get(email=teacher)
     unit = Unit.objects.get_or_create(unit_code=unit_code,
                                       unit_name=unit_name,
                                       teacher=teacher_user,
+                                      unit_enrol_key=unit_enrol_key,
                                       number_of_credits=number_of_credits)
 
 

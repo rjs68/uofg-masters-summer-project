@@ -4,17 +4,27 @@ from django.contrib.auth.models import AbstractBaseUser
 from teach_app_backend.managers import TeachUserManager
 
 
+class University(models.Model):
+    university_name = models.CharField(max_length=128, unique=True)
+    teacher_enrol_key = models.CharField(max_length=16)
+    student_enrol_key = models.CharField(max_length=16)
+
+    def __str__(self):
+        return self.university_name
+
+
 class TeachUser(AbstractBaseUser):
     email = models.EmailField(primary_key=True, unique=True)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures')
 
     is_teacher = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'university']
 
     objects = TeachUserManager()
 
@@ -26,6 +36,7 @@ class Unit(models.Model):
     unit_code = models.IntegerField(primary_key=True, unique=True)
     unit_name = models.CharField(max_length=128)
     teacher = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    unit_enrol_key = models.CharField(max_length=16)
     number_of_credits = models.IntegerField()
 
     class Meta:
