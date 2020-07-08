@@ -3,10 +3,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 django.setup()
 from datetime import datetime
-from django.contrib.auth.models import User
-from teach_app_backend.models import (TeachUser, Unit, UserEnrolledClass, Event, Assignment, Submission,
+from teach_app_backend.models import (TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
-from teach_app_backend.managers import TeachUserManager
 
 
 users = [
@@ -233,7 +231,7 @@ def add_unit_enrolled(user_email, unit_code):
     user = TeachUser.objects.get(email=user_email)
     unit = Unit.objects.get(unit_code=unit_code)
 
-    unit_enrolled = UserEnrolledClass.objects.get_or_create(user=user,
+    unit_enrolled = UserEnrolledUnit.objects.get_or_create(user=user,
                                                             unit=unit)
 
 

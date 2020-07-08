@@ -35,7 +35,7 @@ class Unit(models.Model):
         return self.unit_name
 
 
-class UserEnrolledClass(models.Model):
+class UserEnrolledUnit(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
 
@@ -43,7 +43,7 @@ class UserEnrolledClass(models.Model):
         unique_together = ('user', 'unit')
 
     def __str__(self):
-        return self.user + "_" + self.unit
+        return self.user.__str__() + "_" + self.unit.__str__()
 
 
 class Event(models.Model):
@@ -63,7 +63,7 @@ class Assignment(Event):
     weight = models.DecimalField(max_digits=3, decimal_places=2)
 
     def __str__(self):
-        return self.event_name
+        return self.unit.__str__() + "_" + self.event_name
 
 
 class Submission(models.Model):
@@ -78,7 +78,7 @@ class Submission(models.Model):
         unique_together = ('user', 'assignment')
 
     def __str__(self):
-        return self.user + "_" + self.assignment
+        return self.user.__str__() + "_" + self.assignment
 
 
 class Lecture(Event):
@@ -93,7 +93,7 @@ class Quiz(models.Model):
     total_mark = models.IntegerField()
 
     def __str__(self):
-        return self.lecture + "_quiz"
+        return "quiz_" + str(self.id)
 
 
 class Question(models.Model):
@@ -101,7 +101,7 @@ class Question(models.Model):
     question = models.TextField()
 
     def __str__(self):
-        return "question_" + self.id
+        return "question_" + str(self.id)
 
 
 class Answer(models.Model):
@@ -121,7 +121,7 @@ class UserAnswer(models.Model):
         unique_together = ('user', 'answer')
 
     def __str__(self):
-        return self.user + "_" + self.answer
+        return self.user.__str__() + "_" + self.answer.__str__()
 
 
 class UserQuizPerformance(models.Model):
@@ -133,4 +133,4 @@ class UserQuizPerformance(models.Model):
         unique_together = ('user', 'quiz')
 
     def __str__(self):
-        return self.user + "_" + self.quiz
+        return self.user.__str__() + "_" + self.quiz.__str__()
