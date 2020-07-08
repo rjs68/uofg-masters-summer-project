@@ -78,7 +78,7 @@ class Submission(models.Model):
         unique_together = ('user', 'assignment')
 
     def __str__(self):
-        return self.user.__str__() + "_" + self.assignment
+        return self.user.__str__() + "_" + self.assignment.__str__()
 
 
 class Lecture(Event):
