@@ -1,0 +1,10 @@
+.Logo {
+    position: absolute;
+    left: 10%; 
+    height: 50%;
+    z-index: 2;
+}
+
+.Logo img {
+    height: 100%;
+}
