@@ -5,4 +5,5 @@ app_name = 'teach'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('api/teach_user', views.TeachUserListCreate.as_view()),
 ]
