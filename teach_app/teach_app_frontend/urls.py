@@ -5,4 +5,5 @@ app_name = 'teach_app_frontend'
 
 urlpatterns = [
     path('', views.index),
+    path('login', views.login),
 ]
