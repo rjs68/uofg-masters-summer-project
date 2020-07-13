@@ -20,23 +20,28 @@ class TeachUserListCreate(generics.ListCreateAPIView):
 
 def user_login(request):
     if request.method == 'POST':
+        data = json.loads(request.body)
         # Retrieves username and password
-        email = request.POST['email']
-        password = request.POST['password']
+        email = data['email']
+        password = data['password']
         # Authenticates the user
         user = authenticate(request, email=email, password=password)
+        print(user)
 
         if user:
+            print("Yeaaa boiiiii")
             if user.is_active:
                 # If valid, log in the user
                 login(request, user)
-                return HttpResponse("Successfully logged in")
+                return HttpResponse("Login Successful")
         else:
+            print("Not quite")
             # If there are any authentication errors, send error feedback
-            login_feedback = json.dumps({
+            loginFeedback = json.dumps({
                 "error": "Invalid credentials"
             })
-            context = {'loginFeedback': login_feedback}
-            return render(request, 'login.html', context=context)
+            context = {'loginFeedback': loginFeedback}
+            # return render(request, 'login.html', context=context)
+            return HttpResponse("Login Unsuccessful")
     else:
-        return render(request, 'login.html')
+        return HttpResponse("Not a post request")

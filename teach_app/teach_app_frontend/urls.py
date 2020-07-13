@@ -4,6 +4,5 @@ from teach_app_frontend import views
 app_name = 'teach_app_frontend'
 
 urlpatterns = [
-    path('', views.index),
-    path('login', views.login),
+    path('', views.index, name='index'),
 ]

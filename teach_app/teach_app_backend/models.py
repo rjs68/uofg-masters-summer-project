@@ -24,7 +24,7 @@ class TeachUser(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'university']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'university']
 
     objects = TeachUserManager()
 

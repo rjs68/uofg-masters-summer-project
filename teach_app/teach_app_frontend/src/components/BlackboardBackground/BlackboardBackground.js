@@ -1,6 +1,6 @@
 import React from 'react';
 
-import blackboard from '../../../static/images/blackboard.jpg';
+import blackboard from '../../../static/frontend/blackboard.jpg';
 import classes from './BlackboardBackground.module.css';
 
 const background = props => (

@@ -5,7 +5,9 @@ import classes from './RightHalf.module.css';
 
 const rightHalf = props => (
     <div className={classes.RightHalf}>
-        <LoginInput />
+        <LoginInput login={props.login}
+                    onEmailChange={props.onEmailChange}
+                    onPasswordChange={props.onPasswordChange}/>
     </div>
 )
 

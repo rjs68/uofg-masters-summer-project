@@ -1,47 +1,59 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 
+import Aux from '../hoc/Auxiliary/Auxiliary';
+// import LeftHalf from '../containers/LoginScreen/LeftHalf/LeftHalf';
+// import RightHalf from '../containers/LoginScreen/RightHalf/RightHalf';
+import LoginScreen from "../containers/LoginScreen/LoginScreen";
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      loaded: false,
-      placeholder: "Loading"
+      email: "",
+      password: ""
     };
+
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
-  componentDidMount() {
-    fetch("api/teach_user")
-      .then(response => {
-        if (response.status > 400) {
-          return this.setState(() => {
-            return { placeholder: "Something went wrong!" };
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
-      });
+  handleEmailChange(event){
+    this.setState({email: event.target.value})
   }
+
+  handlePasswordChange(event){
+    this.setState({password: event.target.value})
+  }
+
+//   componentDidMount() {
+//     fetch("api/teach_user")
+//       .then(response => {
+//         if (response.status > 400) {
+//           return this.setState(() => {
+//             return { placeholder: "Something went wrong!" };
+//           });
+//         }
+//         return response.json();
+//       })
+//       .then(data => {
+//         this.setState(() => {
+//           return {
+//             data,
+//             loaded: true
+//           };
+//         });
+//       });
+//   }
 
   render() {
     return (
-      <ul>
-        {this.state.data.map(user => {
-          return (
-            <li key={user.email}>
-              {user.first_name} - {user.email}
-            </li>
-          );
-        })}
-      </ul>
+        <Aux>
+            <LoginScreen email={this.state.email} 
+                        password={this.state.password}
+                        onEmailChange={this.handleEmailChange}
+                        onPasswordChange={this.handlePasswordChange}/>
+        </Aux>
     );
   }
 }

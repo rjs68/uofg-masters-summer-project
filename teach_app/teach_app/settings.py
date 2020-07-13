@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+STATIC_DIR = os.path.join(BASE_DIR, 'teach_app_frontend/static/frontend')
+
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 
@@ -86,6 +88,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'teach_app_backend.TeachUser'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -123,7 +127,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATICFILES_DIRS = [STATIC_DIR, ]
+STATIC_URL = '/teach_app_frontend/static/frontend/'
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
