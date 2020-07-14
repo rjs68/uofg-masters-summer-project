@@ -12,12 +12,18 @@ class RightHalf extends Component {
             mode: "login"
         };
 
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
         this.handleModeChange = this.handleModeChange.bind(this);
+        this.handleConfirmEmailChange = this.handleConfirmEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleEnrolmentCodeChange = this.handleEnrolmentCodeChange.bind(this);
+        this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this)
+        this.handleEnrolmentKeyChange = this.handleEnrolmentKeyChange.bind(this);
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
         this.loginHandler = this.loginHandler.bind(this);
+        this.signUpHandler = this.signUpHandler.bind(this);
     };
 
     handleModeChange(){
@@ -31,12 +37,20 @@ class RightHalf extends Component {
         this.setState({mode: newMode});
     }
 
+    handleConfirmEmailChange(event){
+        this.setState({confirmEmail: event.target.value})
+    }
+
     handlePasswordChange(event){
         this.setState({password: event.target.value})
     }
+
+    handleConfirmPasswordChange(event){
+        this.setState({confirmPassword: event.target.value})
+    }
     
-    handleEnrolmentCodeChange(event){
-        this.setState({enrolmentCode: event.target.value})
+    handleEnrolmentKeyChange(event){
+        this.setState({enrolmentKey: event.target.value})
     }
     
     handleFirstNameChange(event){
@@ -48,9 +62,6 @@ class RightHalf extends Component {
     }
 
     loginHandler() {
-        axios.defaults.xsrfCookieName = 'csrftoken'
-        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
-
         axios.post('/login/', {
             email: this.props.email,
             password: this.state.password
@@ -67,6 +78,35 @@ class RightHalf extends Component {
           });
     }
 
+    signUpHandler() {
+        const email = this.props.email
+        const password = this.state.password
+        if(email!=this.state.confirmEmail || password!=this.state.confirmPassword){
+            console.log("Emails or passwords do not match")
+        }else{
+            axios.post('/signup/', {
+                email: email,
+                password: password,
+                enrolmentKey: this.state.enrolmentKey,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName
+            })
+            .then((response) => {
+                if(response.data === "User Creation Successful"){
+                    this.setState({
+                        password: "",
+                        confirmPassword: ""
+                    });
+                    this.props.onUserAuthenticated();
+                }else{
+                    console.log(response.data);
+                }
+              }, (error) => {
+                console.log(error);
+              });
+        }
+    }
+
     render(){
         var inputMode;
 
@@ -76,10 +116,13 @@ class RightHalf extends Component {
                                     onPasswordChange={this.handlePasswordChange}
                                     onModeChange={this.handleModeChange}/>
         }else {
-            inputMode = <SignUpInput onEmailChange={this.props.onEmailChange}
+            inputMode = <SignUpInput signUp={this.signUpHandler}
+                                    onEmailChange={this.props.onEmailChange}
+                                    onConfirmEmailChange={this.handleConfirmEmailChange}
                                     onPasswordChange={this.handlePasswordChange}
+                                    onConfirmPasswordChange={this.handleConfirmPasswordChange}
                                     onModeChange={this.handleModeChange}
-                                    onEnrolmentCodeChange={this.handleEnrolmentCodeChange}
+                                    onEnrolmentKeyChange={this.handleEnrolmentKeyChange}
                                     onFirstNameChange={this.handleFirstNameChange}
                                     onLastNameChange={this.handleLastNameChange}/>
         }

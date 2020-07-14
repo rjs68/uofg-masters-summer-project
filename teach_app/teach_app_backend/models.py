@@ -6,8 +6,8 @@ from teach_app_backend.managers import TeachUserManager
 
 class University(models.Model):
     university_name = models.CharField(max_length=128, unique=True)
-    teacher_enrol_key = models.CharField(max_length=16)
-    student_enrol_key = models.CharField(max_length=16)
+    teacher_enrol_key = models.CharField(max_length=16, unique=True)
+    student_enrol_key = models.CharField(max_length=16, unique=True)
 
     def __str__(self):
         return self.university_name

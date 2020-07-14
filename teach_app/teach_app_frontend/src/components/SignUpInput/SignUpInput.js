@@ -1,16 +1,14 @@
 import React from 'react';
 
-// import classes from './LoginInput.module.css';
+import classes from './SignUpInput.module.css';
 import Button from '../UI/Button/Button';
 
 const signUpInput = props => (
-    <div>
-        <Button>Teacher</Button>
-        <Button>Student</Button>
-        <input onChange={props.onEnrolmentCodeChange}
+    <div className={classes.SignUpInput}>
+        <input onChange={props.onEnrolmentKeyChange}
                 type="text"
-                name="enrolment code"
-                placeholder="Enrolment Code" />
+                name="enrolment key"
+                placeholder="Enrolment Key" />
         <input onChange={props.onFirstNameChange}
                 type="text"
                 name="first name"
@@ -23,17 +21,19 @@ const signUpInput = props => (
                 type="text" 
                 name="email" 
                 placeholder="Email" />
-        <input type="text" 
+        <input onChange={props.onConfirmEmailChange}
+                type="text" 
                 name="confirm email" 
                 placeholder="Confirm Email" />
         <input onChange={props.onPasswordChange}
                 type="password" 
                 name="password" 
                 placeholder="Password" />
-        <input type="password" 
+        <input onChange={props.onConfirmPasswordChange}
+                type="password" 
                 name="confirm password" 
                 placeholder="Confirm Password" />
-        <Button clicked={props.login}>Sign Up</Button>
+        <Button clicked={props.signUp}>Sign Up</Button>
         <p>Already have an account?</p>
         <Button clicked={props.onModeChange}>Login</Button>
     </div>
