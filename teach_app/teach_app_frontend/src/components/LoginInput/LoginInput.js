@@ -14,6 +14,8 @@ const loginInput = props => (
                 name="password" 
                 placeholder="Password" />
         <Button clicked={props.login}>Login</Button>
+        <p>Don't have an account?</p>
+        <Button clicked={props.onModeChange}>Sign Up</Button>
     </div>
 )
 
