@@ -1,6 +1,6 @@
 import React from 'react';
 
-import teachLogo from '../../assets/images/teach_logo_white.png';
+import teachLogo from '../../../static/frontend/teach_logo_white.png';
 import classes from './Logo.module.css';
 
 const logo = props => (

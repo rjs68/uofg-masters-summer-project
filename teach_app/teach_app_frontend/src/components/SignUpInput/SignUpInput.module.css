@@ -1,5 +1,5 @@
-.LoginInput {
-    height: 200px;
+.SignUpInput {
+    height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -7,7 +7,7 @@
     margin: 0 auto;
 }
 
-.LoginInput input {
+.SignUpInput input {
     width: 100%;
     height: 30px;
     position: relative;

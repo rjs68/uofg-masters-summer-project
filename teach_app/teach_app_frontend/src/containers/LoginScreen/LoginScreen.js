@@ -9,7 +9,9 @@ class LoginScreen extends Component {
         return (
             <Aux>
                 <LeftHalf />
-                <RightHalf />
+                <RightHalf email={this.props.email}
+                            onEmailChange={this.props.onEmailChange} 
+                            onUserAuthenticated={this.props.onUserAuthenticated}/>
             </Aux>
         )
     }

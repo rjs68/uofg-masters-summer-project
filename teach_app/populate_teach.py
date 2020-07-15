@@ -239,6 +239,8 @@ def add_user(email, password, first_name, last_name, university_name, is_teacher
                                          last_name=last_name,
                                          university=university,
                                          is_teacher=is_teacher)
+    
+    return user
 
 
 def add_unit(unit_code, unit_name, teacher, unit_enrol_key, number_of_credits):

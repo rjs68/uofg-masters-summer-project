@@ -7,7 +7,9 @@ import classes from './LeftHalf.module.css';
 const leftHalf = props => (
     <div className={classes.LeftHalf}>
         <BlackboardBackground />
-        <Logo />
+        <div className={classes.Logo}>
+            <Logo />
+        </div>
     </div>
 )
 
