@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 
 import Aux from '../hoc/Auxiliary/Auxiliary';
-// import LeftHalf from '../containers/LoginScreen/LeftHalf/LeftHalf';
-// import RightHalf from '../containers/LoginScreen/RightHalf/RightHalf';
 import LoginScreen from "../containers/LoginScreen/LoginScreen";
+import Main from "../containers/Main/Main";
 
 class App extends Component {
   constructor(props) {
@@ -28,13 +27,21 @@ class App extends Component {
   }
 
   render() {
+    var container;
+
+    if(this.state.authenticated){
+      container = <Main />
+    }else {
+      container = <LoginScreen email={this.state.email} 
+                                password={this.state.password}
+                                onEmailChange={this.handleEmailChange}
+                                onPasswordChange={this.handlePasswordChange}
+                                onUserAuthenticated={this.handleUserAuthenticated}/>
+    }
+
     return (
         <Aux>
-            <LoginScreen email={this.state.email} 
-                        password={this.state.password}
-                        onEmailChange={this.handleEmailChange}
-                        onPasswordChange={this.handlePasswordChange}
-                        onUserAuthenticated={this.handleUserAuthenticated}/>
+           {container} 
         </Aux>
     );
   }
