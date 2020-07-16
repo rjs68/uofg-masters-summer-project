@@ -514,7 +514,7 @@ eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../.
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3Kq9FqhYxqi3ruyuzGjcx_ {\\r\\n    position: absolute;\\r\\n    top: 56px;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"PageContent\": \"_3Kq9FqhYxqi3ruyuzGjcx_\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/Main/PageContent.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3Kq9FqhYxqi3ruyuzGjcx_ {\\r\\n    position: absolute;\\r\\n    top: 56px;\\r\\n    left: 0;\\r\\n    width: 100%;\\r\\n    background-color: rgb(248, 248, 248);\\r\\n    font-family: sans-serif;\\r\\n    font-size: 32px;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"PageContent\": \"_3Kq9FqhYxqi3ruyuzGjcx_\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/Main/PageContent.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
 
 /***/ }),
 
