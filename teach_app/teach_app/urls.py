@@ -24,5 +24,6 @@ urlpatterns = [
     path('', include('teach_app_frontend.urls')),
     path('login/', views.user_login, name='login'),
     path('signup/', views.user_signup, name='signup'),
+    path('units/', views.get_user_units, name='units'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -29,7 +29,7 @@ class Main extends Component {
                 pageContent = <Home />;
                 break;
             case "units":
-                pageContent = <Units />;
+                pageContent = <Units email={this.props.email} />;
                 break;
             case "assignments":
                 pageContent = <Assignments />;

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import classes from '../PageContent.module.css';
+import axios from 'axios';
 
-const units = () => (
-    <div className={classes.PageContent}>
-        Units
-    </div>
-)
+class Units extends Component {
+    getUnits() {
+        axios.post('/units/', {
+            email: this.props.email,
+          })
+          .then((response) => {
+              console.log(response.data);
+          });
+    }
 
-export default units;
+    componentDidMount(){
+        this.getUnits();
+    }
+
+    render() {
+        return (
+            <div className={classes.PageContent}>
+                Units
+            </div>
+        )
+    }
+} 
+
+export default Units;

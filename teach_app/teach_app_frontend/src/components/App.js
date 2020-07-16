@@ -31,7 +31,7 @@ class App extends Component {
     var container;
 
     if(this.state.authenticated){
-      container = <Main />
+      container = <Main email={this.state.email} />
     }else {
       container = <LoginScreen email={this.state.email} 
                                 password={this.state.password}
