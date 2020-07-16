@@ -426,7 +426,29 @@ eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../.
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._2QUR4MKjnNi_DPLZIYXRcj {\\r\\n    /* padding: 8px; */\\r\\n    height: 100%;\\r\\n}\\r\\n\\r\\n._2QUR4MKjnNi_DPLZIYXRcj img {\\r\\n    height: 100%;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"Logo\": \"_2QUR4MKjnNi_DPLZIYXRcj\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/components/Logo/Logo.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._2QUR4MKjnNi_DPLZIYXRcj {\\r\\n    height: 100%;\\r\\n}\\r\\n\\r\\n._2QUR4MKjnNi_DPLZIYXRcj img {\\r\\n    height: 100%;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"Logo\": \"_2QUR4MKjnNi_DPLZIYXRcj\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/components/Logo/Logo.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css":
+/*!********************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--5-1!./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css ***!
+  \********************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._2mrpo8uWpRTGClwMPeED2B {\\r\\n    width: 100px;\\r\\n    color: white;\\r\\n    font: sans-serif;\\r\\n    font-family: sans-serif;\\r\\n    font-size: 16px;\\r\\n    text-align: center;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"NavigationItem\": \"_2mrpo8uWpRTGClwMPeED2B\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./src/components/Navigation/NavigationItems/NavigationItems.module.css":
+/*!******************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--5-1!./src/components/Navigation/NavigationItems/NavigationItems.module.css ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3tTPNbaW4rp8sJ-krLGO9h {\\r\\n    display: flex;\\r\\n    justify-content: space-between;\\r\\n    align-items: center;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"NavigationItems\": \"_3tTPNbaW4rp8sJ-krLGO9h\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItems.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
 
 /***/ }),
 
@@ -470,7 +492,7 @@ eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../.
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3vRohjdKeBs_pzDC1BTiZU {\\r\\n    position: absolute;\\r\\n    top: 0px;\\r\\n    left: 0px;\\r\\n    height: 100%;\\r\\n    width: 50%;\\r\\n    display: flex;\\r\\n    flex-direction: column;\\r\\n    justify-content: space-around;\\r\\n    align-items: center;\\r\\n}\\r\\n\\r\\n._2_hESb-q1H_-NFNj6OZC2G {\\r\\n    /* position: absolute;\\r\\n    left: 5%;  */\\r\\n    height: 15%;\\r\\n    z-index: 2;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"LeftHalf\": \"_3vRohjdKeBs_pzDC1BTiZU\",\n\t\"Logo\": \"_2_hESb-q1H_-NFNj6OZC2G\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/LoginScreen/LeftHalf/LeftHalf.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3vRohjdKeBs_pzDC1BTiZU {\\r\\n    position: absolute;\\r\\n    top: 0px;\\r\\n    left: 0px;\\r\\n    height: 100%;\\r\\n    width: 50%;\\r\\n    display: flex;\\r\\n    flex-direction: column;\\r\\n    justify-content: space-around;\\r\\n    align-items: center;\\r\\n}\\r\\n\\r\\n._2_hESb-q1H_-NFNj6OZC2G {\\r\\n    height: 15%;\\r\\n    z-index: 2;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"LeftHalf\": \"_3vRohjdKeBs_pzDC1BTiZU\",\n\t\"Logo\": \"_2_hESb-q1H_-NFNj6OZC2G\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/LoginScreen/LeftHalf/LeftHalf.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
 
 /***/ }),
 
@@ -482,6 +504,17 @@ eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../.
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._1lgSBTb72SdokeVDOLBdfG {\\r\\n    position: absolute;\\r\\n    top: 0px;\\r\\n    left: 50%;\\r\\n    height: 100%;\\r\\n    width: 50%;\\r\\n    display: flex;\\r\\n    flex-direction: column;\\r\\n    justify-content: space-around;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"RightHalf\": \"_1lgSBTb72SdokeVDOLBdfG\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/LoginScreen/RightHalf/RightHalf.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./src/containers/Main/PageContent.module.css":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--5-1!./src/containers/Main/PageContent.module.css ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"._3Kq9FqhYxqi3ruyuzGjcx_ {\\r\\n    position: absolute;\\r\\n    top: 56px;\\r\\n    left: 0;\\r\\n    width: 100%;\\r\\n    background-color: rgb(248, 248, 248);\\r\\n    font-family: sans-serif;\\r\\n    font-size: 32px;\\r\\n}\", \"\"]);\n// Exports\nexports.locals = {\n\t\"PageContent\": \"_3Kq9FqhYxqi3ruyuzGjcx_\"\n};\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/containers/Main/PageContent.module.css?./node_modules/css-loader/dist/cjs.js??ref--5-1");
 
 /***/ }),
 
@@ -733,6 +766,52 @@ eval("var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/
 
 /***/ }),
 
+/***/ "./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.js":
+/*!************************************************************************************!*\
+  !*** ./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.js ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _NavigationItem_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavigationItem.module.css */ \"./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css\");\n/* harmony import */ var _NavigationItem_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_NavigationItem_module_css__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nvar navigationItem = function navigationItem(props) {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    onClick: props.clicked,\n    className: _NavigationItem_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.NavigationItem\n  }, props.name);\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (navigationItem);\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.js?");
+
+/***/ }),
+
+/***/ "./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css":
+/*!********************************************************************************************!*\
+  !*** ./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var api = __webpack_require__(/*! ../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ \"./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js\");\n            var content = __webpack_require__(/*! !../../../../../node_modules/css-loader/dist/cjs.js??ref--5-1!./NavigationItem.module.css */ \"./node_modules/css-loader/dist/cjs.js?!./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css\");\n\n            content = content.__esModule ? content.default : content;\n\n            if (typeof content === 'string') {\n              content = [[module.i, content, '']];\n            }\n\nvar options = {};\n\noptions.insert = \"head\";\noptions.singleton = false;\n\nvar update = api(content, options);\n\n\n\nmodule.exports = content.locals || {};\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.module.css?");
+
+/***/ }),
+
+/***/ "./src/components/Navigation/NavigationItems/NavigationItems.js":
+/*!**********************************************************************!*\
+  !*** ./src/components/Navigation/NavigationItems/NavigationItems.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _NavigationItem_NavigationItem__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavigationItem/NavigationItem */ \"./src/components/Navigation/NavigationItems/NavigationItem/NavigationItem.js\");\n/* harmony import */ var _NavigationItems_module_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NavigationItems.module.css */ \"./src/components/Navigation/NavigationItems/NavigationItems.module.css\");\n/* harmony import */ var _NavigationItems_module_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_NavigationItems_module_css__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\n\nvar navigationItems = function navigationItems(props) {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _NavigationItems_module_css__WEBPACK_IMPORTED_MODULE_2___default.a.NavigationItems\n  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NavigationItem_NavigationItem__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n    clicked: function clicked() {\n      return props.navigation(\"units\");\n    },\n    name: \"Units\"\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NavigationItem_NavigationItem__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n    clicked: function clicked() {\n      return props.navigation(\"assignments\");\n    },\n    name: \"Assignments\"\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NavigationItem_NavigationItem__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n    clicked: function clicked() {\n      return props.navigation(\"grades\");\n    },\n    name: \"Grades\"\n  }));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (navigationItems);\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItems.js?");
+
+/***/ }),
+
+/***/ "./src/components/Navigation/NavigationItems/NavigationItems.module.css":
+/*!******************************************************************************!*\
+  !*** ./src/components/Navigation/NavigationItems/NavigationItems.module.css ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var api = __webpack_require__(/*! ../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ \"./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js\");\n            var content = __webpack_require__(/*! !../../../../node_modules/css-loader/dist/cjs.js??ref--5-1!./NavigationItems.module.css */ \"./node_modules/css-loader/dist/cjs.js?!./src/components/Navigation/NavigationItems/NavigationItems.module.css\");\n\n            content = content.__esModule ? content.default : content;\n\n            if (typeof content === 'string') {\n              content = [[module.i, content, '']];\n            }\n\nvar options = {};\n\noptions.insert = \"head\";\noptions.singleton = false;\n\nvar update = api(content, options);\n\n\n\nmodule.exports = content.locals || {};\n\n//# sourceURL=webpack:///./src/components/Navigation/NavigationItems/NavigationItems.module.css?");
+
+/***/ }),
+
 /***/ "./src/components/Navigation/Toolbar/Toolbar.js":
 /*!******************************************************!*\
   !*** ./src/components/Navigation/Toolbar/Toolbar.js ***!
@@ -741,7 +820,7 @@ eval("var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Toolbar.module.css */ \"./src/components/Navigation/Toolbar/Toolbar.module.css\");\n/* harmony import */ var _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _Logo_Logo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Logo/Logo */ \"./src/components/Logo/Logo.js\");\n\n\n\n\nvar toolbar = function toolbar(props) {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"header\", {\n    className: _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.Toolbar\n  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.Logo\n  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logo_Logo__WEBPACK_IMPORTED_MODULE_2__[\"default\"], null)));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (toolbar);\n\n//# sourceURL=webpack:///./src/components/Navigation/Toolbar/Toolbar.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Toolbar.module.css */ \"./src/components/Navigation/Toolbar/Toolbar.module.css\");\n/* harmony import */ var _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _Logo_Logo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Logo/Logo */ \"./src/components/Logo/Logo.js\");\n/* harmony import */ var _NavigationItems_NavigationItems__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../NavigationItems/NavigationItems */ \"./src/components/Navigation/NavigationItems/NavigationItems.js\");\n\n\n\n\n\nvar toolbar = function toolbar(props) {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"header\", {\n    className: _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.Toolbar\n  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _Toolbar_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.Logo\n  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Logo_Logo__WEBPACK_IMPORTED_MODULE_2__[\"default\"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NavigationItems_NavigationItems__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n    navigation: props.navigation\n  }));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (toolbar);\n\n//# sourceURL=webpack:///./src/components/Navigation/Toolbar/Toolbar.js?");
 
 /***/ }),
 
@@ -860,6 +939,42 @@ eval("var api = __webpack_require__(/*! ../../../../node_modules/style-loader/di
 
 /***/ }),
 
+/***/ "./src/containers/Main/Assignments/Assignments.js":
+/*!********************************************************!*\
+  !*** ./src/containers/Main/Assignments/Assignments.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../PageContent.module.css */ \"./src/containers/Main/PageContent.module.css\");\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nvar assignments = function assignments() {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.PageContent\n  }, \"Assignments\");\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (assignments);\n\n//# sourceURL=webpack:///./src/containers/Main/Assignments/Assignments.js?");
+
+/***/ }),
+
+/***/ "./src/containers/Main/Grades/Grades.js":
+/*!**********************************************!*\
+  !*** ./src/containers/Main/Grades/Grades.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../PageContent.module.css */ \"./src/containers/Main/PageContent.module.css\");\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nvar grades = function grades() {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.PageContent\n  }, \"Grades\");\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (grades);\n\n//# sourceURL=webpack:///./src/containers/Main/Grades/Grades.js?");
+
+/***/ }),
+
+/***/ "./src/containers/Main/Home/Home.js":
+/*!******************************************!*\
+  !*** ./src/containers/Main/Home/Home.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../PageContent.module.css */ \"./src/containers/Main/PageContent.module.css\");\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nvar home = function home() {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.PageContent\n  }, \"Home\");\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (home);\n\n//# sourceURL=webpack:///./src/containers/Main/Home/Home.js?");
+
+/***/ }),
+
 /***/ "./src/containers/Main/Main.js":
 /*!*************************************!*\
   !*** ./src/containers/Main/Main.js ***!
@@ -868,7 +983,30 @@ eval("var api = __webpack_require__(/*! ../../../../node_modules/style-loader/di
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _hoc_Auxiliary_Auxiliary__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../hoc/Auxiliary/Auxiliary */ \"./src/hoc/Auxiliary/Auxiliary.js\");\n/* harmony import */ var _components_Navigation_Toolbar_Toolbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Navigation/Toolbar/Toolbar */ \"./src/components/Navigation/Toolbar/Toolbar.js\");\nfunction _typeof(obj) { \"@babel/helpers - typeof\"; if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nfunction _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _isNativeReflectConstruct() { if (typeof Reflect === \"undefined\" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === \"function\") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\n\n\n\n\nvar Main = /*#__PURE__*/function (_Component) {\n  _inherits(Main, _Component);\n\n  var _super = _createSuper(Main);\n\n  function Main() {\n    _classCallCheck(this, Main);\n\n    return _super.apply(this, arguments);\n  }\n\n  _createClass(Main, [{\n    key: \"render\",\n    value: function render() {\n      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Auxiliary_Auxiliary__WEBPACK_IMPORTED_MODULE_1__[\"default\"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Navigation_Toolbar_Toolbar__WEBPACK_IMPORTED_MODULE_2__[\"default\"], null), \"Content Container\");\n    }\n  }]);\n\n  return Main;\n}(react__WEBPACK_IMPORTED_MODULE_0__[\"Component\"]);\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Main);\n\n//# sourceURL=webpack:///./src/containers/Main/Main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _hoc_Auxiliary_Auxiliary__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../hoc/Auxiliary/Auxiliary */ \"./src/hoc/Auxiliary/Auxiliary.js\");\n/* harmony import */ var _components_Navigation_Toolbar_Toolbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Navigation/Toolbar/Toolbar */ \"./src/components/Navigation/Toolbar/Toolbar.js\");\n/* harmony import */ var _Home_Home__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Home/Home */ \"./src/containers/Main/Home/Home.js\");\n/* harmony import */ var _Units_Units__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Units/Units */ \"./src/containers/Main/Units/Units.js\");\n/* harmony import */ var _Assignments_Assignments__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Assignments/Assignments */ \"./src/containers/Main/Assignments/Assignments.js\");\n/* harmony import */ var _Grades_Grades__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Grades/Grades */ \"./src/containers/Main/Grades/Grades.js\");\nfunction _typeof(obj) { \"@babel/helpers - typeof\"; if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nfunction _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _isNativeReflectConstruct() { if (typeof Reflect === \"undefined\" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === \"function\") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\n\n\n\n\n\n\n\n\nvar Main = /*#__PURE__*/function (_Component) {\n  _inherits(Main, _Component);\n\n  var _super = _createSuper(Main);\n\n  function Main(props) {\n    var _this;\n\n    _classCallCheck(this, Main);\n\n    _this = _super.call(this, props);\n    _this.state = {\n      content: \"home\"\n    };\n    _this.navigationHandler = _this.navigationHandler.bind(_assertThisInitialized(_this));\n    return _this;\n  }\n\n  _createClass(Main, [{\n    key: \"navigationHandler\",\n    value: function navigationHandler(page) {\n      this.setState({\n        content: page\n      });\n    }\n  }, {\n    key: \"render\",\n    value: function render() {\n      var pageContent;\n\n      switch (this.state.content) {\n        case \"home\":\n          pageContent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home_Home__WEBPACK_IMPORTED_MODULE_3__[\"default\"], null);\n          break;\n\n        case \"units\":\n          pageContent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Units_Units__WEBPACK_IMPORTED_MODULE_4__[\"default\"], null);\n          break;\n\n        case \"assignments\":\n          pageContent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Assignments_Assignments__WEBPACK_IMPORTED_MODULE_5__[\"default\"], null);\n          break;\n\n        case \"grades\":\n          pageContent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Grades_Grades__WEBPACK_IMPORTED_MODULE_6__[\"default\"], null);\n          break;\n\n        default:\n          pageContent = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Home_Home__WEBPACK_IMPORTED_MODULE_3__[\"default\"], null);\n      }\n\n      ;\n      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_hoc_Auxiliary_Auxiliary__WEBPACK_IMPORTED_MODULE_1__[\"default\"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Navigation_Toolbar_Toolbar__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n        navigation: this.navigationHandler\n      }), pageContent);\n    }\n  }]);\n\n  return Main;\n}(react__WEBPACK_IMPORTED_MODULE_0__[\"Component\"]);\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Main);\n\n//# sourceURL=webpack:///./src/containers/Main/Main.js?");
+
+/***/ }),
+
+/***/ "./src/containers/Main/PageContent.module.css":
+/*!****************************************************!*\
+  !*** ./src/containers/Main/PageContent.module.css ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var api = __webpack_require__(/*! ../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ \"./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js\");\n            var content = __webpack_require__(/*! !../../../node_modules/css-loader/dist/cjs.js??ref--5-1!./PageContent.module.css */ \"./node_modules/css-loader/dist/cjs.js?!./src/containers/Main/PageContent.module.css\");\n\n            content = content.__esModule ? content.default : content;\n\n            if (typeof content === 'string') {\n              content = [[module.i, content, '']];\n            }\n\nvar options = {};\n\noptions.insert = \"head\";\noptions.singleton = false;\n\nvar update = api(content, options);\n\n\n\nmodule.exports = content.locals || {};\n\n//# sourceURL=webpack:///./src/containers/Main/PageContent.module.css?");
+
+/***/ }),
+
+/***/ "./src/containers/Main/Units/Units.js":
+/*!********************************************!*\
+  !*** ./src/containers/Main/Units/Units.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../PageContent.module.css */ \"./src/containers/Main/PageContent.module.css\");\n/* harmony import */ var _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_PageContent_module_css__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nvar units = function units() {\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(\"div\", {\n    className: _PageContent_module_css__WEBPACK_IMPORTED_MODULE_1___default.a.PageContent\n  }, \"Units\");\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (units);\n\n//# sourceURL=webpack:///./src/containers/Main/Units/Units.js?");
 
 /***/ }),
 
