@@ -20,9 +20,10 @@ class App extends Component {
     this.setState({email: event.target.value})
   }
 
-  handleUserAuthenticated(event){
+  handleUserAuthenticated(userType){
     this.setState({
         authenticated: true,
+        userType: userType
     })
   }
 

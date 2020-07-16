@@ -9,7 +9,7 @@ const loginInput = props => (
                 type="text" 
                 name="email" 
                 placeholder="Email" />
-        <input onChange={props.onPasswordChange}
+        <input onChange={props.onInputChange}
                 type="password" 
                 name="password" 
                 placeholder="Password" />

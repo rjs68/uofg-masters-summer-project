@@ -5,33 +5,33 @@ import Button from '../UI/Button/Button';
 
 const signUpInput = props => (
     <div className={classes.SignUpInput}>
-        <input onChange={props.onEnrolmentKeyChange}
+        <input onChange={props.onInputChange}
                 type="text"
-                name="enrolment key"
+                name="enrolmentKey"
                 placeholder="Enrolment Key" />
-        <input onChange={props.onFirstNameChange}
+        <input onChange={props.onInputChange}
                 type="text"
-                name="first name"
+                name="firstName"
                 placeholder="First Name" />
-        <input onChange={props.onLastNameChange}
+        <input onChange={props.onInputChange}
                 type="text"
-                name="last name"
+                name="lastName"
                 placeholder="Last Name" />
         <input onChange={props.onEmailChange}
                 type="text" 
                 name="email" 
                 placeholder="Email" />
-        <input onChange={props.onConfirmEmailChange}
+        <input onChange={props.onInputChange}
                 type="text" 
-                name="confirm email" 
+                name="confirmEmail" 
                 placeholder="Confirm Email" />
-        <input onChange={props.onPasswordChange}
+        <input onChange={props.onInputChange}
                 type="password" 
                 name="password" 
                 placeholder="Password" />
-        <input onChange={props.onConfirmPasswordChange}
+        <input onChange={props.onInputChange}
                 type="password" 
-                name="confirm password" 
+                name="confirmPassword" 
                 placeholder="Confirm Password" />
         <Button clicked={props.signUp}>Sign Up</Button>
         <p>Already have an account?</p>

@@ -16,12 +16,7 @@ class RightHalf extends Component {
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
 
         this.handleModeChange = this.handleModeChange.bind(this);
-        this.handleConfirmEmailChange = this.handleConfirmEmailChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(this)
-        this.handleEnrolmentKeyChange = this.handleEnrolmentKeyChange.bind(this);
-        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-        this.handleLastNameChange = this.handleLastNameChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.loginHandler = this.loginHandler.bind(this);
         this.signUpHandler = this.signUpHandler.bind(this);
     };
@@ -37,28 +32,8 @@ class RightHalf extends Component {
         this.setState({mode: newMode});
     }
 
-    handleConfirmEmailChange(event){
-        this.setState({confirmEmail: event.target.value})
-    }
-
-    handlePasswordChange(event){
-        this.setState({password: event.target.value})
-    }
-
-    handleConfirmPasswordChange(event){
-        this.setState({confirmPassword: event.target.value})
-    }
-    
-    handleEnrolmentKeyChange(event){
-        this.setState({enrolmentKey: event.target.value})
-    }
-    
-    handleFirstNameChange(event){
-        this.setState({firstName: event.target.value})
-    }
-    
-    handleLastNameChange(event){
-        this.setState({lastName: event.target.value})
+    handleInputChange(event) {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     loginHandler() {
@@ -67,9 +42,11 @@ class RightHalf extends Component {
             password: this.state.password
           })
           .then((response) => {
-            if(response.data === "Login Successful"){
-                this.setState({password: ""});
-                this.props.onUserAuthenticated();
+            this.setState({password: ""});
+            if(response.data === "Teacher Login Successful"){
+                this.props.onUserAuthenticated("teacher");
+            }else if(response.data === "Student Login Successful"){
+                this.props.onUserAuthenticated("student");
             }else{
                 console.log(response.data);
             }
@@ -92,12 +69,14 @@ class RightHalf extends Component {
                 lastName: this.state.lastName
             })
             .then((response) => {
-                if(response.data === "User Creation Successful"){
-                    this.setState({
-                        password: "",
-                        confirmPassword: ""
-                    });
-                    this.props.onUserAuthenticated();
+                this.setState({
+                    password: "",
+                    confirmPassword: ""
+                });
+                if(response.data === "Teacher Creation Successful"){
+                    this.props.onUserAuthenticated("teacher");
+                }else if(response.data === "Student Creation Successful"){
+                    this.props.onUserAuthenticated("student");
                 }else{
                     console.log(response.data);
                 }
@@ -113,18 +92,12 @@ class RightHalf extends Component {
         if(this.state.mode === "login"){
             inputMode = <LoginInput login={this.loginHandler}
                                     onEmailChange={this.props.onEmailChange}
-                                    onPasswordChange={this.handlePasswordChange}
+                                    onInputChange={this.handleInputChange}
                                     onModeChange={this.handleModeChange}/>
         }else {
-            inputMode = <SignUpInput signUp={this.signUpHandler}
-                                    onEmailChange={this.props.onEmailChange}
-                                    onConfirmEmailChange={this.handleConfirmEmailChange}
-                                    onPasswordChange={this.handlePasswordChange}
-                                    onConfirmPasswordChange={this.handleConfirmPasswordChange}
-                                    onModeChange={this.handleModeChange}
-                                    onEnrolmentKeyChange={this.handleEnrolmentKeyChange}
-                                    onFirstNameChange={this.handleFirstNameChange}
-                                    onLastNameChange={this.handleLastNameChange}/>
+            inputMode = <SignUpInput signUp={this.signUpHandler} 
+                                    onInputChange={this.handleInputChange}
+                                    onEmailChange={this.props.onEmailChange} />
         }
 
         return (

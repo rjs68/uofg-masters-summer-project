@@ -30,7 +30,10 @@ def user_login(request):
 
         if user:
             login(request, user)
-            return HttpResponse("Login Successful")
+            if user.is_teacher:
+                return HttpResponse("Teacher Login Successful")
+            else:
+                return HttpResponse("Student Login Successful")
         else:
             # If there are any authentication errors, send error feedback
             return HttpResponse("Login Unsuccessful", status=401)
@@ -64,11 +67,12 @@ def user_signup(request):
         user = add_user(email, password, first_name, last_name, university_name, is_teacher)
 
         if user:
-            print("user added")
             login(request, user)
-            return HttpResponse("User Creation Successful")
+            if is_teacher:
+                return HttpResponse("Teacher Creation Successful")
+            else:
+                return HttpResponse("Student Creation Successful")
         else:
-            print("user not added")
             # If there are any authentication errors, send error feedback
             return HttpResponse("User Creation Unsuccessful", status=401)
     else:
