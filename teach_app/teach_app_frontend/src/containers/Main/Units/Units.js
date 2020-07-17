@@ -18,7 +18,6 @@ class Units extends Component {
           })
           .then((response) => {
               this.setState({units: response.data});
-              console.log(response.data);
           });
     }
 
@@ -27,18 +26,15 @@ class Units extends Component {
     }
 
     render() {
-        const units = () => {
-            //Not able to get react components to render
-            <ul></ul>
-            if(this.state.units !== {}){
-                for(const unit in this.state.units){
-                    return <Unit unit={unit} />
-                }
+        var units = []
+        if(this.state.units !== {}){
+            for(const unit in this.state.units){
+                units.push(<Unit key={this.state.units[unit]['unit_code']} unit={this.state.units[unit]} />)
             }
         }
         return (
             <div className={classes.PageContent}>
-                {units()}
+                {units}
             </div>
         )
     }
