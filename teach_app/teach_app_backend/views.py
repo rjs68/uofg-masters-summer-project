@@ -7,7 +7,7 @@ from rest_framework import generics
 
 from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
-from populate_teach import add_user, add_unit
+from populate_teach import add_user, add_unit, add_unit_enrolled
 
 
 def index(request):
@@ -54,6 +54,22 @@ def create_unit(request):
         return HttpResponse("Unit Created Successfully")
     else:
         return HttpResponse("Unit Not Created")
+
+
+def unit_enrolment(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    unit_enrol_key = data['unitEnrolmentKey']
+    email = data['email']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+
+    if unit and unit_enrol_key == unit.unit_enrol_key:
+        user_enrolled_unit = add_unit_enrolled(email, unit_code)
+        if(user_enrolled_unit):
+            return HttpResponse("User Enrolled")
+    else:
+        return HttpResponse("User Not Enrolled")
 
 
 

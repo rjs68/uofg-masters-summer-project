@@ -6,6 +6,7 @@ import Unit from './Unit/Unit';
 import Button from '../../../components/UI/Button/Button';
 import Modal from '../../../components/UI/Modal/Modal';
 import CreateUnitForm from '../../../components/CreateUnitForm/CreateUnitForm';
+import UnitEnrolmentForm from '../../../components/UnitEnrolmentForm/UnitEnrolmentForm';
 
 class Units extends Component {
     constructor(props) {
@@ -48,6 +49,7 @@ class Units extends Component {
             form = <CreateUnitForm email={this.props.email} />;
         }else{
             button = "Enrol in a Unit";
+            form = <UnitEnrolmentForm email={this.props.email} />;
         }
 
         var units = []

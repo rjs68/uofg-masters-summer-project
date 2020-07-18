@@ -1,29 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import classes from './CreateUnitForm.module.css';
 import Button from '../UI/Button/Button';
+import classes from './UnitEnrolmentForm.module.css';
 
-class CreateUnitForm extends Component {
+class UnitEnrolmentForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.createUnitHandler = this.createUnitHandler.bind(this);
+        this.unitEnrolmentHandler = this.unitEnrolmentHandler.bind(this);
     }
     
     handleInputChange(event) {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    createUnitHandler() {
-        axios.post('/create-unit/', {
+    unitEnrolmentHandler() {
+        axios.post('/unit-enrol/', {
             unitCode: this.state.unitCode,
-            unitName: this.state.unitName,
-            teacher: this.props.email,
             unitEnrolmentKey: this.state.unitEnrolmentKey,
-            numberOfCredits: this.state.numberOfCredits
+            email: this.props.email
           })
           .then((response) => {
             console.log(response);
@@ -31,30 +29,22 @@ class CreateUnitForm extends Component {
             console.log(error);
           });
     }
-    
+
     render() {
         return (
-            <div className={classes.CreateUnitForm}>
+            <div className={classes.UnitEnrolmentForm}>
                 <input onChange={this.handleInputChange}
                                 type="text" 
                                 name="unitCode" 
                                 placeholder="Unit Code" />
                 <input onChange={this.handleInputChange}
                                 type="text" 
-                                name="unitName" 
-                                placeholder="Unit Name" />
-                <input onChange={this.handleInputChange}
-                                type="text" 
                                 name="unitEnrolmentKey" 
                                 placeholder="Unit Enrolment Key" />
-                <input onChange={this.handleInputChange}
-                                type="text" 
-                                name="numberOfCredits" 
-                                placeholder="Number of Credits" />
-                <Button clicked={this.createUnitHandler}>Create</Button>
+                <Button clicked={this.unitEnrolmentHandler}>Enrol</Button>
             </div>
-        )
+        );
     }
 }
 
-export default CreateUnitForm;
+export default UnitEnrolmentForm;

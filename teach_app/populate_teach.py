@@ -260,6 +260,8 @@ def add_unit_enrolled(user_email, unit_code):
 
     unit_enrolled = UserEnrolledUnit.objects.get_or_create(user=user,
                                                             unit=unit)
+    
+    return unit_enrolled
 
 
 def add_assignment(unit_code, assignment_name, deadline, weight):
