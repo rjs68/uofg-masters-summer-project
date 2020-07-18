@@ -251,6 +251,8 @@ def add_unit(unit_code, unit_name, teacher, unit_enrol_key, number_of_credits):
                                       unit_enrol_key=unit_enrol_key,
                                       number_of_credits=number_of_credits)
 
+    return unit
+
 
 def add_unit_enrolled(user_email, unit_code):
     user = TeachUser.objects.get(email=user_email)

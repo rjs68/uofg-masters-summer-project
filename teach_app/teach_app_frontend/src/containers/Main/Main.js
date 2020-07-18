@@ -29,7 +29,8 @@ class Main extends Component {
                 pageContent = <Home />;
                 break;
             case "units":
-                pageContent = <Units />;
+                pageContent = <Units email={this.props.email} 
+                                        userType={this.props.userType} />;
                 break;
             case "assignments":
                 pageContent = <Assignments />;
