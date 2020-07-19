@@ -27,5 +27,6 @@ urlpatterns = [
     path('units/', views.get_user_units, name='units'),
     path('create-unit/', views.create_unit, name='create-unit'),
     path('unit-enrol/', views.unit_enrolment, name='unit-enrol'),
+    path('assignments/', views.get_user_assignments, name='assignments'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

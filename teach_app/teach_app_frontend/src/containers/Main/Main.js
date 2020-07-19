@@ -33,7 +33,7 @@ class Main extends Component {
                                         userType={this.props.userType} />;
                 break;
             case "assignments":
-                pageContent = <Assignments />;
+                pageContent = <Assignments email={this.props.email} />;
                 break;
             case "grades":
                 pageContent = <Grades />;

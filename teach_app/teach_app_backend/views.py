@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from rest_framework import generics
 
-from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit
+from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import add_user, add_unit, add_unit_enrolled
 
@@ -24,19 +24,44 @@ def get_user_units(request):
     email = data['email']
     user = TeachUser.objects.get(email=email)
     units = []
+    
     if user.is_teacher:
-        userUnits = Unit.objects.filter(teacher=user)
-        for userUnit in userUnits:
-            unitData = __get_unit_data(userUnit)
-            units.append(unitData)
+        user_units = Unit.objects.filter(teacher=user)
+        for user_unit in user_units:
+            unit_data = __get_unit_data(user_unit)
+            units.append(unit_data)
     else:
-        userUnits = UserEnrolledUnit.objects.filter(user=user).values('unit')
-        for userUnit in userUnits:
-            unit = Unit.objects.get(unit_code=userUnit['unit'])
-            unitData = __get_unit_data(unit)
-            units.append(unitData)
+        user_units = UserEnrolledUnit.objects.filter(user=user).values('unit')
+        for user_unit in user_units:
+            unit = Unit.objects.get(unit_code=user_unit['unit'])
+            unit_data = __get_unit_data(unit)
+            units.append(unit_data)
     
     data = json.dumps(units)
+    return HttpResponse(data)
+
+
+def get_user_assignments(request):
+    data = json.loads(request.body)
+    email = data['email']
+    user = TeachUser.objects.get(email=email)
+
+    assignments = []
+    if user.is_teacher:
+        user_units = Unit.objects.filter(teacher=user)
+    else:
+        user_enrolled_units = UserEnrolledUnit.objects.filter(user=user).values('unit')
+        user_units = []
+        for user_enrolled_unit in user_enrolled_units:
+            unit = Unit.objects.get(unit_code=user_enrolled_unit['unit'])
+            user_units.append(unit)
+    for user_unit in user_units:
+        unit_assignments = Assignment.objects.filter(unit=user_unit)
+        for unit_assignment in unit_assignments:
+            assignment_data = __get_assignment_data(unit_assignment)
+            assignments.append(assignment_data)
+    
+    data = json.dumps(assignments, default=str)
     return HttpResponse(data)
 
 
@@ -140,4 +165,13 @@ def __get_unit_data(unit):
         "teacher": unit.teacher.email,
         "unit_enrol_key": unit.unit_enrol_key,
         "number_of_credits": unit.number_of_credits
+    }
+
+
+def __get_assignment_data(assignment):
+    return {
+        "unit": assignment.unit.unit_name,
+        "assignment_name": assignment.event_name,
+        "deadline": assignment.date_time,
+        "weight": assignment.weight
     }
