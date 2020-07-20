@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 import TextField from '@material-ui/core/TextField';
 import Button from '../UI/Button/Button';
-import UnitDropdown from './UnitDropdown/UnitDropdown';
 
 class CreateAssignmentForm extends Component {
     constructor(props) {
@@ -49,21 +50,30 @@ class CreateAssignmentForm extends Component {
     }
 
     render() {
+        var units = []
+        if(this.state.units !== {}){
+            for(const unit in this.state.units){
+                units.push(<Dropdown.Item as="button">{this.state.units[unit]['unit_name']}</Dropdown.Item>);
+            }
+        }
+
         return (
             <div>
-                <UnitDropdown units={this.state.units} />
+                <DropdownButton id="unitSelector" title="Unit">
+                    {units}
+                </DropdownButton>
                 <input onChange={this.handleInputChange}
                                 type="text" 
                                 name="assignmentName" 
                                 placeholder="Assignment Name" />
-                {/* <TextField onChange={this.handleInputChange}
+                <TextField onChange={this.handleInputChange}
                                 type="datetime-local"
                                 name="deadline" 
                                 label="Deadline"
                                 defaultValue="2020-12-31T00:00" 
                                 InputLabelProps={{
                                     shrink: true,
-                                  }} /> */}
+                                  }} />
                 <input onChange={this.handleInputChange}
                                 type="file" 
                                 name="specification" />
