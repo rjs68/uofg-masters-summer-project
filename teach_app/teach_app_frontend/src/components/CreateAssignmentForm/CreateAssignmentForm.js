@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import {DropdownMultiple, Dropdown} from 'reactjs-dropdown-component';
+import {Dropdown} from 'reactjs-dropdown-component';
 import TextField from '@material-ui/core/TextField';
 import Button from '../UI/Button/Button';
 import classes from './CreateAssignmentForm.module.css';
@@ -32,6 +32,7 @@ class CreateAssignmentForm extends Component {
                   index++;
                   return {
                       id: id,
+                      unit: unit,
                       title: unit['unit_name'],
                       selected: false,
                       key: 'unit'
@@ -46,7 +47,8 @@ class CreateAssignmentForm extends Component {
         temp.forEach(item => item.selected = false);
         temp[id].selected = true;
         this.setState({
-          units: temp
+          units: temp,
+          unit: temp[id]['unit']
         });
     }
 
