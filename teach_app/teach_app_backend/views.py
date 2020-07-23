@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from rest_framework import generics
+from datetime import datetime
 
 from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
-from populate_teach import add_user, add_unit, add_unit_enrolled
+from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
 
 
 def index(request):
@@ -79,6 +80,28 @@ def create_unit(request):
         return HttpResponse("Unit Created Successfully")
     else:
         return HttpResponse("Unit Not Created")
+
+
+def create_assignment(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment_name = data['assignmentName']
+    deadline_string = data['deadline']
+    deadline = datetime.strptime(deadline_string, "%Y-%m-%dT%H:%M")
+    specification = data['specification']
+    weight = data['weight']
+
+    assignment = Assignment.objects.get_or_create(unit=unit, 
+                                                    event_name=assignment_name, 
+                                                    date_time=deadline,
+                                                    specification=specification, 
+                                                    weight=weight)
+
+    if(assignment):
+        return HttpResponse("Assignment Created Successfully")
+    else:
+        return HttpResponse("Assignment Not Created")
 
 
 def unit_enrolment(request):

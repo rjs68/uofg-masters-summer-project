@@ -54,18 +54,18 @@ class CreateAssignmentForm extends Component {
 
     createAssignmentHandler() {
         console.log("Create Assignment");
-        // axios.post('/create-unit/', {
-        //     unitCode: this.state.unitCode,
-        //     unitName: this.state.unitName,
-        //     teacher: this.props.email,
-        //     unitEnrolmentKey: this.state.unitEnrolmentKey,
-        //     numberOfCredits: this.state.numberOfCredits
-        //   })
-        //   .then((response) => {
-        //     console.log(response);
-        //   }, (error) => {
-        //     console.log(error);
-        //   });
+        axios.post('/create-assignment/', {
+            unitCode: this.state.unit['unit_code'],
+            assignmentName: this.state.assignmentName,
+            deadline: this.state.deadline,
+            specification: this.state.specification,
+            weight: this.state.weight
+          })
+          .then((response) => {
+            console.log(response);
+          }, (error) => {
+            console.log(error);
+          });
     }
 
     componentDidMount(){

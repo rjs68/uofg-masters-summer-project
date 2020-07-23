@@ -270,6 +270,8 @@ def add_assignment(unit_code, assignment_name, deadline, weight):
                                                   event_name=assignment_name,
                                                   date_time=deadline,
                                                   weight=weight)
+    
+    return assignment
 
 
 def add_submission(user_email, unit_code, assignment_name, submission_time, grade, feedback):
