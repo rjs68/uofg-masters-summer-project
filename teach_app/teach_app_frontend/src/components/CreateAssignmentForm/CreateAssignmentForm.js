@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
+import {DropdownMultiple, Dropdown} from 'reactjs-dropdown-component';
 import TextField from '@material-ui/core/TextField';
 import Button from '../UI/Button/Button';
+import classes from './CreateAssignmentForm.module.css';
 
 class CreateAssignmentForm extends Component {
     constructor(props) {
@@ -13,6 +13,7 @@ class CreateAssignmentForm extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.getUnits = this.getUnits.bind(this);
+        this.resetThenSet = this.resetThenSet.bind(this);
         this.createAssignmentHandler = this.createAssignmentHandler.bind(this);
     }
 
@@ -25,8 +26,28 @@ class CreateAssignmentForm extends Component {
             email: this.props.email,
           })
           .then((response) => {
-              this.setState({units: response.data});
+              var index = 0;
+              var units = response.data.map(unit => {
+                  const id = index;
+                  index++;
+                  return {
+                      id: id,
+                      title: unit['unit_name'],
+                      selected: false,
+                      key: 'unit'
+                  }
+              })
+              this.setState({units: units});
           });
+    }
+
+    resetThenSet(id) {
+        const temp = JSON.parse(JSON.stringify(this.state.units));
+        temp.forEach(item => item.selected = false);
+        temp[id].selected = true;
+        this.setState({
+          units: temp
+        });
     }
 
     createAssignmentHandler() {
@@ -50,18 +71,19 @@ class CreateAssignmentForm extends Component {
     }
 
     render() {
-        var units = []
-        if(this.state.units !== {}){
-            for(const unit in this.state.units){
-                units.push(<Dropdown.Item as="button">{this.state.units[unit]['unit_name']}</Dropdown.Item>);
-            }
+        var unitDropdown;
+        if(this.state.units){
+            //https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+            unitDropdown = <Dropdown searchable={["Search for Unit", "No matching unit"]}
+                                        title="Select Unit"
+                                        list={this.state.units}
+                                        resetThenSet={this.resetThenSet}
+                                        />
         }
 
         return (
-            <div>
-                <DropdownButton id="unitSelector" title="Unit">
-                    {units}
-                </DropdownButton>
+            <div className={classes.CreateAssignmentForm}>
+                {unitDropdown}
                 <input onChange={this.handleInputChange}
                                 type="text" 
                                 name="assignmentName" 
