@@ -67,6 +67,18 @@ def get_user_assignments(request):
     return HttpResponse(data)
 
 
+def get_assignment_specification(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    assignment_name = data['assignmentName']
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    if(assignment.specification):
+        return HttpResponse("We have a spec")
+    else:
+        return HttpResponse("No spec here")
+
+
 def create_unit(request):
     data = json.loads(request.body)
     unit_code = data['unitCode']
@@ -190,6 +202,7 @@ def __get_unit_data(unit):
 def __get_assignment_data(assignment):
     return {
         "unit": assignment.unit.unit_name,
+        "unit_code": assignment.unit.unit_code,
         "assignment_name": assignment.event_name,
         "deadline": assignment.date_time,
         "weight": assignment.weight
