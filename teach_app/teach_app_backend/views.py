@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from datetime import datetime
 
@@ -89,14 +90,9 @@ def create_assignment(request):
     assignment_name = data['assignmentName']
     deadline_string = data['deadline']
     deadline = datetime.strptime(deadline_string, "%Y-%m-%dT%H:%M")
-    specification = data['specification']
     weight = data['weight']
 
-    assignment = Assignment.objects.get_or_create(unit=unit, 
-                                                    event_name=assignment_name, 
-                                                    date_time=deadline,
-                                                    specification=specification, 
-                                                    weight=weight)
+    assignment = add_assignment(unit, assignment_name, deadline, weight)
 
     if(assignment):
         return HttpResponse("Assignment Created Successfully")

@@ -12,6 +12,7 @@ class CreateAssignmentForm extends Component {
         this.state = {};
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSpecificationUpload = this.handleSpecificationUpload.bind(this);
         this.getUnits = this.getUnits.bind(this);
         this.resetThenSet = this.resetThenSet.bind(this);
         this.createAssignmentHandler = this.createAssignmentHandler.bind(this);
@@ -19,6 +20,10 @@ class CreateAssignmentForm extends Component {
 
     handleInputChange(event) {
         this.setState({[event.target.name]: event.target.value});
+    }
+
+    handleSpecificationUpload(event){
+        this.setState({specification: event.target.files[0]});
     }
 
     getUnits() {
@@ -52,15 +57,25 @@ class CreateAssignmentForm extends Component {
         });
     }
 
+    uploadSpecificationHandler() {
+        //https://www.geeksforgeeks.org/file-uploading-in-react-js/
+        const formData = new FormData(); 
+        
+        // Update the formData object 
+        formData.append( 
+            "specification", 
+            this.state.specification, 
+            this.state.specification.name 
+        ); 
+    }
+
     createAssignmentHandler() {
-        console.log("Create Assignment");
-        axios.post('/create-assignment/', {
+        axios.post("/create-assignment/", {
             unitCode: this.state.unit['unit_code'],
             assignmentName: this.state.assignmentName,
             deadline: this.state.deadline,
-            specification: this.state.specification,
             weight: this.state.weight
-          })
+        })
           .then((response) => {
             console.log(response);
           }, (error) => {
@@ -98,7 +113,7 @@ class CreateAssignmentForm extends Component {
                                 InputLabelProps={{
                                     shrink: true,
                                   }} />
-                <input onChange={this.handleInputChange}
+                <input onChange={this.handleSpecificationUpload}
                                 type="file" 
                                 name="specification" />
                 <input onChange={this.handleInputChange}
