@@ -79,7 +79,8 @@ class Assignments extends Component {
         var selectedAssignment;
         if(this.state.assignmentSelected){
             selectedAssignment = <Modal show={this.state.assignmentSelected}>
-                                        <Assignment assignment={this.state.selectedAssignment} />
+                                        <Assignment assignment={this.state.selectedAssignment} 
+                                                    userType={this.props.userType} />
                                     </Modal>
         }
 

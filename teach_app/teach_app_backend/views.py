@@ -74,9 +74,26 @@ def get_assignment_specification(request):
     unit = Unit.objects.get(unit_code=unit_code)
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
     if(assignment.specification):
-        return HttpResponse("We have a spec")
+        return HttpResponse("Specification found")
     else:
-        return HttpResponse("No spec here")
+        return HttpResponse("Specification not found")
+
+
+def upload_assignment_specification(request):
+    specification = request.FILES['specification']
+    specification_name = specification.name.split('-')
+    unit_code = specification_name[1]
+    assignment_name = specification_name[2]
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    assignment.specification = specification
+    assignment.save()
+    if(assignment.specification):
+        return HttpResponse("Upload Successful")
+    else:
+        return HttpResponse("Upload Unsuccessful")
+    
+
 
 
 def create_unit(request):
