@@ -9,7 +9,9 @@ class Assignment extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            specificationUploaded: false
+            specificationUploaded: false,
+            specificationName: "specification-"+this.props.assignment['unit_code']
+                                +"-"+this.props.assignment['assignment_name']+".pdf"
         };
 
         this.getAssignmentSpecification = this.getAssignmentSpecification.bind(this);
@@ -59,14 +61,14 @@ class Assignment extends Component{
     render() {
         var specification;
         if(this.state.specificationUploaded){
-            specification = <p>Here's the specification.</p>;
+            const specificationPath = "/media/assignments/" + this.state.specificationName + "/";
+            specification = <a  href={specificationPath} download> Download Specification </a>;
         }else if(this.props.userType === "teacher") { 
             specification = <Aux>
                                 <p>Upload the specification here</p>
                                 <input onChange={this.handleSpecificationUpload}
                                         type="file" 
-                                        name={"specification-"+this.props.assignment['unit_code']
-                                                +"-"+this.props.assignment['assignment_name']} />
+                                        name={this.state.specificationName} />
                                 <Button clicked={this.uploadSpecificationHandler}>Upload Assignment</Button>
                             </Aux>
         }else{

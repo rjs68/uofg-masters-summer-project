@@ -2,7 +2,7 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from datetime import datetime
@@ -83,7 +83,8 @@ def upload_assignment_specification(request):
     specification = request.FILES['specification']
     specification_name = specification.name.split('-')
     unit_code = specification_name[1]
-    assignment_name = specification_name[2]
+    assignment_name = specification_name[2].split('.')
+    assignment_name = assignment_name[0]
     unit = Unit.objects.get(unit_code=unit_code)
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
     assignment.specification = specification
