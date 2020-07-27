@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from datetime import datetime
 
-from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment
+from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
 
@@ -93,8 +93,40 @@ def upload_assignment_specification(request):
         return HttpResponse("Upload Successful")
     else:
         return HttpResponse("Upload Unsuccessful")
-    
 
+
+def get_submission(request):
+    data = json.loads(request.body)
+    email = data['userEmail']
+    user = TeachUser.objects.get(email=email)
+    unit_code = data['unitCode']
+    assignment_name = data['assignmentName']
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    submission = Submission.objects.get(user=user, assignment=assignment)
+    if(submission.submission):
+        return HttpResponse("Submission found")
+    else:
+        return HttpResponse("Submission not found")
+
+
+def upload_submission(request):
+    submission_file = request.FILES['submission']
+    submission_name = submission_file.name.split('-')
+    user_email = submission_name[0]
+    unit_code = submission_name[1]
+    assignment_name = submission_name[2].split('.')
+    assignment_name = assignment_name[0]
+    user = TeachUser.objects.get(email=user_email)
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    submission = Submission.objects.get(user=user, assignment=assignment)
+    submission.submission = submission_file
+    submission.save()
+    if(submission.submission):
+        return HttpResponse("Upload Successful")
+    else:
+        return HttpResponse("Upload Unsuccessful")
 
 
 def create_unit(request):

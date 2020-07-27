@@ -31,5 +31,7 @@ urlpatterns = [
     path('create-assignment/', views.create_assignment, name='create-assignment'),
     path('assignment-specification/', views.get_assignment_specification, name='assignment-specification'),
     path('upload-specification/', views.upload_assignment_specification, name='upload-specification'),
+    path('submission/', views.get_submission, name='submission'),
+    path('upload-submission/', views.upload_submission, name='upload-submission'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

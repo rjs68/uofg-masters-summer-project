@@ -80,7 +80,8 @@ class Assignments extends Component {
         if(this.state.assignmentSelected){
             selectedAssignment = <Modal show={this.state.assignmentSelected}>
                                         <Assignment assignment={this.state.selectedAssignment} 
-                                                    userType={this.props.userType} />
+                                                    userType={this.props.userType} 
+                                                    email={this.props.email} />
                                     </Modal>
         }
 
