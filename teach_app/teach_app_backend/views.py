@@ -1,10 +1,12 @@
 import json
+import os
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 from rest_framework import generics
 from datetime import datetime
 
@@ -123,10 +125,19 @@ def upload_submission(request):
     assignment_name = assignment_name[0]
     user = TeachUser.objects.get(email=user_email)
     unit = Unit.objects.get(unit_code=unit_code)
+
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
     submission = Submission.objects.get(user=user, assignment=assignment)
+
+    directory_name = os.path.join(settings.MEDIA_ROOT, "submissions")
+    file_name = submission_file.name.replace('@', '')
+    file_path = os.path.join(directory_name, file_name)
+    print(file_path)
+    if os.path.exists(file_path):
+        os.remove(file_path)
     submission.submission = submission_file
     submission.save()
+
     if(submission.submission):
         return HttpResponse("Upload Successful")
     else:
