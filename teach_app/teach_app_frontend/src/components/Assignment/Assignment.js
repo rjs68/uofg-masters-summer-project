@@ -125,8 +125,16 @@ class Assignment extends Component{
         var submission;
         if(this.props.userType === "student"){
             if(this.state.submissionUploaded){
-                const submissionPath = "media/submissions";
-                submission = <p>You've already submitted this assignment</p>
+                const submissionName = this.state.submissionName.replace('@', '');
+                const submissionPath = "media/submissions/" + submissionName + "/";
+                submission = <Aux>
+                                <a href={submissionPath} download> Download Submission </a>
+                                <p>You can change your submission here</p>
+                                <input onChange={this.handleSubmissionUpload}
+                                        type="file" 
+                                        name={this.state.submissionName} />
+                                <Button clicked={this.uploadSubmissionHandler}>Edit Submission</Button>
+                            </Aux>;
             }else if(this.state.specificationUploaded){
                 submission = <Aux>
                                 <p>Upload your submission here</p>
@@ -134,7 +142,7 @@ class Assignment extends Component{
                                         type="file" 
                                         name={this.state.submissionName} />
                                 <Button clicked={this.uploadSubmissionHandler}>Upload Submission</Button>
-                            </Aux>
+                            </Aux>;
             }
         }
 

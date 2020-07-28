@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics
 from datetime import datetime
 
@@ -103,7 +104,10 @@ def get_submission(request):
     assignment_name = data['assignmentName']
     unit = Unit.objects.get(unit_code=unit_code)
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
-    submission = Submission.objects.get(user=user, assignment=assignment)
+    try:
+        submission = Submission.objects.get(user=user, assignment=assignment)
+    except ObjectDoesNotExist:
+        submission = Submission.objects.create(user=user, assignment=assignment)
     if(submission.submission):
         return HttpResponse("Submission found")
     else:

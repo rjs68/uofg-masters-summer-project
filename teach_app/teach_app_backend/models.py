@@ -81,9 +81,9 @@ class Submission(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     submission = models.FileField(upload_to='submissions')
-    submission_time = models.DateTimeField()
-    grade = models.DecimalField(blank=True, default=None, max_digits=4, decimal_places=2)
-    feedback = models.TextField(blank=True, default=None)
+    submission_time = models.DateTimeField(blank=True, null=True)
+    grade = models.DecimalField(blank=True, null=True, default=None, max_digits=4, decimal_places=2)
+    feedback = models.TextField(blank=True, null=True, default=None)
 
     class Meta:
         unique_together = ('user', 'assignment')
