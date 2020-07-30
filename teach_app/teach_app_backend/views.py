@@ -1,4 +1,4 @@
-import json
+import simplejson as json
 import os
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -42,8 +42,8 @@ def get_user_units(request):
             unit_data = __get_unit_data(unit)
             units.append(unit_data)
     
-    data = json.dumps(units)
-    return HttpResponse(data)
+    units_data = json.dumps(units)
+    return HttpResponse(units_data)
 
 
 def get_user_assignments(request):
@@ -114,6 +114,25 @@ def get_submission(request):
         return HttpResponse("Submission found")
     else:
         return HttpResponse("Submission not found")
+
+
+def get_student_submissions(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    assignment_name = data['assignmentName']
+    unit = Unit.objects.get(unit_code=unit_code)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    submissions = Submission.objects.filter(assignment=assignment)
+    submissions_data = []
+    if(submissions):
+        for submission in submissions:
+            submission_data = __get_submission_data(submission)
+            submissions_data.append(submission_data)
+        
+        submissions_data = json.dumps(submissions_data)
+        return HttpResponse(submissions_data)
+    else:
+        return HttpResponse("No submissions yet")
 
 
 def upload_submission(request):
@@ -271,4 +290,12 @@ def __get_assignment_data(assignment):
         "assignment_name": assignment.event_name,
         "deadline": assignment.date_time,
         "weight": assignment.weight
+    }
+
+
+def __get_submission_data(submission):
+    return {
+        "user": submission.user.email,
+        "grade": submission.grade,
+        "feedback": submission.feedback
     }

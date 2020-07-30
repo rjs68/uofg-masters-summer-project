@@ -4,6 +4,8 @@ import axios from 'axios';
 import classes from './Assignment.module.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Button from '../UI/Button/Button';
+import StudentSubmission from '../StudentSubmission/StudentSubmission';
+import studentSubmission from '../StudentSubmission/StudentSubmission';
 
 class Assignment extends Component{
     constructor(props) {
@@ -21,6 +23,7 @@ class Assignment extends Component{
         this.handleSpecificationUpload = this.handleSpecificationUpload.bind(this);
         this.uploadSpecificationHandler = this.uploadSpecificationHandler.bind(this);
         this.getSubmission = this.getSubmission.bind(this);
+        this.getStudentSubmissions = this.getStudentSubmissions.bind(this);
         this.handleSubmissionUpload = this.handleSubmissionUpload.bind(this);
         this.uploadSubmissionHandler = this.uploadSubmissionHandler.bind(this);
     }
@@ -75,6 +78,17 @@ class Assignment extends Component{
             });
     }
 
+    getStudentSubmissions(){
+        axios.post('/student-submissions/', {
+            unitCode: this.props.assignment['unit_code'],
+            assignmentName: this.props.assignment['assignment_name']
+        })
+            .then((response) => {
+                console.log(response);
+                this.setState({studentSubmissions: response.data});
+            });
+    }
+
     handleSubmissionUpload(event){
         const submission = event.target.files[0];
         Object.defineProperty(submission, 'name', {
@@ -99,6 +113,8 @@ class Assignment extends Component{
         this.getAssignmentSpecification();
         if(this.props.userType === "student"){
             this.getSubmission();
+        }else{
+            this.getStudentSubmissions();
         }
     }
 
@@ -144,12 +160,29 @@ class Assignment extends Component{
                                 <Button clicked={this.uploadSubmissionHandler}>Upload Submission</Button>
                             </Aux>;
             }
+        }else{
+            if(this.state.studentSubmissions){
+                submission = [];
+                for(const studentSubmission in this.state.studentSubmissions){
+                    const studentEmail = this.state.studentSubmissions[studentSubmission]['user'];
+                    const submissionName = (studentEmail+"-"+this.props.assignment['unit_code']
+                                            +"-"+this.props.assignment['assignment_name']+".pdf")
+                                            .replace('@', '');
+                    const submissionPath = "media/submissions/" + submissionName + "/";
+                    submission.push(<StudentSubmission key={studentSubmission}
+                                                        submissionPath={submissionPath}
+                                                        studentEmail={studentEmail}
+                                                        grade={this.state.studentSubmissions[studentSubmission]['grade']}
+                                                        feedback={this.state.studentSubmissions[studentSubmission]['feedback']}/>)
+                }
+            }
         }
 
         return (
             <div className={classes.Assignment}>
                 <h1>{this.props.assignment['unit']} - {this.props.assignment['assignment_name']}</h1>
                 {specification}
+                <br />
                 {submission}
             </div>
         )
