@@ -5,7 +5,6 @@ import classes from './Assignment.module.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Button from '../UI/Button/Button';
 import StudentSubmission from '../StudentSubmission/StudentSubmission';
-import studentSubmission from '../StudentSubmission/StudentSubmission';
 
 class Assignment extends Component{
     constructor(props) {
