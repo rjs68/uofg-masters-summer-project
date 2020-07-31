@@ -168,10 +168,14 @@ class Assignment extends Component{
                                             +"-"+this.props.assignment['assignment_name']+".pdf")
                                             .replace('@', '');
                     const submissionPath = "media/submissions/" + submissionName + "/";
+                    var grade = this.state.studentSubmissions[studentSubmission]['grade'];
+                    if(grade === null){
+                        grade = "N/A";
+                    };
                     submission.push(<StudentSubmission key={studentSubmission}
                                                         submissionPath={submissionPath}
                                                         studentEmail={studentEmail}
-                                                        grade={this.state.studentSubmissions[studentSubmission]['grade']}
+                                                        grade={grade}
                                                         feedback={this.state.studentSubmissions[studentSubmission]['feedback']}/>)
                 }
             }

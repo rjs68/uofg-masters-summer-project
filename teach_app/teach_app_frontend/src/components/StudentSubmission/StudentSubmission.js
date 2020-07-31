@@ -1,10 +1,12 @@
 import React from 'react';
 
+import classes from './StudentSubmission.module.css';
+
 const studentSubmission = props => (
-    <div>
-        <a href={props.submissionPath} download>{props.studentEmail}</a>
-        <p>{props.grade}</p>
-        <p>{props.feedback}</p>
+    <div className={classes.StudentSubmission}>
+        <div className={classes.Email}>{props.studentEmail}</div>
+        <a href={props.submissionPath} download>Download Submission</a>
+        <div className={classes.Grade}>{props.grade}</div>
     </div>
 )
 
