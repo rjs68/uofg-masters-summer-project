@@ -26,20 +26,12 @@ class TeachUserListCreate(generics.ListCreateAPIView):
 
 def get_user_units(request):
     data = json.loads(request.body)
-    email = data['email']
-    user = TeachUser.objects.get(email=email)
+    user = TeachUser.objects.get(email=data['email'])
+
+    user_units = __get_user_units(user)
     units = []
-    
-    if user.is_teacher:
-        user_units = Unit.objects.filter(teacher=user)
-        for user_unit in user_units:
+    for user_unit in user_units:
             unit_data = __get_unit_data(user_unit)
-            units.append(unit_data)
-    else:
-        user_units = UserEnrolledUnit.objects.filter(user=user).values('unit')
-        for user_unit in user_units:
-            unit = Unit.objects.get(unit_code=user_unit['unit'])
-            unit_data = __get_unit_data(unit)
             units.append(unit_data)
     
     units_data = json.dumps(units)
@@ -48,18 +40,10 @@ def get_user_units(request):
 
 def get_user_assignments(request):
     data = json.loads(request.body)
-    email = data['email']
-    user = TeachUser.objects.get(email=email)
+    user = TeachUser.objects.get(email=data['email'])
 
+    user_units = __get_user_units(user)
     assignments = []
-    if user.is_teacher:
-        user_units = Unit.objects.filter(teacher=user)
-    else:
-        user_enrolled_units = UserEnrolledUnit.objects.filter(user=user).values('unit')
-        user_units = []
-        for user_enrolled_unit in user_enrolled_units:
-            unit = Unit.objects.get(unit_code=user_enrolled_unit['unit'])
-            user_units.append(unit)
     for user_unit in user_units:
         unit_assignments = Assignment.objects.filter(unit=user_unit)
         for unit_assignment in unit_assignments:
@@ -72,10 +56,8 @@ def get_user_assignments(request):
 
 def get_assignment_specification(request):
     data = json.loads(request.body)
-    unit_code = data['unitCode']
-    assignment_name = data['assignmentName']
-    unit = Unit.objects.get(unit_code=unit_code)
-    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
     if(assignment.specification):
         return HttpResponse("Specification found")
     else:
@@ -85,11 +67,9 @@ def get_assignment_specification(request):
 def upload_assignment_specification(request):
     specification = request.FILES['specification']
     specification_name = specification.name.split('-')
-    unit_code = specification_name[1]
+    unit = Unit.objects.get(unit_code=specification_name[1])
     assignment_name = specification_name[2].split('.')
-    assignment_name = assignment_name[0]
-    unit = Unit.objects.get(unit_code=unit_code)
-    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name[0])
     assignment.specification = specification
     assignment.save()
     if(assignment.specification):
@@ -100,16 +80,10 @@ def upload_assignment_specification(request):
 
 def get_submission(request):
     data = json.loads(request.body)
-    email = data['userEmail']
-    user = TeachUser.objects.get(email=email)
-    unit_code = data['unitCode']
-    assignment_name = data['assignmentName']
-    unit = Unit.objects.get(unit_code=unit_code)
-    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
-    try:
-        submission = Submission.objects.get(user=user, assignment=assignment)
-    except ObjectDoesNotExist:
-        submission = Submission.objects.create(user=user, assignment=assignment)
+    user = TeachUser.objects.get(email=data['userEmail'])
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    submission = __get_submission_object(user, assignment)
     if(submission.submission):
         return HttpResponse("Submission found")
     else:
@@ -118,10 +92,8 @@ def get_submission(request):
 
 def get_student_submissions(request):
     data = json.loads(request.body)
-    unit_code = data['unitCode']
-    assignment_name = data['assignmentName']
-    unit = Unit.objects.get(unit_code=unit_code)
-    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
     submissions = Submission.objects.filter(assignment=assignment)
     submissions_data = []
     if(submissions):
@@ -135,23 +107,34 @@ def get_student_submissions(request):
         return HttpResponse("No submissions yet")
 
 
+def edit_student_grade(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['studentEmail'])
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    submission = __get_submission_object(user, assignment)
+
+    submission.grade = data['grade']
+    submission.save()
+    if(submission.grade == data['grade']):
+        return HttpResponse("Grade Edit Successful")
+    else:
+        return HttpResponse("Grade Edit Unsuccessful")
+
+
 def upload_submission(request):
     submission_file = request.FILES['submission']
     submission_name = submission_file.name.split('-')
-    user_email = submission_name[0]
-    unit_code = submission_name[1]
     assignment_name = submission_name[2].split('.')
-    assignment_name = assignment_name[0]
-    user = TeachUser.objects.get(email=user_email)
-    unit = Unit.objects.get(unit_code=unit_code)
 
-    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name)
+    user = TeachUser.objects.get(email=submission_name[0])
+    unit = Unit.objects.get(unit_code=submission_name[1])
+    assignment = Assignment.objects.get(unit=unit, event_name=assignment_name[0])
     submission = Submission.objects.get(user=user, assignment=assignment)
 
     directory_name = os.path.join(settings.MEDIA_ROOT, "submissions")
     file_name = submission_file.name.replace('@', '')
     file_path = os.path.join(directory_name, file_name)
-    print(file_path)
     if os.path.exists(file_path):
         os.remove(file_path)
     submission.submission = submission_file
@@ -181,8 +164,7 @@ def create_unit(request):
 
 def create_assignment(request):
     data = json.loads(request.body)
-    unit_code = data['unitCode']
-    unit = Unit.objects.get(unit_code=unit_code)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
     assignment_name = data['assignmentName']
     deadline_string = data['deadline']
     deadline = datetime.strptime(deadline_string, "%Y-%m-%dT%H:%M")
@@ -198,11 +180,9 @@ def create_assignment(request):
 
 def unit_enrolment(request):
     data = json.loads(request.body)
-    unit_code = data['unitCode']
     unit_enrol_key = data['unitEnrolmentKey']
     email = data['email']
-
-    unit = Unit.objects.get(unit_code=unit_code)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
 
     if unit and unit_enrol_key == unit.unit_enrol_key:
         user_enrolled_unit = add_unit_enrolled(email, unit_code)
@@ -273,6 +253,18 @@ def user_signup(request):
         return HttpResponse("Not a valid request")
 
 
+def __get_user_units(user):
+    if user.is_teacher:
+        user_units = Unit.objects.filter(teacher=user)
+    else:
+        user_enrolled_units = UserEnrolledUnit.objects.filter(user=user).values('unit')
+        user_units = []
+        for user_enrolled_unit in user_enrolled_units:
+            unit = Unit.objects.get(unit_code=user_enrolled_unit['unit'])
+            user_units.append(unit)
+    return user_units
+
+
 def __get_unit_data(unit):
     return {
         "unit_code": unit.unit_code,
@@ -299,3 +291,11 @@ def __get_submission_data(submission):
         "grade": submission.grade,
         "feedback": submission.feedback
     }
+
+
+def __get_submission_object(user, assignment):
+    try:
+        submission = Submission.objects.get(user=user, assignment=assignment)
+    except ObjectDoesNotExist:
+        submission = Submission.objects.create(user=user, assignment=assignment)
+    return submission

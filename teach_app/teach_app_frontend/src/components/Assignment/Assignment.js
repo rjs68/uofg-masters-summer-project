@@ -176,7 +176,8 @@ class Assignment extends Component{
                                                         submissionPath={submissionPath}
                                                         studentEmail={studentEmail}
                                                         grade={grade}
-                                                        feedback={this.state.studentSubmissions[studentSubmission]['feedback']}/>)
+                                                        feedback={this.state.studentSubmissions[studentSubmission]['feedback']}
+                                                        assignment={this.props.assignment}/>)
                 }
             }
         }

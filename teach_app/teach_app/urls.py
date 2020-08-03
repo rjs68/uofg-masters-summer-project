@@ -34,5 +34,6 @@ urlpatterns = [
     path('submission/', views.get_submission, name='submission'),
     path('upload-submission/', views.upload_submission, name='upload-submission'),
     path('student-submissions/', views.get_student_submissions, name='student-submissions'),
+    path('student-grade/', views.edit_student_grade, name='student-grade'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
