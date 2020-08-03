@@ -85,7 +85,9 @@ def get_submission(request):
     assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
     submission = __get_submission_object(user, assignment)
     if(submission.submission):
-        return HttpResponse("Submission found")
+        submission_data = __get_submission_data(submission)
+        submission_data = json.dumps(submission_data, default=str)
+        return HttpResponse(submission_data)
     else:
         return HttpResponse("Submission not found")
 
@@ -101,7 +103,7 @@ def get_student_submissions(request):
             submission_data = __get_submission_data(submission)
             submissions_data.append(submission_data)
         
-        submissions_data = json.dumps(submissions_data)
+        submissions_data = json.dumps(submissions_data, default=str)
         return HttpResponse(submissions_data)
     else:
         return HttpResponse("No submissions yet")
@@ -153,6 +155,7 @@ def upload_submission(request):
     if os.path.exists(file_path):
         os.remove(file_path)
     submission.submission = submission_file
+    submission.submission_time = datetime.now()
     submission.save()
 
     if(submission.submission):
@@ -303,6 +306,7 @@ def __get_assignment_data(assignment):
 def __get_submission_data(submission):
     return {
         "user": submission.user.email,
+        "submission_time": submission.submission_time,
         "grade": submission.grade,
         "feedback": submission.feedback
     }

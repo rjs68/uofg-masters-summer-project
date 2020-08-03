@@ -69,11 +69,14 @@ class Assignment extends Component{
             assignmentName: this.props.assignment['assignment_name']
         })
             .then((response) => {
-                if(response.data === "Submission found"){
-                    this.setState({submissionUploaded: true});
-                }else if(response.data === "Submission not found"){
+                if(response.data === "Submission not found"){
                     this.setState({submissionUploaded: false});
-                }
+                }else{
+                    this.setState({
+                        submissionUploaded: true,
+                        submissionData: response.data
+                    });
+                } 
             });
     }
 
@@ -83,7 +86,6 @@ class Assignment extends Component{
             assignmentName: this.props.assignment['assignment_name']
         })
             .then((response) => {
-                console.log(response);
                 this.setState({studentSubmissions: response.data});
             });
     }
@@ -149,6 +151,8 @@ class Assignment extends Component{
                                         type="file" 
                                         name={this.state.submissionName} />
                                 <Button clicked={this.uploadSubmissionHandler}>Edit Submission</Button>
+                                <p>Grade: {this.state.submissionData['grade']}</p>
+                                <p>Feedback: {this.state.submissionData['feedback']}</p>
                             </Aux>;
             }else if(this.state.specificationUploaded){
                 submission = <Aux>
