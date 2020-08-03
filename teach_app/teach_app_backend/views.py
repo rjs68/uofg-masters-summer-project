@@ -122,6 +122,21 @@ def edit_student_grade(request):
         return HttpResponse("Grade Edit Unsuccessful")
 
 
+def edit_student_feedback(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['studentEmail'])
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    submission = __get_submission_object(user, assignment)
+
+    submission.feedback = data['feedback']
+    submission.save()
+    if(submission.feedback == data['feedback']):
+        return HttpResponse("Feedback Edit Successful")
+    else:
+        return HttpResponse("Feedback Edit Unsuccessful")
+
+
 def upload_submission(request):
     submission_file = request.FILES['submission']
     submission_name = submission_file.name.split('-')

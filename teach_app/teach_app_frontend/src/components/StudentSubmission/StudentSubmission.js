@@ -4,6 +4,7 @@ import classes from './StudentSubmission.module.css';
 import Button from '../UI/Button/Button';
 import Modal from '../UI/Modal/Modal';
 import GradeEditor from '../GradeEditor/GradeEditor';
+import FeedbackEditor from '../FeedbackEditor/FeedbackEditor';
 
 class StudentSubmission extends Component {
     constructor(props) {
@@ -12,8 +13,9 @@ class StudentSubmission extends Component {
             showGradeModal: false,
             showFeedbackModal: false
         };
-        
+
         this.handleGradeEditorStatus = this.handleGradeEditorStatus.bind(this);
+        this.handleFeedbackEditorStatus = this.handleFeedbackEditorStatus.bind(this);
     };
 
     handleGradeEditorStatus() {
@@ -28,6 +30,18 @@ class StudentSubmission extends Component {
         });
     }
 
+    handleFeedbackEditorStatus() {
+        var showFeedbackModal;
+        if(this.state.showFeedbackModal === true){
+            showFeedbackModal = false;
+        }else{
+            showFeedbackModal = true;
+        };
+        this.setState({
+            showFeedbackModal: showFeedbackModal
+        });
+    }
+
     render() {
         return (
             <div className={classes.StudentSubmission}>
@@ -36,11 +50,16 @@ class StudentSubmission extends Component {
                                 studentEmail={this.props.studentEmail}
                                 grade={this.props.grade}/>
                 </Modal>
+                <Modal show={this.state.showFeedbackModal}>
+                    <FeedbackEditor assignment={this.props.assignment}
+                                    studentEmail={this.props.studentEmail}
+                                    feedback={this.props.feedback}/>
+                </Modal>
                 <div className={classes.Email}>{this.props.studentEmail}</div>
                 <a href={this.props.submissionPath} download>Download Submission</a>
                 <div className={classes.Grade}>{this.props.grade}</div>
                 <Button clicked={this.handleGradeEditorStatus}>Edit Grade</Button>
-                <Button>Edit Feedback</Button>
+                <Button clicked={this.handleFeedbackEditorStatus}>Edit Feedback</Button>
             </div>
         )
     };
