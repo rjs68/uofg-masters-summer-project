@@ -43,6 +43,19 @@ class StudentSubmission extends Component {
     }
 
     render() {
+        var submissionTimeString;
+        var plusIndex;
+        var submissionTimeObject;
+        var submittedDiv;
+        if(this.props.submissionTime){
+            submissionTimeString = this.props.submissionTime;
+            submissionTimeString.replace(' ', 'T');
+            plusIndex = submissionTimeString.indexOf('+');
+            submissionTimeString = submissionTimeString.substring(0, plusIndex);
+            submissionTimeObject = new Date(submissionTimeString);
+            submittedDiv = <div>Submitted: {submissionTimeObject.toDateString()}</div>;
+        }
+        
         return (
             <div className={classes.StudentSubmission}>
                 <Modal show={this.state.showGradeModal}>
@@ -55,11 +68,16 @@ class StudentSubmission extends Component {
                                     studentEmail={this.props.studentEmail}
                                     feedback={this.props.feedback}/>
                 </Modal>
-                <div className={classes.Email}>{this.props.studentEmail}</div>
-                <a href={this.props.submissionPath} download>Download Submission</a>
-                <div className={classes.Grade}>{this.props.grade}</div>
-                <Button clicked={this.handleGradeEditorStatus}>Edit Grade</Button>
-                <Button clicked={this.handleFeedbackEditorStatus}>Edit Feedback</Button>
+                <div>
+                    <div className={classes.Email}>{this.props.studentEmail}</div>
+                    <a href={this.props.submissionPath} download>Download Submission</a>
+                    <div className={classes.Grade}>{this.props.grade}</div>
+                    {submittedDiv}
+                </div>
+                <div>
+                    <Button clicked={this.handleGradeEditorStatus}>Edit Grade</Button>
+                    <Button clicked={this.handleFeedbackEditorStatus}>Edit Feedback</Button>
+                </div> 
             </div>
         )
     };

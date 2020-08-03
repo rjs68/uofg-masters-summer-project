@@ -181,7 +181,8 @@ class Assignment extends Component{
                                                         studentEmail={studentEmail}
                                                         grade={grade}
                                                         feedback={this.state.studentSubmissions[studentSubmission]['feedback']}
-                                                        assignment={this.props.assignment}/>)
+                                                        assignment={this.props.assignment}
+                                                        submissionTime={this.state.studentSubmissions[studentSubmission]['submission_time']}/>)
                 }
             }
         }

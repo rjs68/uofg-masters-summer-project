@@ -1,16 +1,16 @@
 .StudentSubmission {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 10px;
     border: darkslategray;
     border-width: 1px;
     border-style: solid;
+    font-family: sans-serif;
+    font-size: 16px;
 }
 
 .StudentSubmission div {
-    font-family: sans-serif;
-    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .StudentSubmission a {
