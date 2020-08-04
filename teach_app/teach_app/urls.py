@@ -28,5 +28,13 @@ urlpatterns = [
     path('create-unit/', views.create_unit, name='create-unit'),
     path('unit-enrol/', views.unit_enrolment, name='unit-enrol'),
     path('assignments/', views.get_user_assignments, name='assignments'),
+    path('create-assignment/', views.create_assignment, name='create-assignment'),
+    path('assignment-specification/', views.get_assignment_specification, name='assignment-specification'),
+    path('upload-specification/', views.upload_assignment_specification, name='upload-specification'),
+    path('submission/', views.get_submission, name='submission'),
+    path('upload-submission/', views.upload_submission, name='upload-submission'),
+    path('student-submissions/', views.get_student_submissions, name='student-submissions'),
+    path('student-grade/', views.edit_student_grade, name='student-grade'),
+    path('student-feedback/', views.edit_student_feedback, name='student-feedback'),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

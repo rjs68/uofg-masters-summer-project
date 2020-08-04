@@ -184,6 +184,15 @@ def populate():
     for university in universities:
         add_university(university['university_name'], university['teacher_enrol_key'],
                        university['student_enrol_key'])
+    
+    university = University.objects.get(university_name="University of Glasgow")
+    admin = TeachUser.objects.create_superuser(email="admin@email.com",
+                                                password="adminpassword",
+                                                first_name="admin",
+                                                last_name="admin",
+                                                university=university,
+                                                is_teacher="true")
+
 
     for user in users:
         add_user(user['email'], user['password'], user['first_name'], user['last_name'],
@@ -270,6 +279,8 @@ def add_assignment(unit_code, assignment_name, deadline, weight):
                                                   event_name=assignment_name,
                                                   date_time=deadline,
                                                   weight=weight)
+    
+    return assignment
 
 
 def add_submission(user_email, unit_code, assignment_name, submission_time, grade, feedback):

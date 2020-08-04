@@ -24,7 +24,12 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "axios": "^0.19.2",
-    "js-cookie": "^2.2.1"
+    "bootstrap": "^4.5.0",
+    "js-cookie": "^2.2.1",
+    "react-bootstrap": "^1.2.2",
+    "react-pdf": "^4.2.0",
+    "reactjs-dropdown-component": "^1.1.2"
   }
 }
