@@ -43,17 +43,43 @@ class StudentSubmission extends Component {
     }
 
     render() {
-        var submissionTimeString;
-        var plusIndex;
-        var submissionTimeObject;
         var submittedDiv;
+        var submissionTimeObject;
         if(this.props.submissionTime){
-            submissionTimeString = this.props.submissionTime;
+            var submissionTimeString = this.props.submissionTime;
             submissionTimeString.replace(' ', 'T');
-            plusIndex = submissionTimeString.indexOf('+');
+            const plusIndex = submissionTimeString.indexOf('+');
             submissionTimeString = submissionTimeString.substring(0, plusIndex);
             submissionTimeObject = new Date(submissionTimeString);
-            submittedDiv = <div>Submitted: {submissionTimeObject.toDateString()}</div>;
+            submittedDiv = <div>
+                                Submitted: {submissionTimeObject.toLocaleTimeString()} {submissionTimeObject.toDateString()}
+                            </div>;
+        }
+
+        var deadlineComparisonDiv;
+        if(this.props.assignment['deadline'] && submissionTimeObject){
+            var assignmentTimeString = this.props.assignment['deadline'];
+            const assignmentTimeObject = new Date(assignmentTimeString);
+            var timeDifference = ((assignmentTimeObject.getTime() - submissionTimeObject.getTime())/1000)/60;
+            var timeUnit = " minutes"
+            const submittedOnTime = timeDifference>=0;
+            var earlyOrLate;
+            if(!submittedOnTime){
+                timeDifference = timeDifference*-1;
+                earlyOrLate = " late";
+            }else{
+                earlyOrLate = " early";
+            }
+            if(timeDifference>=60*24){
+                timeDifference=(timeDifference/60)/24;
+                timeUnit = " days";
+            }else if(timeDifference>=60){
+                timeDifference=timeDifference/60;
+                timeUnit = " hours";
+            }
+            deadlineComparisonDiv = <div>
+                                {Math.round(timeDifference)} {timeUnit} {earlyOrLate}
+                            </div>;
         }
         
         return (
@@ -71,12 +97,13 @@ class StudentSubmission extends Component {
                 <div>
                     <div className={classes.Email}>{this.props.studentEmail}</div>
                     <a href={this.props.submissionPath} download>Download Submission</a>
-                    <div className={classes.Grade}>{this.props.grade}</div>
                     {submittedDiv}
                 </div>
                 <div>
+                    <div className={classes.Grade}>Grade: {this.props.grade}</div>
                     <Button clicked={this.handleGradeEditorStatus}>Edit Grade</Button>
                     <Button clicked={this.handleFeedbackEditorStatus}>Edit Feedback</Button>
+                    {deadlineComparisonDiv}
                 </div> 
             </div>
         )

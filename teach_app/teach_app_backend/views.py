@@ -298,7 +298,7 @@ def __get_assignment_data(assignment):
         "unit": assignment.unit.unit_name,
         "unit_code": assignment.unit.unit_code,
         "assignment_name": assignment.event_name,
-        "deadline": assignment.date_time,
+        "deadline": assignment.date_time.strftime("%Y-%m-%dT%H:%M:%S"),
         "weight": assignment.weight
     }
 
