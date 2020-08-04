@@ -182,13 +182,13 @@ def create_unit(request):
 
 def create_assignment(request):
     data = json.loads(request.body)
-    unit = Unit.objects.get(unit_code=data['unitCode'])
+    unit_code = data['unitCode']
     assignment_name = data['assignmentName']
     deadline_string = data['deadline']
     deadline = datetime.strptime(deadline_string, "%Y-%m-%dT%H:%M")
     weight = data['weight']
 
-    assignment = add_assignment(unit, assignment_name, deadline, weight)
+    assignment = add_assignment(unit_code, assignment_name, deadline, weight)
 
     if(assignment):
         return HttpResponse("Assignment Created Successfully")

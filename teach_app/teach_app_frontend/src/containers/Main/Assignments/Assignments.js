@@ -7,6 +7,7 @@ import AssignmentBox from './AssignmentBox/AssignmentBox';
 import Assignment from '../../../components/Assignment/Assignment';
 import Button from '../../../components/UI/Button/Button';
 import Modal from '../../../components/UI/Modal/Modal';
+import Backdrop from '../../../components/UI/Backdrop/Backdrop';
 import CreateAssignmentForm from '../../../components/CreateAssignmentForm/CreateAssignmentForm';
 
 class Assignments extends Component {
@@ -20,7 +21,7 @@ class Assignments extends Component {
 
         this.getAssignments = this.getAssignments.bind(this);
         this.handleChangeStatus = this.handleChangeStatus.bind(this);
-        this.handleAssignmentSelected = this.handleAssignmentSelected.bind(this);
+        this.handleAssignmentSelectedStatus = this.handleAssignmentSelectedStatus.bind(this);
     }
 
     getAssignments() {
@@ -35,18 +36,24 @@ class Assignments extends Component {
     handleChangeStatus() {
         if(this.state.createAssignmentHandling === true){
             this.setState({createAssignmentHandling: false});
+            this.getAssignments();
         }else{
             this.setState({createAssignmentHandling: true});
         }
     }
 
-    handleAssignmentSelected(index) {
-        console.log(index);
-        console.log(this.state.assignments[index]);
-        this.setState({
-            assignmentSelected: true,
-            selectedAssignment: this.state.assignments[index]
-        })
+    handleAssignmentSelectedStatus(index) {
+        if(this.state.assignmentSelected){
+            this.setState({
+                assignmentSelected: false,
+                selectedAssignment: null
+            })
+        }else{
+            this.setState({
+                assignmentSelected: true,
+                selectedAssignment: this.state.assignments[index]
+            })
+        }
     }
 
     componentDidMount(){
@@ -58,7 +65,8 @@ class Assignments extends Component {
         if(this.props.userType === "teacher"){
             form = <Aux>
                         <Modal show={this.state.createAssignmentHandling}>
-                            <CreateAssignmentForm email={this.props.email} />
+                            <CreateAssignmentForm email={this.props.email}
+                                                    closeForm={this.handleChangeStatus} />
                         </Modal>
                         <Button clicked={this.handleChangeStatus}>Create Assignment</Button>
                     </Aux>;
@@ -71,7 +79,7 @@ class Assignments extends Component {
                 assignments.push(<AssignmentBox key={index} 
                                                 index={index}
                                                 assignment={this.state.assignments[assignment]} 
-                                                clicked={this.handleAssignmentSelected}/>);
+                                                clicked={this.handleAssignmentSelectedStatus}/>);
                 index += 1;
             }
         }
@@ -85,8 +93,19 @@ class Assignments extends Component {
                                     </Modal>
         }
 
+        var showBackdrop = false;
+        var backdropClicked;
+        if(this.state.createAssignmentHandling){
+            showBackdrop = true;
+            backdropClicked = this.handleChangeStatus;
+        }else if(this.state.assignmentSelected){
+            showBackdrop = true;
+            backdropClicked = this.handleAssignmentSelectedStatus;
+        };
+
         return (
             <div className={classes.PageContent}>
+                <Backdrop show={showBackdrop} clicked={backdropClicked}/>
                 {form}
                 {selectedAssignment}
                 {assignments}

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classes from './StudentSubmission.module.css';
 import Button from '../UI/Button/Button';
 import Modal from '../UI/Modal/Modal';
+import Backdrop from '../UI/Backdrop/Backdrop';
 import GradeEditor from '../GradeEditor/GradeEditor';
 import FeedbackEditor from '../FeedbackEditor/FeedbackEditor';
 
@@ -81,9 +82,20 @@ class StudentSubmission extends Component {
                                 {Math.round(timeDifference)} {timeUnit} {earlyOrLate}
                             </div>;
         }
+
+        var showBackdrop = false;
+        var backdropClicked;
+        if(this.state.showFeedbackModal){
+            showBackdrop = true;
+            backdropClicked = this.handleFeedbackEditorStatus;
+        }else if(this.state.showGradeModal){
+            showBackdrop = true;
+            backdropClicked = this.handleGradeEditorStatus;
+        }
         
         return (
             <div className={classes.StudentSubmission}>
+                <Backdrop show={showBackdrop} clicked={backdropClicked}/>
                 <Modal show={this.state.showGradeModal}>
                     <GradeEditor assignment={this.props.assignment}
                                 studentEmail={this.props.studentEmail}
