@@ -4,6 +4,7 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import Home from './Home/Home';
 import Units from './Units/Units';
+import Lectures from './Lectures/Lectures';
 import Assignments from './Assignments/Assignments';
 import Grades from './Grades/Grades';
 
@@ -11,7 +12,16 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          content: "home"
+          content: "home",
+          contentPages: {
+                "home": <Home />,
+                "units": <Units email={this.props.email} 
+                                userType={this.props.userType} />,
+                "lectures": <Lectures email={this.props.email} />,
+                "assignments": <Assignments email={this.props.email} 
+                                            userType={this.props.userType}/>,
+                "grades": <Grades />
+          }
         };
 
         this.navigationHandler = this.navigationHandler.bind(this);
@@ -22,26 +32,7 @@ class Main extends Component {
     }
     
     render() {
-        var pageContent;
-
-        switch(this.state.content){
-            case "home":
-                pageContent = <Home />;
-                break;
-            case "units":
-                pageContent = <Units email={this.props.email} 
-                                        userType={this.props.userType} />;
-                break;
-            case "assignments":
-                pageContent = <Assignments email={this.props.email} 
-                                            userType={this.props.userType}/>;
-                break;
-            case "grades":
-                pageContent = <Grades />;
-                break;
-            default:
-                pageContent = <Home />;
-        };
+        const pageContent = this.state.contentPages[this.state.content];
 
         return (
             <Aux>

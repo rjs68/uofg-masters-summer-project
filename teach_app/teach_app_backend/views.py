@@ -10,7 +10,8 @@ from django.conf import settings
 from rest_framework import generics
 from datetime import datetime
 
-from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission
+from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
+                                        Lecture)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
 
@@ -51,6 +52,22 @@ def get_user_assignments(request):
             assignments.append(assignment_data)
     
     data = json.dumps(assignments, default=str)
+    return HttpResponse(data)
+
+
+def get_user_lectures(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['email'])
+
+    user_units = __get_user_units(user)
+    lectures = []
+    for user_unit in user_units:
+        unit_lectures = Lecture.objects.filter(unit=user_unit)
+        for unit_lecture in unit_lectures:
+            lecture_data = __get_lecture_data(unit_lecture)
+            lectures.append(lecture_data)
+    
+    data = json.dumps(lectures, default=str)
     return HttpResponse(data)
 
 
@@ -303,10 +320,24 @@ def __get_assignment_data(assignment):
     }
 
 
+def __get_lecture_data(lecture):
+    return {
+        "unit": lecture.unit.unit_name,
+        "unit_code": lecture.unit.unit_code,
+        "lecture_name": lecture.event_name,
+        "lecture_time": lecture.date_time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+
+
 def __get_submission_data(submission):
+    if(submission.submission_time):
+        submission_time = submission.submission_time.strftime("%Y-%m-%dT%H:%M:%S")
+    else:
+        submission_time = None
+    
     return {
         "user": submission.user.email,
-        "submission_time": submission.submission_time,
+        "submission_time": submission_time,
         "grade": submission.grade,
         "feedback": submission.feedback
     }
