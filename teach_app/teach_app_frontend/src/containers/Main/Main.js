@@ -17,7 +17,8 @@ class Main extends Component {
                 "home": <Home />,
                 "units": <Units email={this.props.email} 
                                 userType={this.props.userType} />,
-                "lectures": <Lectures email={this.props.email} />,
+                "lectures": <Lectures email={this.props.email} 
+                                        userType={this.props.userType} />,
                 "assignments": <Assignments email={this.props.email} 
                                             userType={this.props.userType}/>,
                 "grades": <Grades />
