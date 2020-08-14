@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 class LectureVideo extends Component {
     constructor(props){
@@ -9,11 +8,12 @@ class LectureVideo extends Component {
             ident: 'teach',
             secret: '2b07e9c8-da3b-11ea-ab22-0242ac150002',
             channel: 'Teach',
-            // username: this.props.userEmail.replace('@', '')
-            username: 'U3sTqtxFSBlQf3uFp4CYoftVnTy19bsUt9Ttt4p68bhJjbFlNC0-URo59oHrTulbAAAAAF8v6yh0ZWFjaA=='
+            username: this.props.userEmail
         }
 
-        this.getRemoteConnection = this.getRemoteConnection.bind(this);
+        this.getToken = this.getToken.bind(this);
+        this.getServer = this.getServer.bind(this);
+        this.connectToServer = this.connectToServer.bind(this);
         this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
         this.getRemoteMediaStream = this.getRemoteMediaStream.bind(this);
         this.handleConnection = this.handleConnection.bind(this);
@@ -24,18 +24,49 @@ class LectureVideo extends Component {
         this.createdAnswer = this.createdAnswer.bind(this);
     }
 
-    getRemoteConnection() {
+    getToken() {
         const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function($evt){
-        if(xhr.readyState == 4 && xhr.status == 200){
-            let res = JSON.parse(xhr.responseText);
-            console.log("response: ",res);
+        xhr.onreadystatechange = ($evt) => {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                let res = JSON.parse(xhr.responseText);
+                console.log("token response: ",res);
+                this.setState({
+                    token: res['v']
+                });
+                this.getServer();
+            }
         }
-        }
-        xhr.open("PUT", "https://global.xirsys.net/_token/Teach", true);
+        xhr.open("PUT", "https://global.xirsys.net/_token/Teach?k="+this.state.username, true);
         xhr.setRequestHeader ("Authorization", "Basic " + btoa("teach:2b07e9c8-da3b-11ea-ab22-0242ac150002") );
         xhr.setRequestHeader ("Content-Type", "application/json");
-        xhr.send( JSON.stringify({"format": "urls"}) );
+        xhr.send();
+    }
+
+    getServer() {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = ($evt) => {
+            if(xhr.readyState == 4 && xhr.status == 200){
+                let res = JSON.parse(xhr.responseText);
+                console.log("server response: ",res);
+                this.setState({
+                    server: res['v']
+                });
+                this.connectToServer();
+            }
+        }
+        xhr.open("GET", "https://global.xirsys.net/_host/Teach?type=signal&k="+this.state.username, true);
+        xhr.setRequestHeader ("Authorization", "Basic " + btoa("teach:2b07e9c8-da3b-11ea-ab22-0242ac150002") );
+        xhr.setRequestHeader ("Content-Type", "application/json");
+        xhr.send();
+    }
+
+    connectToServer() {
+        const serverUrl = this.state.server+"/v2/"+this.state.token;
+        var ws = new WebSocket(serverUrl);
+        console.log(ws);
+        ws.addEventListener('message', event => {
+            console.log(event.data);
+        })
     }
 
     getLocalVideoStream() {
@@ -153,7 +184,7 @@ class LectureVideo extends Component {
         // }else{
         //     this.getPeerConnections();
         // }
-        this.getRemoteConnection();
+        this.getToken();
     }
 
     render() {
