@@ -17,6 +17,8 @@ class LectureVideo extends Component {
         this.onSocketMessage = this.onSocketMessage.bind(this);
         this.getIceCandidates = this.getIceCandidates.bind(this);
         this.createPeerConnection = this.createPeerConnection.bind(this);
+        this.createdOffer = this.createdOffer.bind(this);
+        this.createdAnswer = this.createdAnswer.bind(this);
 
 
         // this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
@@ -25,8 +27,6 @@ class LectureVideo extends Component {
         // this.getOtherPeer = this.getOtherPeer.bind(this);
         // this.getPeerName = this.getPeerName.bind(this);
         // this.getPeerConnections = this.getPeerConnections.bind(this);
-        // this.createdOffer = this.createdOffer.bind(this);
-        // this.createdAnswer = this.createdAnswer.bind(this);
     }
 
     getToken() {
@@ -95,13 +95,17 @@ class LectureVideo extends Component {
             case "message":
                 switch(data.p.msg.type) {
                     case "offer":
-                        const desc = new RTCSessionDescription(data.p.msg);
+                        var desc = new RTCSessionDescription(data.p.msg);
                         console.log(desc);
-                        const pc = this.state.peerConnection;
+                        var pc = this.state.peerConnection;
                         pc.setRemoteDescription(desc);
-                        this.setState({
-                            peerConnection: pc
-                        });
+                        pc.createAnswer().then(description => this.createdAnswer(description));
+                        break;
+                    case "answer":
+                        desc = new RTCSessionDescription(data.p.msg);
+                        console.log(desc);
+                        pc = this.state.peerConnection;
+                        pc.setRemoteDescription(desc);
                         break;
                 }
         }
@@ -136,17 +140,29 @@ class LectureVideo extends Component {
     createdOffer(description){
         const pc = this.state.peerConnection;
         pc.setLocalDescription(description);
-        this.setState({
-            peerConnection: pc
-        });
         var pkt = {
-            t: "u",
-            m: {
-                f: "Teach/" + this.state.username,
-                o: "message"
-            },
-            p: {msg:description}
+                t: "u",
+                m: {
+                    f: "Teach/" + this.state.username,
+                    o: "message"
+                },
+                p: {msg:description}
             };
+        this.state.webSocket.send(JSON.stringify(pkt));
+    }
+
+    createdAnswer(description){
+        const pc = this.state.peerConnection;
+        pc.setLocalDescription(description);
+        var pkt = {
+            t: "u", 
+            m: {
+                f: "Teach/" + this.state.username, 
+                o: "message", 
+                t: null
+            }, 
+            p: {msg:description}
+        };
         this.state.webSocket.send(JSON.stringify(pkt));
     }
 
@@ -212,14 +228,6 @@ class LectureVideo extends Component {
     // getPeerName(peerConnection) {
     //     return (peerConnection === this.state.localPeerConnection) ?
     //         'localPeerConnection' : 'remotePeerConnection';
-    // }
-
-    // createdAnswer(description){
-    //     console.log("Answer:" + description);
-    //     const remotePeerConnection = this.state.remotePeerConnection;
-    //     remotePeerConnection.setLocalDescription(description);
-    //     const localPeerConnection = this.state.localPeerConnection;
-    //     localPeerConnection.setRemoteDescription(description);
     // }
 
     // getPeerConnections() {
