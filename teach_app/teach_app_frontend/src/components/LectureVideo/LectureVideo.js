@@ -14,6 +14,7 @@ class LectureVideo extends Component {
         this.getToken = this.getToken.bind(this);
         this.getSocketServer = this.getSocketServer.bind(this);
         this.connectToSocket = this.connectToSocket.bind(this);
+        this.onSocketMessage = this.onSocketMessage.bind(this);
         this.getIceCandidates = this.getIceCandidates.bind(this);
         this.createPeerConnection = this.createPeerConnection.bind(this);
 
@@ -68,13 +69,42 @@ class LectureVideo extends Component {
         const serverUrl = this.state.server+"/v2/"+this.state.token;
         var ws = new WebSocket(serverUrl);
         console.log(ws);
-        ws.addEventListener('message', event => {
-            console.log(event.data);
-        })
-        this.setState({
-            webSocket: ws
-        });
-        ws.onopen = this.getIceCandidates();
+        ws.onopen = () => {
+            ws.addEventListener('message', this.onSocketMessage);
+            this.setState({
+                webSocket: ws
+            });
+            this.getIceCandidates();
+        }
+    }
+
+    onSocketMessage(event) {
+        const data = JSON.parse(event.data);
+        switch (data.m.o) {
+            case "peers":
+                const users = data.p.users;
+                for(var i=0; i < users.length; i++) {
+                    console.log(users[i] + " is in the chat");
+                }
+                break;
+            case "peer_connected":
+                const f = data.m.f.split("/");
+                const joining = f[f.length-1];
+                    console.log(joining + " has joined the chat");
+                break;
+            case "message":
+                switch(data.p.msg.type) {
+                    case "offer":
+                        const desc = new RTCSessionDescription(data.p.msg);
+                        console.log(desc);
+                        const pc = this.state.peerConnection;
+                        pc.setRemoteDescription(desc);
+                        this.setState({
+                            peerConnection: pc
+                        });
+                        break;
+                }
+        }
     }
 
     getIceCandidates() {
@@ -104,7 +134,11 @@ class LectureVideo extends Component {
     }
 
     createdOffer(description){
-        this.state.peerConnection.setLocalDescription(description);
+        const pc = this.state.peerConnection;
+        pc.setLocalDescription(description);
+        this.setState({
+            peerConnection: pc
+        });
         var pkt = {
             t: "u",
             m: {
