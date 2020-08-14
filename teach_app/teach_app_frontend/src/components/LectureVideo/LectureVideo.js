@@ -15,14 +15,17 @@ class LectureVideo extends Component {
         this.getSocketServer = this.getSocketServer.bind(this);
         this.connectToSocket = this.connectToSocket.bind(this);
         this.getIceCandidates = this.getIceCandidates.bind(this);
-        this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
-        this.getRemoteMediaStream = this.getRemoteMediaStream.bind(this);
-        this.handleConnection = this.handleConnection.bind(this);
-        this.getOtherPeer = this.getOtherPeer.bind(this);
-        this.getPeerName = this.getPeerName.bind(this);
-        this.getPeerConnections = this.getPeerConnections.bind(this);
-        this.createdOffer = this.createdOffer.bind(this);
-        this.createdAnswer = this.createdAnswer.bind(this);
+        this.createPeerConnection = this.createPeerConnection.bind(this);
+
+
+        // this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
+        // this.getRemoteMediaStream = this.getRemoteMediaStream.bind(this);
+        // this.handleConnection = this.handleConnection.bind(this);
+        // this.getOtherPeer = this.getOtherPeer.bind(this);
+        // this.getPeerName = this.getPeerName.bind(this);
+        // this.getPeerConnections = this.getPeerConnections.bind(this);
+        // this.createdOffer = this.createdOffer.bind(this);
+        // this.createdAnswer = this.createdAnswer.bind(this);
     }
 
     getToken() {
@@ -68,7 +71,10 @@ class LectureVideo extends Component {
         ws.addEventListener('message', event => {
             console.log(event.data);
         })
-        this.getIceCandidates();
+        this.setState({
+            webSocket: ws
+        });
+        ws.onopen = this.getIceCandidates();
     }
 
     getIceCandidates() {
@@ -77,6 +83,10 @@ class LectureVideo extends Component {
             if(xhr.readyState == 4 && xhr.status == 200){
                 let res = JSON.parse(xhr.responseText);
                 console.log("ice candidates: ",res);
+                this.setState({
+                    iceCandidates: res['v']
+                });
+                this.createPeerConnection();
             }
         }
         xhr.open("PUT", "https://global.xirsys.net/_turn/Teach", true);
@@ -85,113 +95,124 @@ class LectureVideo extends Component {
         xhr.send();
     }
 
-    getLocalVideoStream() {
-        const constraints = { audio: true, video: true };
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(stream => {
-                this.setState({
-                    localStream: stream
-                })
-                console.log('Got MediaStream:', stream);
-                const video = document.querySelector('video');
-                video.srcObject = stream;
-                video.onloadedmetadata = () => {
-                    video.play();
-                };
-                this.getPeerConnections();
-            })
-            .catch(error => {
-                console.error('Error accessing media devices.', error);
-            });
-    }
-
-    //https://github.com/googlecodelabs/webrtc-web/blob/master/step-02/js/main.js
-    getRemoteMediaStream(event) {
-        console.log("Got remote stream");
-        const remoteStream = event.stream;
+    createPeerConnection(){
+        const pc = new RTCPeerConnection(this.state.iceCandidates);
         this.setState({
-            remoteStream: remoteStream
-        })
-        if(this.props.userType==="student"){
-            const video = document.getElementById('remoteVideo');
-            video.srcObject = remoteStream;
-        }
-    }
-
-    handleConnection(event) {
-        const peerConnection = event.target;
-        const iceCandidate = event.candidate;
-      
-        if (iceCandidate) {
-          const newIceCandidate = new RTCIceCandidate(iceCandidate);
-          const otherPeer = this.getOtherPeer(peerConnection);
-      
-          otherPeer.addIceCandidate(newIceCandidate)
-            .then(() => {
-                console.log(`${this.getPeerName(peerConnection)} addIceCandidate success.`);
-            }).catch((error) => {
-                console.log(`${this.getPeerName(peerConnection)} failed to add ICE Candidate:\n`+
-                    `${error.toString()}.`);
-            });
-      
-          console.log(`${this.getPeerName(peerConnection)} ICE candidate:\n` +
-                `${event.candidate.candidate}.`);
-        }
-    }
-
-    getOtherPeer(peerConnection) {
-        return (peerConnection === this.state.localPeerConnection) ?
-            this.state.remotePeerConnection : this.state.localPeerConnection;
-    }
-
-    getPeerName(peerConnection) {
-        return (peerConnection === this.state.localPeerConnection) ?
-            'localPeerConnection' : 'remotePeerConnection';
+            peerConnection: pc
+        });
+        pc.createOffer().then(description => this.createdOffer(description));
     }
 
     createdOffer(description){
-        console.log("Offer:" + description);
-        const localPeerConnection = this.state.localPeerConnection;
-        localPeerConnection.setLocalDescription(description);
-        const remotePeerConnection = this.state.remotePeerConnection;
-        remotePeerConnection.setRemoteDescription(description);
-        remotePeerConnection.createAnswer()
-            .then(this.createdAnswer);
+        this.state.peerConnection.setLocalDescription(description);
+        var pkt = {
+            t: "u",
+            m: {
+                f: "Teach/" + this.state.username,
+                o: "message"
+            },
+            p: {msg:description}
+            };
+        this.state.webSocket.send(JSON.stringify(pkt));
     }
 
-    createdAnswer(description){
-        console.log("Answer:" + description);
-        const remotePeerConnection = this.state.remotePeerConnection;
-        remotePeerConnection.setLocalDescription(description);
-        const localPeerConnection = this.state.localPeerConnection;
-        localPeerConnection.setRemoteDescription(description);
-    }
+    // getLocalVideoStream() {
+    //     const constraints = { audio: true, video: true };
+    //     navigator.mediaDevices.getUserMedia(constraints)
+    //         .then(stream => {
+    //             this.setState({
+    //                 localStream: stream
+    //             })
+    //             console.log('Got MediaStream:', stream);
+    //             const video = document.querySelector('video');
+    //             video.srcObject = stream;
+    //             video.onloadedmetadata = () => {
+    //                 video.play();
+    //             };
+    //             this.getPeerConnections();
+    //         })
+    //         .catch(error => {
+    //             console.error('Error accessing media devices.', error);
+    //         });
+    // }
 
-    getPeerConnections() {
-        const localPeerConnection = new RTCPeerConnection(this.state.configuration);
-        localPeerConnection.addEventListener('icecandidate', this.handleConnection);
-        if(this.props.userType==="teacher"){
-            localPeerConnection.addStream(this.state.localStream);
-        }
-        console.log(localPeerConnection);
+    // //https://github.com/googlecodelabs/webrtc-web/blob/master/step-02/js/main.js
+    // getRemoteMediaStream(event) {
+    //     console.log("Got remote stream");
+    //     const remoteStream = event.stream;
+    //     this.setState({
+    //         remoteStream: remoteStream
+    //     })
+    //     if(this.props.userType==="student"){
+    //         const video = document.getElementById('remoteVideo');
+    //         video.srcObject = remoteStream;
+    //     }
+    // }
 
-        const remotePeerConnection = new RTCPeerConnection(this.state.configuration);
-        remotePeerConnection.addEventListener('icecandidate', this.handleConnection);
-        remotePeerConnection.addEventListener('addstream', this.getRemoteMediaStream);
-        console.log(remotePeerConnection);
+    // handleConnection(event) {
+    //     const peerConnection = event.target;
+    //     const iceCandidate = event.candidate;
+      
+    //     if (iceCandidate) {
+    //       const newIceCandidate = new RTCIceCandidate(iceCandidate);
+    //       const otherPeer = this.getOtherPeer(peerConnection);
+      
+    //       otherPeer.addIceCandidate(newIceCandidate)
+    //         .then(() => {
+    //             console.log(`${this.getPeerName(peerConnection)} addIceCandidate success.`);
+    //         }).catch((error) => {
+    //             console.log(`${this.getPeerName(peerConnection)} failed to add ICE Candidate:\n`+
+    //                 `${error.toString()}.`);
+    //         });
+      
+    //       console.log(`${this.getPeerName(peerConnection)} ICE candidate:\n` +
+    //             `${event.candidate.candidate}.`);
+    //     }
+    // }
 
-        this.setState({
-            localPeerConnection: localPeerConnection,
-            remotePeerConnection: remotePeerConnection
-        });
+    // getOtherPeer(peerConnection) {
+    //     return (peerConnection === this.state.localPeerConnection) ?
+    //         this.state.remotePeerConnection : this.state.localPeerConnection;
+    // }
 
-        const offerOptions = {
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: true
-        }
-        localPeerConnection.createOffer(offerOptions)
-            .then(this.createdOffer);
-    }
+    // getPeerName(peerConnection) {
+    //     return (peerConnection === this.state.localPeerConnection) ?
+    //         'localPeerConnection' : 'remotePeerConnection';
+    // }
+
+    // createdAnswer(description){
+    //     console.log("Answer:" + description);
+    //     const remotePeerConnection = this.state.remotePeerConnection;
+    //     remotePeerConnection.setLocalDescription(description);
+    //     const localPeerConnection = this.state.localPeerConnection;
+    //     localPeerConnection.setRemoteDescription(description);
+    // }
+
+    // getPeerConnections() {
+    //     const localPeerConnection = new RTCPeerConnection(this.state.configuration);
+    //     localPeerConnection.addEventListener('icecandidate', this.handleConnection);
+    //     if(this.props.userType==="teacher"){
+    //         localPeerConnection.addStream(this.state.localStream);
+    //     }
+    //     console.log(localPeerConnection);
+
+    //     const remotePeerConnection = new RTCPeerConnection(this.state.configuration);
+    //     remotePeerConnection.addEventListener('icecandidate', this.handleConnection);
+    //     remotePeerConnection.addEventListener('addstream', this.getRemoteMediaStream);
+    //     console.log(remotePeerConnection);
+
+    //     this.setState({
+    //         localPeerConnection: localPeerConnection,
+    //         remotePeerConnection: remotePeerConnection
+    //     });
+
+    //     const offerOptions = {
+    //         offerToReceiveAudio: true,
+    //         offerToReceiveVideo: true
+    //     }
+    //     localPeerConnection.createOffer(offerOptions)
+    //         .then(this.createdOffer);
+    // }
 
 
     componentDidMount(){
