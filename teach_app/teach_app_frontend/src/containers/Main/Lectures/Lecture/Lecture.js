@@ -5,7 +5,8 @@ import LectureVideo from '../../../../components/LectureVideo/LectureVideo';
 const lecture = props => (
     <div>
         {props.lecture}
-        <LectureVideo userType={props.userType} />
+        <LectureVideo userEmail={props.userEmail}
+                        userType={props.userType} />
     </div>
 );
 

@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class LectureVideo extends Component {
     constructor(props){
         super(props);
         this.state = {
-            configuration: {'iceServers': [{'urls': 'stun:eu-turn3.xirsys.com'}]}
+            configuration: {'iceServers': [{'urls': 'stun:eu-turn3.xirsys.com'}]},
+            ident: 'teach',
+            secret: '2b07e9c8-da3b-11ea-ab22-0242ac150002',
+            channel: 'Teach',
+            // username: this.props.userEmail.replace('@', '')
+            username: 'U3sTqtxFSBlQf3uFp4CYoftVnTy19bsUt9Ttt4p68bhJjbFlNC0-URo59oHrTulbAAAAAF8v6yh0ZWFjaA=='
         }
 
+        this.getRemoteConnection = this.getRemoteConnection.bind(this);
         this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
         this.getRemoteMediaStream = this.getRemoteMediaStream.bind(this);
         this.handleConnection = this.handleConnection.bind(this);
@@ -17,6 +24,20 @@ class LectureVideo extends Component {
         this.createdAnswer = this.createdAnswer.bind(this);
     }
 
+    getRemoteConnection() {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function($evt){
+        if(xhr.readyState == 4 && xhr.status == 200){
+            let res = JSON.parse(xhr.responseText);
+            console.log("response: ",res);
+        }
+        }
+        xhr.open("PUT", "https://global.xirsys.net/_token/Teach", true);
+        xhr.setRequestHeader ("Authorization", "Basic " + btoa("teach:2b07e9c8-da3b-11ea-ab22-0242ac150002") );
+        xhr.setRequestHeader ("Content-Type", "application/json");
+        xhr.send( JSON.stringify({"format": "urls"}) );
+    }
+
     getLocalVideoStream() {
         const constraints = { audio: true, video: true };
         navigator.mediaDevices.getUserMedia(constraints)
@@ -25,7 +46,7 @@ class LectureVideo extends Component {
                     localStream: stream
                 })
                 console.log('Got MediaStream:', stream);
-                const video = document.getElementById('localVideo');
+                const video = document.querySelector('video');
                 video.srcObject = stream;
                 video.onloadedmetadata = () => {
                     video.play();
@@ -39,12 +60,15 @@ class LectureVideo extends Component {
 
     //https://github.com/googlecodelabs/webrtc-web/blob/master/step-02/js/main.js
     getRemoteMediaStream(event) {
+        console.log("Got remote stream");
         const remoteStream = event.stream;
         this.setState({
             remoteStream: remoteStream
         })
-        const video = document.getElementById('remoteVideo');
-        video.srcObject = remoteStream;
+        if(this.props.userType==="student"){
+            const video = document.getElementById('remoteVideo');
+            video.srcObject = remoteStream;
+        }
     }
 
     handleConnection(event) {
@@ -63,7 +87,7 @@ class LectureVideo extends Component {
                     `${error.toString()}.`);
             });
       
-          console.log(`${getPeerName(peerConnection)} ICE candidate:\n` +
+          console.log(`${this.getPeerName(peerConnection)} ICE candidate:\n` +
                 `${event.candidate.candidate}.`);
         }
     }
@@ -99,7 +123,9 @@ class LectureVideo extends Component {
     getPeerConnections() {
         const localPeerConnection = new RTCPeerConnection(this.state.configuration);
         localPeerConnection.addEventListener('icecandidate', this.handleConnection);
-        localPeerConnection.addStream(this.state.localStream);
+        if(this.props.userType==="teacher"){
+            localPeerConnection.addStream(this.state.localStream);
+        }
         console.log(localPeerConnection);
 
         const remotePeerConnection = new RTCPeerConnection(this.state.configuration);
@@ -122,14 +148,18 @@ class LectureVideo extends Component {
 
 
     componentDidMount(){
-        this.getLocalVideoStream();
+        // if(this.props.userType==="teacher"){
+        //     this.getLocalVideoStream();
+        // }else{
+        //     this.getPeerConnections();
+        // }
+        this.getRemoteConnection();
     }
 
     render() {
         return (
             <div>
-                <video autoPlay={true} id="localVideo" controls></video>
-                <video autoPlay={true} id="remoteVideo" controls></video>
+                <video autoPlay={true} controls></video>
             </div>
         )
     }
