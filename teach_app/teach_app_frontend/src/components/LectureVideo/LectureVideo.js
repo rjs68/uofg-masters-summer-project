@@ -8,7 +8,9 @@ class LectureVideo extends Component {
             ident: 'teach',
             secret: '2b07e9c8-da3b-11ea-ab22-0242ac150002',
             channel: 'Teach',
-            username: this.props.userEmail
+            username: this.props.userEmail,
+            sendDisabled: true,
+            callMade: false
         }
 
         this.getToken = this.getToken.bind(this);
@@ -19,14 +21,13 @@ class LectureVideo extends Component {
         this.createPeerConnection = this.createPeerConnection.bind(this);
         this.createdOffer = this.createdOffer.bind(this);
         this.createdAnswer = this.createdAnswer.bind(this);
-
-
-        // this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
-        // this.getRemoteMediaStream = this.getRemoteMediaStream.bind(this);
-        // this.handleConnection = this.handleConnection.bind(this);
-        // this.getOtherPeer = this.getOtherPeer.bind(this);
-        // this.getPeerName = this.getPeerName.bind(this);
-        // this.getPeerConnections = this.getPeerConnections.bind(this);
+        this.onIceCandidate = this.onIceCandidate.bind(this);
+        this.onDataChannel = this.onDataChannel.bind(this);
+        this.onMessageChange = this.onMessageChange.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
+        this.onDataMessage = this.onDataMessage.bind(this);
+        this.onDataChannelOpen = this.onDataChannelOpen.bind(this);
+        this.callPeer = this.callPeer.bind(this);
     }
 
     getToken() {
@@ -90,7 +91,7 @@ class LectureVideo extends Component {
             case "peer_connected":
                 const f = data.m.f.split("/");
                 const joining = f[f.length-1];
-                    console.log(joining + " has joined the chat");
+                console.log(joining + " has joined the chat");
                 break;
             case "message":
                 switch(data.p.msg.type) {
@@ -99,6 +100,7 @@ class LectureVideo extends Component {
                         console.log(desc);
                         var pc = this.state.peerConnection;
                         pc.setRemoteDescription(desc);
+                        pc.ondatachannel = event => this.onDataChannel(event);
                         pc.createAnswer().then(description => this.createdAnswer(description));
                         break;
                     case "answer":
@@ -107,6 +109,12 @@ class LectureVideo extends Component {
                         pc = this.state.peerConnection;
                         pc.setRemoteDescription(desc);
                         break;
+                    case "candidate":
+                        console.log("You are receiving a candidate");
+                        var candidate = new RTCIceCandidate(data.p.msg);
+                        pc = this.state.peerConnection;
+                        pc.addIceCandidate(candidate);
+                            
                 }
         }
     }
@@ -131,10 +139,11 @@ class LectureVideo extends Component {
 
     createPeerConnection(){
         const pc = new RTCPeerConnection(this.state.iceCandidates);
+        pc.onicecandidate = event => this.onIceCandidate(event);
         this.setState({
-            peerConnection: pc
+            peerConnection: pc,
         });
-        pc.createOffer().then(description => this.createdOffer(description));
+        // pc.createOffer().then(description => this.createdOffer(description));
     }
 
     createdOffer(description){
@@ -160,115 +169,98 @@ class LectureVideo extends Component {
                 f: "Teach/" + this.state.username, 
                 o: "message", 
                 t: null
-            }, 
+            },  
             p: {msg:description}
         };
         this.state.webSocket.send(JSON.stringify(pkt));
     }
 
-    // getLocalVideoStream() {
-    //     const constraints = { audio: true, video: true };
-    //     navigator.mediaDevices.getUserMedia(constraints)
-    //         .then(stream => {
-    //             this.setState({
-    //                 localStream: stream
-    //             })
-    //             console.log('Got MediaStream:', stream);
-    //             const video = document.querySelector('video');
-    //             video.srcObject = stream;
-    //             video.onloadedmetadata = () => {
-    //                 video.play();
-    //             };
-    //             this.getPeerConnections();
-    //         })
-    //         .catch(error => {
-    //             console.error('Error accessing media devices.', error);
-    //         });
-    // }
+    onIceCandidate(event) {
+        console.log("You are sending a candidate");
+        const candidate = event.candidate;
+        if (event.candidate != null) {
+            var cPkt = {type: "candidate",
+            sdpMLineIndex: candidate.sdpMLineIndex,
+            sdpMid: candidate.sdpMid,
+            candidate: candidate.candidate
+        };
+        const pkt = {
+            t: "u",
+            m: {
+                f: "SampleAppChannel/" + this.state.username,
+                o: 'message'
+                },
+            p: {msg:cPkt}
+        }
+        this.state.webSocket.send(JSON.stringify(pkt));
+        }
+    }
 
-    // //https://github.com/googlecodelabs/webrtc-web/blob/master/step-02/js/main.js
-    // getRemoteMediaStream(event) {
-    //     console.log("Got remote stream");
-    //     const remoteStream = event.stream;
-    //     this.setState({
-    //         remoteStream: remoteStream
-    //     })
-    //     if(this.props.userType==="student"){
-    //         const video = document.getElementById('remoteVideo');
-    //         video.srcObject = remoteStream;
-    //     }
-    // }
+    onDataChannel(event) {
+        const dc = event.channel;
+        dc.onmessage = event => this.onDataMessage(event);
+        dc.onopen = event => this.onDataChannelOpen(event);
+        dc.onreadystatechange = event => console.log("Status Changed");
+        this.setState({
+            dataChannel: dc
+        })
+    }
 
-    // handleConnection(event) {
-    //     const peerConnection = event.target;
-    //     const iceCandidate = event.candidate;
-      
-    //     if (iceCandidate) {
-    //       const newIceCandidate = new RTCIceCandidate(iceCandidate);
-    //       const otherPeer = this.getOtherPeer(peerConnection);
-      
-    //       otherPeer.addIceCandidate(newIceCandidate)
-    //         .then(() => {
-    //             console.log(`${this.getPeerName(peerConnection)} addIceCandidate success.`);
-    //         }).catch((error) => {
-    //             console.log(`${this.getPeerName(peerConnection)} failed to add ICE Candidate:\n`+
-    //                 `${error.toString()}.`);
-    //         });
-      
-    //       console.log(`${this.getPeerName(peerConnection)} ICE candidate:\n` +
-    //             `${event.candidate.candidate}.`);
-    //     }
-    // }
+    onMessageChange(event) {
+        this.setState({
+            message: event.target.value
+        });
+    }
 
-    // getOtherPeer(peerConnection) {
-    //     return (peerConnection === this.state.localPeerConnection) ?
-    //         this.state.remotePeerConnection : this.state.localPeerConnection;
-    // }
+    onDataChannelOpen(event) {
+        this.setState({
+            sendDisabled: false
+        })
+    }
 
-    // getPeerName(peerConnection) {
-    //     return (peerConnection === this.state.localPeerConnection) ?
-    //         'localPeerConnection' : 'remotePeerConnection';
-    // }
+    callPeer() {
+        console.log("You are calling");
+        const pc = this.state.peerConnection;
+        const dc = pc.createDataChannel("data"); 
+        dc.onmessage = event => this.onDataMessage(event);
+        dc.onopen = event => this.onDataChannelOpen(event);
+        dc.onreadystatechange = event => console.log("Status Changed");
+        this.setState({
+            dataChannel: dc
+        })
+        pc.createOffer().then(d => this.createdOffer(d));
+    }
+    
+    sendMessage() {
+        const message = this.state.message;
+        console.log("You said " + message);
+        const messagePacket = {
+            f: this.state.username,
+            msg: message
+        }
+        const dc = this.state.dataChannel;
+        dc.send(JSON.stringify(messagePacket));
+    }
 
-    // getPeerConnections() {
-    //     const localPeerConnection = new RTCPeerConnection(this.state.configuration);
-    //     localPeerConnection.addEventListener('icecandidate', this.handleConnection);
-    //     if(this.props.userType==="teacher"){
-    //         localPeerConnection.addStream(this.state.localStream);
-    //     }
-    //     console.log(localPeerConnection);
-
-    //     const remotePeerConnection = new RTCPeerConnection(this.state.configuration);
-    //     remotePeerConnection.addEventListener('icecandidate', this.handleConnection);
-    //     remotePeerConnection.addEventListener('addstream', this.getRemoteMediaStream);
-    //     console.log(remotePeerConnection);
-
-    //     this.setState({
-    //         localPeerConnection: localPeerConnection,
-    //         remotePeerConnection: remotePeerConnection
-    //     });
-
-    //     const offerOptions = {
-    //         offerToReceiveAudio: true,
-    //         offerToReceiveVideo: true
-    //     }
-    //     localPeerConnection.createOffer(offerOptions)
-    //         .then(this.createdOffer);
-    // }
-
+    onDataMessage(event) {
+        const messagePacket = JSON.parse(event.data);
+        console.log(messagePacket.f + " said: " + messagePacket.msg);
+    }
 
     componentDidMount(){
-        // if(this.props.userType==="teacher"){
-        //     this.getLocalVideoStream();
-        // }else{
-        //     this.getPeerConnections();
-        // }
         this.getToken();
     }
 
     render() {
         return (
             <div>
+                <button onClick={this.callPeer}>Call</button>
+                <input onChange={this.onMessageChange}
+                        type="text" 
+                        name="message" 
+                        placeholder="Message" />
+                <button onClick={this.sendMessage}
+                        disabled={this.state.sendDisabled}>Send</button>
                 <video autoPlay={true} controls></video>
             </div>
         )
