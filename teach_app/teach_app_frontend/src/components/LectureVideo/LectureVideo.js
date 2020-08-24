@@ -30,6 +30,7 @@ class LectureVideo extends Component {
         this.createNewPeerConnection = this.createNewPeerConnection.bind(this);
         this.setDataChannelHandlers = this.setDataChannelHandlers.bind(this);
         this.getUsernameByRemoteDescription = this.getUsernameByRemoteDescription.bind(this);
+        this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
     }
 
     getToken() {
@@ -260,6 +261,11 @@ class LectureVideo extends Component {
 
     createNewPeerConnection(username){
         const pc = new RTCPeerConnection(this.state.iceCandidates);
+        if(this.props.userType==="teacher"){
+            pc.addStream(this.state.localStream);
+        }else{
+            pc.onaddstream = event => this.onAddStream(event);
+        };
         pc.ondatachannel = event => this.onDataChannel(event);
         pc.onicecandidate = candidate => this.onIceCandidate(candidate);
         pc.oniceconnectionstatechange = event => console.log("iceconnection state ", event);
@@ -278,10 +284,41 @@ class LectureVideo extends Component {
             }
         }
         return null;
-    }       
+    }
+
+    getLocalVideoStream() {
+        const constraints = { audio: true, video: true };
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                this.setState({
+                    localStream: stream
+                })
+                console.log('Got MediaStream:', stream);
+                const video = document.querySelector('video');
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    video.play();
+                };
+            })
+            .catch(error => {
+                console.error('Error accessing media devices.', error);
+            });
+    }
+
+    onAddStream(event) {
+        const video = document.querySelector('video');
+        video.srcObject = event.stream;
+        console.log("Received media stream: " + event.stream);
+        video.onloadedmetadata = () => {
+            video.play();
+        };
+    }
 
     componentDidMount(){
         this.getToken();
+        if(this.props.userType==="teacher"){
+            this.getLocalVideoStream();
+        };
     }
 
     render() {
