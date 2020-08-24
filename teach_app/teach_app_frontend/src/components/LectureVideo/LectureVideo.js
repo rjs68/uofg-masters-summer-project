@@ -10,7 +10,7 @@ class LectureVideo extends Component {
             channel: 'Teach',
             username: this.props.userEmail,
             sendDisabled: true,
-            callMade: false
+            peerConnections: {}
         }
 
         this.getToken = this.getToken.bind(this);
@@ -18,9 +18,8 @@ class LectureVideo extends Component {
         this.connectToSocket = this.connectToSocket.bind(this);
         this.onSocketMessage = this.onSocketMessage.bind(this);
         this.getIceCandidates = this.getIceCandidates.bind(this);
-        this.createPeerConnection = this.createPeerConnection.bind(this);
-        this.createdOffer = this.createdOffer.bind(this);
-        this.createdAnswer = this.createdAnswer.bind(this);
+        this.onCreateOffer = this.onCreateOffer.bind(this);
+        this.onCreateAnswer = this.onCreateAnswer.bind(this);
         this.onIceCandidate = this.onIceCandidate.bind(this);
         this.onDataChannel = this.onDataChannel.bind(this);
         this.onMessageChange = this.onMessageChange.bind(this);
@@ -28,6 +27,9 @@ class LectureVideo extends Component {
         this.onDataMessage = this.onDataMessage.bind(this);
         this.onDataChannelOpen = this.onDataChannelOpen.bind(this);
         this.callPeer = this.callPeer.bind(this);
+        this.createNewPeerConnection = this.createNewPeerConnection.bind(this);
+        this.setDataChannelHandlers = this.setDataChannelHandlers.bind(this);
+        this.getUsernameByRemoteDescription = this.getUsernameByRemoteDescription.bind(this);
     }
 
     getToken() {
@@ -81,6 +83,10 @@ class LectureVideo extends Component {
 
     onSocketMessage(event) {
         const data = JSON.parse(event.data);
+        var f;
+        var desc;
+        var pc;
+        var sender;
         switch (data.m.o) {
             case "peers":
                 const users = data.p.users;
@@ -89,32 +95,34 @@ class LectureVideo extends Component {
                 }
                 break;
             case "peer_connected":
-                const f = data.m.f.split("/");
+                f = data.m.f.split("/");
                 const joining = f[f.length-1];
                 console.log(joining + " has joined the chat");
+                this.callPeer(joining);
                 break;
             case "message":
                 switch(data.p.msg.type) {
                     case "offer":
-                        var desc = new RTCSessionDescription(data.p.msg);
-                        console.log(desc);
-                        var pc = this.state.peerConnection;
+                        desc = new RTCSessionDescription(data.p.msg);
+                        f = data.m.f.split("/");
+                        sender = f[f.length-1];
+                        pc = this.createNewPeerConnection(sender);
                         pc.setRemoteDescription(desc);
-                        pc.ondatachannel = event => this.onDataChannel(event);
-                        pc.createAnswer().then(description => this.createdAnswer(description));
+                        pc.createAnswer().then(d => this.onCreateAnswer(d,sender));
                         break;
                     case "answer":
                         desc = new RTCSessionDescription(data.p.msg);
-                        console.log(desc);
-                        pc = this.state.peerConnection;
-                        pc.setRemoteDescription(desc);
+                        f = data.m.f.split("/");
+                        sender = f[f.length-1];
+                        this.state.peerConnections[sender].pc.setRemoteDescription(desc);
                         break;
                     case "candidate":
-                        console.log("You are receiving a candidate");
+                        f = data.m.f.split("/");
+                        sender = f[f.length-1];
+                        console.log("candidate", sender, data, this.state.peerConnections);
                         var candidate = new RTCIceCandidate(data.p.msg);
-                        pc = this.state.peerConnection;
-                        pc.addIceCandidate(candidate);
-                            
+                        this.state.peerConnections[sender].pc.addIceCandidate(candidate);
+                        break;
                 }
         }
     }
@@ -128,7 +136,6 @@ class LectureVideo extends Component {
                 this.setState({
                     iceCandidates: res['v']
                 });
-                this.createPeerConnection();
             }
         }
         xhr.open("PUT", "https://global.xirsys.net/_turn/Teach", true);
@@ -137,74 +144,75 @@ class LectureVideo extends Component {
         xhr.send();
     }
 
-    createPeerConnection(){
-        const pc = new RTCPeerConnection(this.state.iceCandidates);
-        pc.onicecandidate = event => this.onIceCandidate(event);
-        this.setState({
-            peerConnection: pc,
-        });
-        // pc.createOffer().then(description => this.createdOffer(description));
-    }
-
-    createdOffer(description){
-        const pc = this.state.peerConnection;
-        pc.setLocalDescription(description);
-        var pkt = {
-                t: "u",
-                m: {
-                    f: "Teach/" + this.state.username,
-                    o: "message"
-                },
-                p: {msg:description}
-            };
-        this.state.webSocket.send(JSON.stringify(pkt));
-    }
-
-    createdAnswer(description){
-        const pc = this.state.peerConnection;
-        pc.setLocalDescription(description);
+    onCreateOffer(description, peer) {
+        this.state.peerConnections[peer].pc.setLocalDescription(description);
         var pkt = {
             t: "u", 
             m: {
                 f: "Teach/" + this.state.username, 
                 o: "message", 
-                t: null
-            },  
-            p: {msg:description}
-        };
+                t: peer
+            }, 
+            p: {msg:description}};
+        this.state.webSocket.send(JSON.stringify(pkt));
+    }
+
+    onCreateAnswer(description, peer) {
+        this.state.peerConnections[peer].pc.setLocalDescription(description);
+        var pkt = {
+            t: "u", 
+            m: {
+                f: "Teach/" + this.state.username, 
+                o: "message", 
+                t: peer
+            }, 
+            p: {msg:description}};
         this.state.webSocket.send(JSON.stringify(pkt));
     }
 
     onIceCandidate(event) {
-        console.log("You are sending a candidate");
-        const candidate = event.candidate;
-        if (event.candidate != null) {
-            var cPkt = {type: "candidate",
-            sdpMLineIndex: candidate.sdpMLineIndex,
-            sdpMid: candidate.sdpMid,
-            candidate: candidate.candidate
+        var remoteUsername;
+        if(event.target.remoteDescription){
+            remoteUsername = this.getUsernameByRemoteDescription(event.target.remoteDescription.sdp);
         };
-        const pkt = {
-            t: "u",
-            m: {
-                f: "SampleAppChannel/" + this.state.username,
-                o: 'message'
+        const candidate = event.candidate;
+        if (candidate != null && remoteUsername != null) {
+            var cPkt = {
+                type: "candidate",
+                sdpMLineIndex: candidate.sdpMLineIndex,
+                sdpMid: candidate.sdpMid,
+                candidate: candidate.candidate
+            };
+            var pkt = {
+                t: "u",
+                m: {
+                    f: "Teach/" + this.state.username,
+                    o: "message",
+                    t: remoteUsername
                 },
-            p: {msg:cPkt}
-        }
-        this.state.webSocket.send(JSON.stringify(pkt));
-        }
+                p: {msg:cPkt}
+            };
+            this.state.webSocket.send(JSON.stringify(pkt));
+        }   
     }
 
     onDataChannel(event) {
-        const dc = event.channel;
-        dc.onmessage = event => this.onDataMessage(event);
-        dc.onopen = event => this.onDataChannelOpen(event);
-        dc.onreadystatechange = event => console.log("Status Changed");
-        this.setState({
-            dataChannel: dc
-        })
+        const dataChannel = event.channel;
+        const keys = Object.keys(this.state.peerConnections);
+        var comp;
+        for(var i = 0; i < keys.length; i++) {
+            comp = this.state.peerConnections[keys[i]];
+            if(event.currentTarget.localDescription.sdp == comp.pc.localDescription.sdp) {
+                comp.dc = dataChannel;
+            }
+        }
+        this.setDataChannelHandlers(dataChannel);
     }
+
+    setDataChannelHandlers(dc) {
+        dc.onmessage = evt => this.onDataMessage(evt);
+        dc.onopen = evt => this.onDataChannelOpen(evt);
+    }       
 
     onMessageChange(event) {
         this.setState({
@@ -218,17 +226,14 @@ class LectureVideo extends Component {
         })
     }
 
-    callPeer() {
-        console.log("You are calling");
-        const pc = this.state.peerConnection;
-        const dc = pc.createDataChannel("data"); 
-        dc.onmessage = event => this.onDataMessage(event);
-        dc.onopen = event => this.onDataChannelOpen(event);
-        dc.onreadystatechange = event => console.log("Status Changed");
-        this.setState({
-            dataChannel: dc
-        })
-        pc.createOffer().then(d => this.createdOffer(d));
+    callPeer(peer) {
+        if(peer!==this.state.username){
+            var pc = this.createNewPeerConnection(peer);
+            var dataChannel = pc.createDataChannel("data");
+            this.state.peerConnections[peer].dc = dataChannel;
+            this.setDataChannelHandlers(dataChannel);
+            pc.createOffer().then(d => this.onCreateOffer(d, peer));
+        };
     }
     
     sendMessage() {
@@ -237,15 +242,43 @@ class LectureVideo extends Component {
         const messagePacket = {
             f: this.state.username,
             msg: message
+        };
+        var dataChannel;
+        const keys = Object.keys(this.state.peerConnections);
+        var comp;
+        for(var i = 0; i < keys.length; i++) {
+            comp = this.state.peerConnections[keys[i]];
+            dataChannel = comp.dc;
+            dataChannel.send(JSON.stringify(messagePacket));
         }
-        const dc = this.state.dataChannel;
-        dc.send(JSON.stringify(messagePacket));
     }
 
     onDataMessage(event) {
         const messagePacket = JSON.parse(event.data);
         console.log(messagePacket.f + " said: " + messagePacket.msg);
     }
+
+    createNewPeerConnection(username){
+        const pc = new RTCPeerConnection(this.state.iceCandidates);
+        pc.ondatachannel = event => this.onDataChannel(event);
+        pc.onicecandidate = candidate => this.onIceCandidate(candidate);
+        pc.oniceconnectionstatechange = event => console.log("iceconnection state ", event);
+        this.state.peerConnections[username] = {pc: pc, dc: null};
+        console.log("setting new peer connection: ", this.state.peerConnections);
+        return pc;
+    }
+     
+    getUsernameByRemoteDescription(sdp) {
+        const keys = Object.keys(this.state.peerConnections);
+        var pc;
+        for(var i = 0; i < keys.length; i++) {
+            pc = this.state.peerConnections[keys[i]].pc;
+            if(pc.remoteDescription.sdp == sdp) {
+                return keys[i];
+            }
+        }
+        return null;
+    }       
 
     componentDidMount(){
         this.getToken();
@@ -254,7 +287,7 @@ class LectureVideo extends Component {
     render() {
         return (
             <div>
-                <button onClick={this.callPeer}>Call</button>
+                {/* <button onClick={this.callPeer}>Call</button> */}
                 <input onChange={this.onMessageChange}
                         type="text" 
                         name="message" 
