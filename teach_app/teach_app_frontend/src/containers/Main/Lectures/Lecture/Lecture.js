@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import LectureVideo from '../../../../components/LectureVideo/LectureVideo';
 import SubmitQuestion from '../../../../components/SubmitQuestion/SubmitQuestion';
+import Questions from './Questions/Questions';
+import Aux from '../../../../hoc/Auxiliary/Auxiliary';
+import classes from './Lecture.module.css';
 
 class Lecture extends Component {
     constructor(props){
@@ -9,7 +12,8 @@ class Lecture extends Component {
         this.state = {
             username: this.props.userEmail,
             sendDisabled: true,
-            peerConnections: {}
+            peerConnections: {},
+            questions: []
         }
 
         this.getToken = this.getToken.bind(this);
@@ -29,6 +33,7 @@ class Lecture extends Component {
         this.setDataChannelHandlers = this.setDataChannelHandlers.bind(this);
         this.getUsernameByRemoteDescription = this.getUsernameByRemoteDescription.bind(this);
         this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
+        this.addLocalQuestion = this.addLocalQuestion.bind(this);
     }
 
     getToken() {
@@ -234,27 +239,15 @@ class Lecture extends Component {
             pc.createOffer().then(d => this.onCreateOffer(d, peer));
         };
     }
-    
-    // sendMessage() {
-    //     const message = this.state.message;
-    //     console.log("You said " + message);
-    //     const messagePacket = {
-    //         f: this.state.username,
-    //         msg: message
-    //     };
-    //     var dataChannel;
-    //     const keys = Object.keys(this.state.peerConnections);
-    //     var comp;
-    //     for(var i = 0; i < keys.length; i++) {
-    //         comp = this.state.peerConnections[keys[i]];
-    //         dataChannel = comp.dc;
-    //         dataChannel.send(JSON.stringify(messagePacket));
-    //     }
-    // }
 
     onDataMessage(event) {
         const questionPacket = JSON.parse(event.data);
-        console.log(questionPacket.f + " asked: " + questionPacket.question);
+        console.log(questionPacket.username + " asked: " + questionPacket.question);
+        const questions = this.state.questions;
+        questions.push(questionPacket);
+        this.setState({
+            questions: questions
+        });
     }
 
     createNewPeerConnection(username){
@@ -305,6 +298,15 @@ class Lecture extends Component {
         console.log("Received media stream: " + event.stream);
     }
 
+    addLocalQuestion(questionPacket) {
+        questionPacket.username = "You";
+        const questions = this.state.questions;
+        questions.push(questionPacket);
+        this.setState({
+            questions: questions
+        });
+    }
+
     componentDidMount(){
         this.getToken();
         if(this.props.userType==="teacher"){
@@ -321,19 +323,23 @@ class Lecture extends Component {
         var submitQuestion;
         if(this.props.userType==="student"){
             submitQuestion = <SubmitQuestion peerConnections={this.state.peerConnections}
-                                                username={this.state.username} />
+                                                username={this.state.username} 
+                                                addLocalQuestion={this.addLocalQuestion}/>
         }
 
         return (
             <div>
-                {/* <input onChange={this.onMessageChange}
-                        type="text" 
-                        name="message" 
-                        placeholder="Message" />
-                <button onClick={this.sendMessage} */}
-                        {/* disabled={this.state.sendDisabled}>Send</button> */}
-                {lectureVideo}
-                {submitQuestion}
+                <div className={classes.LectureVideoQuestions}>
+                    <div>
+                        {lectureVideo}
+                    </div>
+                    <div>
+                        <Questions questions={this.state.questions} />
+                    </div>
+                </div>
+                <div>
+                    {submitQuestion}
+                </div>
             </div>
         )
     }

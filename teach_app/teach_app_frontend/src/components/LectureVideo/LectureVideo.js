@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import classes from './LectureVideo.module.css';
+
 class LectureVideo extends Component {
     componentDidMount() {
         const video = document.querySelector('video');
@@ -11,7 +13,7 @@ class LectureVideo extends Component {
 
     render() {
         return (
-            <div>
+            <div className={classes.LectureVideo}>
                 <video autoPlay={true} controls></video>
             </div>
         )

@@ -19,7 +19,7 @@ class SubmitQuestion extends Component {
     submitQuestion() {
         const question = this.state.question;
         const questionPacket = {
-            f: this.props.username,
+            username: this.props.username,
             question: question
         };
         var dataChannel;
@@ -30,6 +30,7 @@ class SubmitQuestion extends Component {
             dataChannel = peer.dc;
             dataChannel.send(JSON.stringify(questionPacket));
         }
+        this.props.addLocalQuestion(questionPacket);
     }
 
     render() {
