@@ -6,6 +6,10 @@
     flex-direction: column;
 } */
 
+.Lecture {
+    width: 100%;
+}
+
 .LectureVideoQuestions {
     display: flex;
     flex-direction: row;

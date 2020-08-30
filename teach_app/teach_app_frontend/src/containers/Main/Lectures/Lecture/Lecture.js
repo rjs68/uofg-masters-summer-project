@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import LectureVideo from '../../../../components/LectureVideo/LectureVideo';
 import SubmitQuestion from '../../../../components/SubmitQuestion/SubmitQuestion';
 import Questions from './Questions/Questions';
-import Aux from '../../../../hoc/Auxiliary/Auxiliary';
 import classes from './Lecture.module.css';
+import Aux from '../../../../hoc/Auxiliary/Auxiliary';
 
 class Lecture extends Component {
     constructor(props){
@@ -328,14 +328,14 @@ class Lecture extends Component {
         }
 
         return (
-            <div>
+            <div className={classes.Lecture}>
                 <div className={classes.LectureVideoQuestions}>
                     <div>
                         {lectureVideo}
                     </div>
-                    <div>
+                    <Aux>
                         <Questions questions={this.state.questions} />
-                    </div>
+                    </Aux>
                 </div>
                 <div>
                     {submitQuestion}

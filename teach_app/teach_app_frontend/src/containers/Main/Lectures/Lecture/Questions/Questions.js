@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Question from '../../../../../components/Question/Question';
+import classes from './Questions.module.css';
 
 const questions = props => {
     const questionComponents = [];
@@ -12,7 +13,7 @@ const questions = props => {
     }
 
     return(
-        <div>
+        <div className={classes.Questions}>
             {questionComponents}
         </div>
     )
