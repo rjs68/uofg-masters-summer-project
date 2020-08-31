@@ -248,13 +248,18 @@ class Lecture extends Component {
     }
 
     onDataMessage(event) {
-        const questionPacket = JSON.parse(event.data);
-        console.log(questionPacket.username + " asked: " + questionPacket.question);
-        const questions = this.state.questions;
-        questions.push(questionPacket);
-        this.setState({
-            questions: questions
-        });
+        const messagePacket = JSON.parse(event.data);
+        if(messagePacket.type==="question"){
+            const questions = this.state.questions;
+            questions.push(messagePacket);
+            this.setState({
+                questions: questions
+            });
+        }else if(messagePacket.type==="quiz launch"){
+            this.setState({
+                quizLaunched: true
+            })
+        }
     }
 
     createNewPeerConnection(username){
@@ -337,6 +342,15 @@ class Lecture extends Component {
         this.setState({
             quizLaunched: true
         });
+        const messagePacket = {
+            type: "quiz launch",
+        };
+        const keys = Object.keys(this.state.peerConnections);
+        for(var i = 0; i < keys.length; i++) {
+            const peer = this.state.peerConnections[keys[i]];
+            const dataChannel = peer.dc;
+            dataChannel.send(JSON.stringify(messagePacket));
+        }
     }
 
     componentDidMount(){
@@ -359,11 +373,13 @@ class Lecture extends Component {
             bottomComponent = <SubmitQuestion peerConnections={this.state.peerConnections}
                                                 username={this.state.username} 
                                                 addLocalQuestion={this.addLocalQuestion}/>
-        }else{
-            if(this.state.quizAvailable){
-                quizModal = <Modal show={this.state.quizLaunched}>
-                                <Quiz quizData={this.state.quizData} />
-                            </Modal>
+        }
+
+        if(this.state.quizAvailable){
+            quizModal = <Modal show={this.state.quizLaunched}>
+                            <Quiz quizData={this.state.quizData} />
+                        </Modal>
+            if(this.props.userType==="teacher"){
                 bottomComponent = <Button clicked={this.launchQuiz}>Launch Quiz</Button>
             }
         }

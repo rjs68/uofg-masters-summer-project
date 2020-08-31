@@ -19,15 +19,14 @@ class SubmitQuestion extends Component {
     submitQuestion() {
         const question = this.state.question;
         const questionPacket = {
+            type: "question",
             username: this.props.username,
             question: question
         };
-        var dataChannel;
         const keys = Object.keys(this.props.peerConnections);
-        var peer;
         for(var i = 0; i < keys.length; i++) {
-            peer = this.props.peerConnections[keys[i]];
-            dataChannel = peer.dc;
+            const peer = this.props.peerConnections[keys[i]];
+            const dataChannel = peer.dc;
             dataChannel.send(JSON.stringify(questionPacket));
         }
         this.props.addLocalQuestion(questionPacket);

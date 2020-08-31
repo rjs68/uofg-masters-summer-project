@@ -1,0 +1,8 @@
+.QuizAnswer {
+    width: 90%;
+    height: 50px;
+    border-style: outset;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+}
