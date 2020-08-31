@@ -11,7 +11,7 @@ from rest_framework import generics
 from datetime import datetime
 
 from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
-                                        Lecture)
+                                        Lecture, Quiz, Question, Answer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
 
@@ -288,6 +288,24 @@ def user_signup(request):
         return HttpResponse("Not a valid request")
 
 
+def get_quiz(request):
+    data = json.loads(request.body)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=data['lectureName'])
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+    if(quiz):
+        quiz_data = {}
+        questions = Question.objects.filter(quiz=quiz)
+        for question in questions:
+            answer_data = __get_answers(question)
+            quiz_data[question.question] = answer_data
+        quiz_data = json.dumps(quiz_data)
+        return HttpResponse(quiz_data)
+    else:
+        return HttpRespons("No quiz available")
+
+
 def __get_user_units(user):
     if user.is_teacher:
         user_units = Unit.objects.filter(teacher=user)
@@ -298,6 +316,14 @@ def __get_user_units(user):
             unit = Unit.objects.get(unit_code=user_enrolled_unit['unit'])
             user_units.append(unit)
     return user_units
+
+
+def __get_answers(question):
+    answer_data = {}
+    answers = Answer.objects.filter(question=question)
+    for answer in answers:
+        answer_data[answer.answer] = answer.is_correct
+    return answer_data
 
 
 def __get_unit_data(unit):

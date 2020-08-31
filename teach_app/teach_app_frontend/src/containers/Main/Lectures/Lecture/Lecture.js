@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import LectureVideo from '../../../../components/LectureVideo/LectureVideo';
 import SubmitQuestion from '../../../../components/SubmitQuestion/SubmitQuestion';
 import Questions from './Questions/Questions';
+import Quiz from '../../../../components/Quiz/Quiz';
 import classes from './Lecture.module.css';
 import Aux from '../../../../hoc/Auxiliary/Auxiliary';
+import Button from '../../../../components/UI/Button/Button';
+import Modal from '../../../../components/UI/Modal/Modal';
 
 class Lecture extends Component {
     constructor(props){
@@ -13,7 +17,8 @@ class Lecture extends Component {
             username: this.props.userEmail,
             sendDisabled: true,
             peerConnections: {},
-            questions: []
+            questions: [],
+            quizLaunched: false
         }
 
         this.getToken = this.getToken.bind(this);
@@ -34,6 +39,8 @@ class Lecture extends Component {
         this.getUsernameByRemoteDescription = this.getUsernameByRemoteDescription.bind(this);
         this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
         this.addLocalQuestion = this.addLocalQuestion.bind(this);
+        this.getQuiz = this.getQuiz.bind(this);
+        this.launchQuiz = this.launchQuiz.bind(this);
     }
 
     getToken() {
@@ -307,7 +314,33 @@ class Lecture extends Component {
         });
     }
 
+    getQuiz() {
+        axios.post('/quiz/', {
+            unitCode: this.props.unitCode,
+            lectureName: this.props.lecture
+        })
+        .then((response) => {
+            if(response.data==="No quiz avaiable"){
+                this.setState({
+                    quizAvailable: false
+                });
+            }else{
+                this.setState({
+                    quizAvailable: true,
+                    quizData: response.data
+                });
+            }
+        });
+    }
+
+    launchQuiz() {
+        this.setState({
+            quizLaunched: true
+        });
+    }
+
     componentDidMount(){
+        this.getQuiz();
         this.getToken();
         if(this.props.userType==="teacher"){
             this.getLocalVideoStream();
@@ -320,15 +353,24 @@ class Lecture extends Component {
             lectureVideo = <LectureVideo lectureStream={this.state.lectureStream}/>
         }
 
-        var submitQuestion;
+        var quizModal;
+        var bottomComponent;
         if(this.props.userType==="student"){
-            submitQuestion = <SubmitQuestion peerConnections={this.state.peerConnections}
+            bottomComponent = <SubmitQuestion peerConnections={this.state.peerConnections}
                                                 username={this.state.username} 
                                                 addLocalQuestion={this.addLocalQuestion}/>
+        }else{
+            if(this.state.quizAvailable){
+                quizModal = <Modal show={this.state.quizLaunched}>
+                                <Quiz quizData={this.state.quizData} />
+                            </Modal>
+                bottomComponent = <Button clicked={this.launchQuiz}>Launch Quiz</Button>
+            }
         }
 
         return (
             <div className={classes.Lecture}>
+                {quizModal}
                 <div className={classes.LectureVideoQuestions}>
                     <div>
                         {lectureVideo}
@@ -338,7 +380,7 @@ class Lecture extends Component {
                     </Aux>
                 </div>
                 <div>
-                    {submitQuestion}
+                    {bottomComponent}
                 </div>
             </div>
         )
