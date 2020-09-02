@@ -11,9 +11,9 @@ from rest_framework import generics
 from datetime import datetime
 
 from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
-                                        Lecture, Quiz, Question, Answer)
+                                        Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
-from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
+from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer
 
 
 def index(request):
@@ -304,6 +304,37 @@ def get_quiz(request):
         return HttpResponse(quiz_data)
     else:
         return HttpRespons("No quiz available")
+
+
+def submit_user_answer(request):
+    data=json.loads(request.body)
+
+    unit_code=data['unitCode']
+    event_name=data['lectureName']
+    question=data['question']
+    answer=data['answer']
+    user_email=data['userEmail']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+    question_object = Question.objects.get(quiz=quiz,
+                                    question=question)
+
+    question_answers = Answer.objects.filter(question=question_object)
+    for question_answer in question_answers:
+        try:
+            userAnswer = UserAnswer.objects.get(user_email=user_email,
+                                                answer=question_answer).delete()
+        except:
+            print("Entry does not exist")
+    
+    user_answer = add_user_answer(unit_code, event_name, question, answer, user_email)
+    if(user_answer):
+        return HttpResponse("Answer Submitted")
+    else:
+        return HttpResponse("Submission Error")
 
 
 def __get_user_units(user):

@@ -345,6 +345,8 @@ def add_user_answer(unit_code, event_name, question, answer, user_email):
 
     user_answer = UserAnswer.objects.get_or_create(user=user,
                                                    answer=answer)
+    
+    return user_answer
 
 
 def add_user_quiz_performance(unit_code, event_name, user_email):

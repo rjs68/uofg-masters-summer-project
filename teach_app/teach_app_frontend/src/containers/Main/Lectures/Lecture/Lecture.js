@@ -377,7 +377,11 @@ class Lecture extends Component {
 
         if(this.state.quizAvailable){
             quizModal = <Modal show={this.state.quizLaunched}>
-                            <Quiz quizData={this.state.quizData} />
+                            <Quiz quizData={this.state.quizData} 
+                                    unitCode={this.props.unitCode}
+                                    lectureName={this.props.lecture}
+                                    userEmail={this.props.userEmail} 
+                                    userType={this.props.userType} />
                         </Modal>
             if(this.props.userType==="teacher"){
                 bottomComponent = <Button clicked={this.launchQuiz}>Launch Quiz</Button>
