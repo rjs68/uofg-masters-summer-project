@@ -18,7 +18,8 @@ class Lecture extends Component {
             sendDisabled: true,
             peerConnections: {},
             questions: [],
-            quizLaunched: false
+            quizLaunched: false,
+            quizLength: 10
         }
 
         this.getToken = this.getToken.bind(this);
@@ -40,6 +41,7 @@ class Lecture extends Component {
         this.getLocalVideoStream = this.getLocalVideoStream.bind(this);
         this.addLocalQuestion = this.addLocalQuestion.bind(this);
         this.getQuiz = this.getQuiz.bind(this);
+        this.handleQuizLengthChange = this.handleQuizLengthChange.bind(this);
         this.launchQuiz = this.launchQuiz.bind(this);
     }
 
@@ -257,6 +259,7 @@ class Lecture extends Component {
             });
         }else if(messagePacket.type==="quiz launch"){
             this.setState({
+                quizLength: messagePacket.quizLength,
                 quizLaunched: true
             })
         }
@@ -338,12 +341,19 @@ class Lecture extends Component {
         });
     }
 
+    handleQuizLengthChange(event) {
+        this.setState({
+            quizLength: event.target.value
+        });
+    }
+
     launchQuiz() {
         this.setState({
             quizLaunched: true
         });
         const messagePacket = {
             type: "quiz launch",
+            quizLength: this.state.quizLength
         };
         const keys = Object.keys(this.state.peerConnections);
         for(var i = 0; i < keys.length; i++) {
@@ -375,16 +385,31 @@ class Lecture extends Component {
                                                 addLocalQuestion={this.addLocalQuestion}/>
         }
 
+        var quizContent;
+        if(this.state.quizLaunched){
+            quizContent = <Quiz quizData={this.state.quizData} 
+                                quizLength={this.state.quizLength}
+                                unitCode={this.props.unitCode}
+                                lectureName={this.props.lecture}
+                                userEmail={this.props.userEmail} 
+                                userType={this.props.userType} />
+        }
         if(this.state.quizAvailable){
             quizModal = <Modal show={this.state.quizLaunched}>
-                            <Quiz quizData={this.state.quizData} 
-                                    unitCode={this.props.unitCode}
-                                    lectureName={this.props.lecture}
-                                    userEmail={this.props.userEmail} 
-                                    userType={this.props.userType} />
+                            {quizContent}
                         </Modal>
             if(this.props.userType==="teacher"){
-                bottomComponent = <Button clicked={this.launchQuiz}>Launch Quiz</Button>
+                bottomComponent = <div>
+                                        <label>
+                                            Quiz Length:
+                                            <input type="number" 
+                                                    name="quizLength"
+                                                    onChange={this.handleQuizLengthChange}
+                                                    placeholder={this.state.quizLength} />
+                                            minutes
+                                        </label>
+                                        <Button clicked={this.launchQuiz}>Launch Quiz</Button>
+                                </div>
             }
         }
 

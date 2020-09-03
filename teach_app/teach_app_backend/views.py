@@ -13,7 +13,8 @@ from datetime import datetime
 from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
                                         Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
-from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer
+from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
+                            add_user_quiz_performance)
 
 
 def index(request):
@@ -335,6 +336,28 @@ def submit_user_answer(request):
         return HttpResponse("Answer Submitted")
     else:
         return HttpResponse("Submission Error")
+
+
+def get_quiz_results(request):
+    data = json.loads(request.body)
+
+    unit_code=data['unitCode']
+    event_name=data['lectureName']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+
+    users = UserEnrolledUnit.objects.filter(unit=unit)
+    user_performances = {}
+    for user in users:
+        user_email = user.user.email
+        user_performance = add_user_quiz_performance(unit_code, event_name, user_email)
+        user_performances[user_email] = user_performance.grade
+    
+    user_performances = json.dumps(user_performances)
+    return HttpResponse(user_performances)
 
 
 def __get_user_units(user):
