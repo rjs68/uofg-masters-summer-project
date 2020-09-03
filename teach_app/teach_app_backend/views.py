@@ -328,7 +328,7 @@ def submit_user_answer(request):
             userAnswer = UserAnswer.objects.get(user_email=user_email,
                                                 answer=question_answer).delete()
         except:
-            print("Entry does not exist")
+            pass
     
     user_answer = add_user_answer(unit_code, event_name, question, answer, user_email)
     if(user_answer):

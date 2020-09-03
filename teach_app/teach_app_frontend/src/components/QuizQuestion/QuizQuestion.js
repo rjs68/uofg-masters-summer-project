@@ -11,13 +11,28 @@ class QuizQuestion extends Component {
         this.state={};
 
         this.selectAnswer = this.selectAnswer.bind(this);
+        this.getNextQuestion = this.getNextQuestion.bind(this);
         this.submitAnswer = this.submitAnswer.bind(this);
     }
 
     selectAnswer(answerId){
-        this.setState({
-            selectedAnswer: answerId
-        });
+        if(this.props.userType==="student"){
+            this.setState({
+                selectedAnswer: answerId
+            });
+        };
+    }
+
+    getNextQuestion(){
+        if(this.props.userType==="student"){
+            this.submitAnswer();
+        }else{
+            if(this.props.isLastQuestion){
+                this.props.finishQuiz();
+            }else{
+                this.props.nextQuestion();
+            }
+        }
     }
 
     submitAnswer(){
@@ -34,7 +49,11 @@ class QuizQuestion extends Component {
                     this.setState({
                         selectedAnswer: null
                     })
-                    this.props.nextQuestion();
+                    if(this.props.isLastQuestion){
+                        this.props.finishQuiz();
+                    }else{
+                        this.props.nextQuestion();
+                    }
                 }else{
                     console.log(response.data);
                 }
@@ -58,6 +77,11 @@ class QuizQuestion extends Component {
             quizAnswers.push(answerComponent);
         }
 
+        var buttonText = "Next";
+        if(this.props.isLastQuestion){
+            buttonText = "Finish Quiz";
+        }
+
         return (
             <div className={classes.QuizQuestion}>
                 <div>
@@ -66,7 +90,7 @@ class QuizQuestion extends Component {
                 <div>
                     {quizAnswers}
                 </div>
-                <Button clicked={this.submitAnswer}>Submit Answer</Button>
+                <Button clicked={this.getNextQuestion}>{buttonText}</Button>
             </div>
         )
     }
