@@ -3,10 +3,11 @@ import os
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, FileResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
+from django.middleware.csrf import get_token
 from rest_framework import generics
 from datetime import datetime
 
@@ -15,15 +16,6 @@ from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledU
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
                             add_user_quiz_performance)
-
-
-def index(request):
-    return HttpResponse("Welcome to Teach")
-
-
-class TeachUserListCreate(generics.ListCreateAPIView):
-    queryset = TeachUser.objects.all()
-    serializer_class = TeachUserSerializer
 
 
 def get_user_units(request):
@@ -227,6 +219,11 @@ def unit_enrolment(request):
     else:
         return HttpResponse("User Not Enrolled")
 
+
+@csrf_exempt
+def authenticate_user(request):
+    csrf_token = get_token(request)
+    return HttpResponse(csrf_token)
 
 
 def user_login(request):

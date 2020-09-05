@@ -33,7 +33,9 @@
     "bootstrap": "^4.5.0",
     "js-cookie": "^2.2.1",
     "react-bootstrap": "^1.2.2",
+    "react-cookie": "^4.0.3",
     "react-pdf": "^4.2.0",
-    "reactjs-dropdown-component": "^1.1.2"
+    "reactjs-dropdown-component": "^1.1.2",
+    "universal-cookie": "^4.0.3"
   }
 }

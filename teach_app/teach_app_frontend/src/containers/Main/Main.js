@@ -12,15 +12,18 @@ class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          content: "home",
+          content: props.cookies.get('page') || "home",
           contentPages: {
                 "home": <Home />,
                 "units": <Units email={this.props.email} 
-                                userType={this.props.userType} />,
+                                userType={this.props.userType} 
+                                cookies={this.props.cookies} />,
                 "lectures": <Lectures email={this.props.email} 
-                                        userType={this.props.userType} />,
+                                        userType={this.props.userType} 
+                                        cookies={this.props.cookies} />,
                 "assignments": <Assignments email={this.props.email} 
-                                            userType={this.props.userType}/>,
+                                            userType={this.props.userType}
+                                            cookies={this.props.cookies} />,
                 "grades": <Grades />
           }
         };
@@ -29,7 +32,10 @@ class Main extends Component {
     }
 
     navigationHandler(page) {
-        this.setState({content: page});
+        this.props.cookies.set('page', page, { path: '/'});
+        this.setState({
+            content: page
+        });
     }
     
     render() {
