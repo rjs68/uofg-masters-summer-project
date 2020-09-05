@@ -1,0 +1,15 @@
+.QuizResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    font-family: sans-serif;
+}
+
+.QuizResults h1 {
+    font-size: 20px;
+}
+
+.QuizResults p {
+    font-size: 16px;
+}

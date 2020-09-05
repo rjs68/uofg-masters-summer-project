@@ -18,5 +18,6 @@ class TeachUserManager(BaseUserManager):
 
     def create_superuser(self, email, first_name, last_name, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', True)
 
         return self.create_user(email, first_name, last_name, password, **extra_fields)

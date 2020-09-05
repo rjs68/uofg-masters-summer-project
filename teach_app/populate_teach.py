@@ -1,6 +1,7 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
+from django.core.exceptions import ObjectDoesNotExist
 django.setup()
 from datetime import datetime
 from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
@@ -191,7 +192,7 @@ def populate():
                                                 first_name="admin",
                                                 last_name="admin",
                                                 university=university,
-                                                is_teacher="true")
+                                                is_teacher=True)
 
 
     for user in users:
@@ -343,8 +344,17 @@ def add_user_answer(unit_code, event_name, question, answer, user_email):
                                 answer=answer)
     user = TeachUser.objects.get(email=user_email)
 
-    user_answer = UserAnswer.objects.get_or_create(user=user,
-                                                   answer=answer)
+    try:
+        user_answer = UserAnswer.objects.get(user=user,
+                                            question=question)
+        user_answer.answer = answer
+        user_answer.save()
+    except ObjectDoesNotExist:
+        user_answer = UserAnswer.objects.create(user=user,
+                                                question=question,
+                                                answer=answer)
+    
+    return user_answer
 
 
 def add_user_quiz_performance(unit_code, event_name, user_email):
@@ -366,9 +376,17 @@ def add_user_quiz_performance(unit_code, event_name, user_email):
         if UserAnswer.objects.filter(user=user, answer=answer).count() > 0 and answer.is_correct:
             user_quiz_grade += 1
 
-    user_quiz_performance = UserQuizPerformance.objects.get_or_create(user=user,
-                                                                      quiz=quiz,
-                                                                      grade=user_quiz_grade)
+    try:
+        user_quiz_performance = UserQuizPerformance.objects.get(user=user,
+                                                                quiz=quiz)
+        user_quiz_performance.grade = user_quiz_grade
+        user_quiz_performance.save()
+    except ObjectDoesNotExist:
+        user_quiz_performance = UserQuizPerformance.objects.create(user=user,
+                                                                    quiz=quiz,
+                                                                    grade=user_quiz_grade)
+
+    return user_quiz_performance
 
 
 if __name__ == '__main__':

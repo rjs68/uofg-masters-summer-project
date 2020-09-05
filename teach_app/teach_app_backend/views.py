@@ -10,9 +10,11 @@ from django.conf import settings
 from rest_framework import generics
 from datetime import datetime
 
-from teach_app_backend.models import TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission
+from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
+                                        Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
-from populate_teach import add_user, add_unit, add_unit_enrolled, add_assignment
+from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
+                            add_user_quiz_performance)
 
 
 def index(request):
@@ -51,6 +53,22 @@ def get_user_assignments(request):
             assignments.append(assignment_data)
     
     data = json.dumps(assignments, default=str)
+    return HttpResponse(data)
+
+
+def get_user_lectures(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['email'])
+
+    user_units = __get_user_units(user)
+    lectures = []
+    for user_unit in user_units:
+        unit_lectures = Lecture.objects.filter(unit=user_unit)
+        for unit_lecture in unit_lectures:
+            lecture_data = __get_lecture_data(unit_lecture)
+            lectures.append(lecture_data)
+    
+    data = json.dumps(lectures, default=str)
     return HttpResponse(data)
 
 
@@ -271,6 +289,77 @@ def user_signup(request):
         return HttpResponse("Not a valid request")
 
 
+def get_quiz(request):
+    data = json.loads(request.body)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=data['lectureName'])
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+    if(quiz):
+        quiz_data = {}
+        questions = Question.objects.filter(quiz=quiz)
+        for question in questions:
+            answer_data = __get_answers(question)
+            quiz_data[question.question] = answer_data
+        quiz_data = json.dumps(quiz_data)
+        return HttpResponse(quiz_data)
+    else:
+        return HttpRespons("No quiz available")
+
+
+def submit_user_answer(request):
+    data=json.loads(request.body)
+
+    unit_code=data['unitCode']
+    event_name=data['lectureName']
+    question=data['question']
+    answer=data['answer']
+    user_email=data['userEmail']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+    question_object = Question.objects.get(quiz=quiz,
+                                    question=question)
+
+    question_answers = Answer.objects.filter(question=question_object)
+    for question_answer in question_answers:
+        try:
+            userAnswer = UserAnswer.objects.get(user_email=user_email,
+                                                answer=question_answer).delete()
+        except:
+            pass
+    
+    user_answer = add_user_answer(unit_code, event_name, question, answer, user_email)
+    if(user_answer):
+        return HttpResponse("Answer Submitted")
+    else:
+        return HttpResponse("Submission Error")
+
+
+def get_quiz_results(request):
+    data = json.loads(request.body)
+
+    unit_code=data['unitCode']
+    event_name=data['lectureName']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    quiz = Quiz.objects.filter(lecture=lecture)[0]
+
+    users = UserEnrolledUnit.objects.filter(unit=unit)
+    user_performances = {}
+    for user in users:
+        user_email = user.user.email
+        user_performance = add_user_quiz_performance(unit_code, event_name, user_email)
+        user_performances[user_email] = user_performance.grade
+    
+    user_performances = json.dumps(user_performances)
+    return HttpResponse(user_performances)
+
+
 def __get_user_units(user):
     if user.is_teacher:
         user_units = Unit.objects.filter(teacher=user)
@@ -281,6 +370,14 @@ def __get_user_units(user):
             unit = Unit.objects.get(unit_code=user_enrolled_unit['unit'])
             user_units.append(unit)
     return user_units
+
+
+def __get_answers(question):
+    answer_data = {}
+    answers = Answer.objects.filter(question=question)
+    for answer in answers:
+        answer_data[answer.answer] = answer.is_correct
+    return answer_data
 
 
 def __get_unit_data(unit):
@@ -303,10 +400,24 @@ def __get_assignment_data(assignment):
     }
 
 
+def __get_lecture_data(lecture):
+    return {
+        "unit": lecture.unit.unit_name,
+        "unit_code": lecture.unit.unit_code,
+        "lecture_name": lecture.event_name,
+        "lecture_time": lecture.date_time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+
+
 def __get_submission_data(submission):
+    if(submission.submission_time):
+        submission_time = submission.submission_time.strftime("%Y-%m-%dT%H:%M:%S")
+    else:
+        submission_time = None
+    
     return {
         "user": submission.user.email,
-        "submission_time": submission.submission_time,
+        "submission_time": submission_time,
         "grade": submission.grade,
         "feedback": submission.feedback
     }

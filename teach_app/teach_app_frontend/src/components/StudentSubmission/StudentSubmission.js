@@ -48,9 +48,6 @@ class StudentSubmission extends Component {
         var submissionTimeObject;
         if(this.props.submissionTime){
             var submissionTimeString = this.props.submissionTime;
-            submissionTimeString.replace(' ', 'T');
-            const plusIndex = submissionTimeString.indexOf('+');
-            submissionTimeString = submissionTimeString.substring(0, plusIndex);
             submissionTimeObject = new Date(submissionTimeString);
             submittedDiv = <div>
                                 Submitted: {submissionTimeObject.toLocaleTimeString()} {submissionTimeObject.toDateString()}

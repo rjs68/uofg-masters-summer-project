@@ -21,6 +21,14 @@ class TeachUser(AbstractBaseUser):
     profile_picture = models.ImageField(upload_to='profile_pictures')
 
     is_teacher = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
 
     USERNAME_FIELD = 'email'
 
@@ -126,10 +134,11 @@ class Answer(models.Model):
 
 class UserAnswer(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('user', 'answer')
+        unique_together = ('user', 'question')
 
     def __str__(self):
         return self.user.__str__() + "_" + self.answer.__str__()
