@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import Cookies from 'universal-cookie';
 
 import Aux from '../hoc/Auxiliary/Auxiliary';
 import LoginScreen from "../containers/LoginScreen/LoginScreen";
@@ -8,8 +9,13 @@ import Main from "../containers/Main/Main";
 class App extends Component {
   constructor(props) {
     super(props);
+
+    const cookies = new Cookies();
+
     this.state = {
-      authenticated: false
+      cookies: cookies,
+      email: cookies.get('userEmail'),
+      authenticated: cookies.get('authenticated')
     };
 
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -17,10 +23,14 @@ class App extends Component {
   }
 
   handleEmailChange(event){
-    this.setState({email: event.target.value})
+    this.setState({
+      email: event.target.value
+    });
   }
 
   handleUserAuthenticated(userType){
+    this.state.cookies.set('userEmail', this.state.email, { path: '/'});
+    this.state.cookies.set('authenticated', true, { path: '/' });
     this.setState({
         authenticated: true,
         userType: userType
