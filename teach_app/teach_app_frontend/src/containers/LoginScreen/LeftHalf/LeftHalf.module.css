@@ -1,0 +1,16 @@
+.LeftHalf {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.Logo {
+    height: 20%;
+    z-index: 2;
+}

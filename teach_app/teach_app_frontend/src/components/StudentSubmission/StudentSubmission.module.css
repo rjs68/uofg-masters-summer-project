@@ -1,0 +1,27 @@
+.StudentSubmission {
+    padding: 10px;
+    border: darkslategray;
+    border-width: 1px;
+    border-style: solid;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+.StudentSubmission div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.StudentSubmission a {
+    width: 170px;
+    align-content: center;
+}
+
+.Email {
+    width: 200px;
+}
+
+.Grade {
+    width: 100px;
+}
