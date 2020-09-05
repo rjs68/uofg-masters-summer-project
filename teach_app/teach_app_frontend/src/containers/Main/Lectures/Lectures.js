@@ -18,6 +18,7 @@ class Lectures extends Component {
     }
 
     getLectures() {
+        axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
         axios.post('/lectures/', {
             email: this.props.email,
           })
