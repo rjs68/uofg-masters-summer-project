@@ -401,12 +401,12 @@ class Lecture extends Component {
             if(this.props.userType==="teacher"){
                 bottomComponent = <div>
                                         <label>
-                                            Quiz Length:
+                                            Quiz Length: 
                                             <input type="number" 
                                                     name="quizLength"
                                                     onChange={this.handleQuizLengthChange}
                                                     placeholder={this.state.quizLength} />
-                                            minutes
+                                             minutes
                                         </label>
                                         <Button clicked={this.launchQuiz}>Launch Quiz</Button>
                                 </div>
@@ -424,7 +424,7 @@ class Lecture extends Component {
                         <Questions questions={this.state.questions} />
                     </Aux>
                 </div>
-                <div>
+                <div className={classes.LectureBottomComponent}>
                     {bottomComponent}
                 </div>
             </div>

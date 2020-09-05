@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import QuizQuestion from '../QuizQuestion/QuizQuestion';
 import QuizResults from '../QuizResults/QuizResults';
 import CountdownClock from '../CountdownClock/CountdownClock';
+import classes from './Quiz.module.css';
 
 class Quiz extends Component {
     constructor(props){
@@ -73,7 +74,7 @@ class Quiz extends Component {
         }
 
         return (
-            <div>
+            <div className={classes.Quiz}>
                 <CountdownClock quizLength={this.props.quizLength} 
                                 quizTimeUp={this.quizTimeUp} />
                 {quizContent}

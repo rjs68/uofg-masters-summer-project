@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import classes from './QuizResults.module.css';
+
 class QuizResults extends Component {
     constructor(props){
         super(props);
@@ -31,7 +33,7 @@ class QuizResults extends Component {
             const resultScore = this.state.quizResults[result];
             cumulativeScore += resultScore;
         }
-        const averageScore = cumulativeScore/numberOfUsers;
+        const averageScore = Math.round(cumulativeScore/numberOfUsers);
         this.setState({
             averageScore: averageScore
         });
@@ -64,7 +66,7 @@ class QuizResults extends Component {
         }
 
         return (
-            <div>
+            <div className={classes.QuizResults}>
                 {quizResults}
             </div>
         )
