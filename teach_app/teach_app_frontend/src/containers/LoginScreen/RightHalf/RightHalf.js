@@ -12,8 +12,9 @@ class RightHalf extends Component {
             mode: "login"
         };
 
-        axios.defaults.xsrfCookieName = 'csrftoken'
-        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+        // axios.defaults.xsrfCookieName = 'csrftoken'
+        // axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = props.cookies.get('csrftoken');
 
         this.handleModeChange = this.handleModeChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);

@@ -29,8 +29,7 @@ class App extends Component {
   authenticateUser(){
     axios.get('/authenticate/')
     .then((response) => {
-      const cookies = new Cookies();
-      cookies.set('csrftoken', response.data, { path: '/'});
+      this.state.cookies.set('csrftoken', response.data, { path: '/'});
     })
   }
 
@@ -61,7 +60,8 @@ class App extends Component {
                                 password={this.state.password}
                                 onEmailChange={this.handleEmailChange}
                                 onPasswordChange={this.handlePasswordChange}
-                                onUserAuthenticated={this.handleUserAuthenticated}/>
+                                onUserAuthenticated={this.handleUserAuthenticated}
+                                cookies={this.state.cookies}/>
     }
 
     return (
