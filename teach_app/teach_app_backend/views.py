@@ -240,7 +240,7 @@ def authenticate_user(request):
     return HttpResponse(csrf_token)
 
 
-@csrf_exempt
+# @csrf_exempt
 def user_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
