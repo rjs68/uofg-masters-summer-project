@@ -25,7 +25,7 @@ class Lectures extends Component {
           .then((response) => {
               this.setState({lectures: response.data});
           }, (error) => {
-            if(error==="Request failed with status code 403"){
+            if(error.response.status===403){
                 window.location.reload(false);
             }else{
                 console.log("Error in get lecture" + error);
