@@ -42,8 +42,9 @@ class App extends Component {
   handleUserAuthenticated(userType){
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
     this.state.cookies.set('authenticated', true, { path: '/' });
-    console.log(this.state.cookies.get('csrftoken'));
-    this.state.cookies.set('csrftoken', this.state.cookies.get('csrftoken'), { path: '/'});
+    this.authenticateUser();
+    // console.log(this.state.cookies.get('csrftoken'));
+    // this.state.cookies.set('csrftoken', this.state.cookies.get('csrftoken'), { path: '/'});
     this.setState({
         authenticated: true,
         userType: userType
