@@ -18,12 +18,14 @@ class Lectures extends Component {
     }
 
     getLectures() {
-        // axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
+        axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
         axios.post('/lectures/', {
             email: this.props.email,
           })
           .then((response) => {
               this.setState({lectures: response.data});
+          }, (error) => {
+            console.log("Error in get lecture" + error);
           });
     }
 
