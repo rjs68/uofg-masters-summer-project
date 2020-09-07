@@ -8,6 +8,7 @@ import classes from './RightHalf.module.css';
 class RightHalf extends Component {
     constructor(props) {
         super(props);
+        props.authenticateUser();
         this.state = {
             mode: "login"
         };
