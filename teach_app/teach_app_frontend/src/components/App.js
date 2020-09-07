@@ -19,13 +19,7 @@ class App extends Component {
       authenticated: cookies.get('authenticated')
     };
 
-    if(this.state.authenticated){
-      this.authenticateUser();
-    }
-
-    if(!cookies.get('csrftoken')){
-      this.authenticateUser();
-    }
+    this.authenticateUser();
 
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleUserAuthenticated = this.handleUserAuthenticated.bind(this);
