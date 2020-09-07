@@ -23,14 +23,16 @@ class App extends Component {
       this.authenticateUser();
     }
 
+    if(!cookies.get('csrftoken')){
+      this.authenticateUser();
+    }
+
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleUserAuthenticated = this.handleUserAuthenticated.bind(this);
   }
 
   authenticateUser(){
-    axios.post('/authenticate/', {
-      email: this.state.email
-    })
+    axios.get('/authenticate/')
     .then((response) => {
       this.state.cookies.set('csrftoken', response.data, { path: '/'});
     })
