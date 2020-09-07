@@ -18,7 +18,8 @@ from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
                             add_user_quiz_performance)
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_user_units(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['email'])
@@ -33,7 +34,7 @@ def get_user_units(request):
     return HttpResponse(units_data)
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def get_user_assignments(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['email'])
@@ -50,7 +51,7 @@ def get_user_assignments(request):
     return HttpResponse(data)
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def get_user_lectures(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['email'])
@@ -66,7 +67,8 @@ def get_user_lectures(request):
     data = json.dumps(lectures, default=str)
     return HttpResponse(data)
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_assignment_specification(request):
     data = json.loads(request.body)
     unit = Unit.objects.get(unit_code=data['unitCode'])
@@ -76,7 +78,8 @@ def get_assignment_specification(request):
     else:
         return HttpResponse("Specification not found")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def upload_assignment_specification(request):
     specification = request.FILES['specification']
     specification_name = specification.name.split('-')
@@ -90,7 +93,8 @@ def upload_assignment_specification(request):
     else:
         return HttpResponse("Upload Unsuccessful")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_submission(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['userEmail'])
@@ -104,7 +108,8 @@ def get_submission(request):
     else:
         return HttpResponse("Submission not found")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_student_submissions(request):
     data = json.loads(request.body)
     unit = Unit.objects.get(unit_code=data['unitCode'])
@@ -121,7 +126,8 @@ def get_student_submissions(request):
     else:
         return HttpResponse("No submissions yet")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def edit_student_grade(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['studentEmail'])
@@ -136,7 +142,8 @@ def edit_student_grade(request):
     else:
         return HttpResponse("Grade Edit Unsuccessful")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def edit_student_feedback(request):
     data = json.loads(request.body)
     user = TeachUser.objects.get(email=data['studentEmail'])
@@ -151,7 +158,8 @@ def edit_student_feedback(request):
     else:
         return HttpResponse("Feedback Edit Unsuccessful")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def upload_submission(request):
     submission_file = request.FILES['submission']
     submission_name = submission_file.name.split('-')
@@ -176,7 +184,8 @@ def upload_submission(request):
     else:
         return HttpResponse("Upload Unsuccessful")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def create_unit(request):
     data = json.loads(request.body)
     unit_code = data['unitCode']
@@ -192,7 +201,8 @@ def create_unit(request):
     else:
         return HttpResponse("Unit Not Created")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def create_assignment(request):
     data = json.loads(request.body)
     unit_code = data['unitCode']
@@ -208,7 +218,8 @@ def create_assignment(request):
     else:
         return HttpResponse("Assignment Not Created")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def unit_enrolment(request):
     data = json.loads(request.body)
     unit_enrol_key = data['unitEnrolmentKey']
@@ -229,7 +240,7 @@ def authenticate_user(request):
     return HttpResponse(csrf_token)
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def user_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -251,7 +262,8 @@ def user_login(request):
     else:
         return HttpResponse("Not a valid request")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def user_signup(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -289,7 +301,8 @@ def user_signup(request):
     else:
         return HttpResponse("Not a valid request")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_quiz(request):
     data = json.loads(request.body)
     unit = Unit.objects.get(unit_code=data['unitCode'])
@@ -307,7 +320,8 @@ def get_quiz(request):
     else:
         return HttpRespons("No quiz available")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def submit_user_answer(request):
     data=json.loads(request.body)
 
@@ -338,7 +352,8 @@ def submit_user_answer(request):
     else:
         return HttpResponse("Submission Error")
 
-@ensure_csrf_cookie
+
+@csrf_exempt
 def get_quiz_results(request):
     data = json.loads(request.body)
 
