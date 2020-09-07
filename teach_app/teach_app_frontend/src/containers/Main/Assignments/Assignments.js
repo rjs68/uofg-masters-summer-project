@@ -25,7 +25,7 @@ class Assignments extends Component {
     }
 
     getAssignments() {
-        axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
+        // axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
         axios.post('/assignments/', {
             email: this.props.email,
           })

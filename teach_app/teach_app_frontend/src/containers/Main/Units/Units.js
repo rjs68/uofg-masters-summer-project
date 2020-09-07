@@ -20,7 +20,7 @@ class Units extends Component {
     }
 
     getUnits() {
-        axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
+        // axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
         axios.post('/units/', {
             email: this.props.email,
           })
