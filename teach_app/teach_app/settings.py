@@ -29,7 +29,7 @@ SECRET_KEY = '69##lkfj6c9d+_hvph1w0qv5*=%6y_8#5^qb#2(^gf&nrewt&n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['teachglasgow.eu.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'teachglasgow.eu.pythonanywhere.com']
 
 
 # Application definition

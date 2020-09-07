@@ -14,7 +14,9 @@ class Main extends Component {
         this.state = {
           content: props.cookies.get('page') || "home",
           contentPages: {
-                "home": <Home />,
+                "home": <Home email={this.props.email} 
+                                userType={this.props.userType} 
+                                cookies={this.props.cookies}/>,
                 "units": <Units email={this.props.email} 
                                 userType={this.props.userType} 
                                 cookies={this.props.cookies} />,
@@ -24,7 +26,9 @@ class Main extends Component {
                 "assignments": <Assignments email={this.props.email} 
                                             userType={this.props.userType}
                                             cookies={this.props.cookies} />,
-                "grades": <Grades />
+                "grades": <Grades email={this.props.email} 
+                                    userType={this.props.userType} 
+                                    cookies={this.props.cookies}/>
           }
         };
 
