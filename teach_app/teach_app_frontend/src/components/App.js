@@ -26,6 +26,7 @@ class App extends Component {
   }
 
   authenticateUser(){
+    console.log("Authenticating");
     axios.get('/authenticate/')
     .then((response) => {
       this.state.cookies.set('csrftoken', response.data, { path: '/'});
