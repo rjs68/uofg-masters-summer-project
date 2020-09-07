@@ -28,7 +28,7 @@ class Lectures extends Component {
             if(error.response.status===403){
                 window.location.reload(false);
             }else{
-                console.log("Error in get lecture" + error);
+                console.log(error);
             } 
           });
     }

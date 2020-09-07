@@ -26,6 +26,12 @@ class Units extends Component {
           })
           .then((response) => {
               this.setState({units: response.data});
+          }, (error) => {
+            if(error.response.status===403){
+                window.location.reload(false);
+            }else{
+                console.log(error);
+            } 
           });
     }
 

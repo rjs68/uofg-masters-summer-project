@@ -31,6 +31,12 @@ class Assignments extends Component {
           })
           .then((response) => {
               this.setState({assignments: response.data});
+          }, (error) => {
+            if(error.response.status===403){
+                window.location.reload(false);
+            }else{
+                console.log(error);
+            }
           });
     }
 
