@@ -30,7 +30,6 @@ class App extends Component {
     axios.get('/authenticate/')
     .then((response) => {
       this.state.cookies.set('csrftoken', response.data, { path: '/'});
-      this.state.cookies._updateBrowserValues();
     })
   }
 
@@ -43,6 +42,7 @@ class App extends Component {
   handleUserAuthenticated(userType){
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
     this.state.cookies.set('authenticated', true, { path: '/' });
+    this.state.cookies.set('csrftoken', cookies.get('csrftoken'), { path: '/'});
     this.setState({
         authenticated: true,
         userType: userType
