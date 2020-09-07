@@ -19,19 +19,19 @@ class App extends Component {
       authenticated: cookies.get('authenticated')
     };
 
-    this.authenticateUser();
+    // this.authenticateUser();
 
-    this.authenticateUser = this.authenticateUser.bind(this);
+    // this.authenticateUser = this.authenticateUser.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleUserAuthenticated = this.handleUserAuthenticated.bind(this);
   }
 
-  authenticateUser(){
-    axios.get('/authenticate/')
-    .then((response) => {
-      this.state.cookies.set('csrftoken', response.data, { path: '/'});
-    })
-  }
+  // authenticateUser(){
+  //   axios.get('/authenticate/')
+  //   .then((response) => {
+  //     this.state.cookies.set('csrftoken', response.data, { path: '/'});
+  //   })
+  // }
 
   handleEmailChange(event){
     this.setState({
@@ -42,7 +42,7 @@ class App extends Component {
   handleUserAuthenticated(userType){
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
     this.state.cookies.set('authenticated', true, { path: '/' });
-    this.authenticateUser();
+    // this.authenticateUser();
     // console.log(this.state.cookies.get('csrftoken'));
     // this.state.cookies.set('csrftoken', this.state.cookies.get('csrftoken'), { path: '/'});
     this.setState({
