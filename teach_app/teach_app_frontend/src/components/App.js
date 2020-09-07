@@ -32,7 +32,7 @@ class App extends Component {
 
   handleUserAuthenticated(userType){
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
-    this.state.cookies.set('userType', this.state.userType, { path: '/' });
+    this.state.cookies.set('userType', userType, { path: '/' });
     this.state.cookies.set('authenticated', true, { path: '/' });
     this.setState({
         authenticated: true,

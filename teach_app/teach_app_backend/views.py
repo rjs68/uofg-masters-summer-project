@@ -9,6 +9,7 @@ from django.conf import settings
 from django.middleware.csrf import get_token
 from rest_framework import generics
 from datetime import datetime
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledUnit, Assignment, Submission,
                                         Lecture, Quiz, Question, Answer, UserAnswer)
@@ -219,11 +220,12 @@ def unit_enrolment(request):
         return HttpResponse("User Not Enrolled")
 
 
-def authenticate_user(request):
-    csrf_token = get_token(request)
-    return HttpResponse(csrf_token)
+# def authenticate_user(request):
+#     csrf_token = get_token(request)
+#     return HttpResponse(csrf_token)
 
 
+@ensure_csrf_cookie
 def user_login(request):
     if request.method == 'POST':
         data = json.loads(request.body)
