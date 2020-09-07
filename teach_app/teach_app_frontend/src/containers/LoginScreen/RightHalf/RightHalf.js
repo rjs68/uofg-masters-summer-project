@@ -40,7 +40,7 @@ class RightHalf extends Component {
     }
 
     loginHandler() {
-        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.headers.post['X-CSRF-Token'] = this.props.cookies.get('csrftoken');
         axios.post('/login/', {
             email: this.props.email,
