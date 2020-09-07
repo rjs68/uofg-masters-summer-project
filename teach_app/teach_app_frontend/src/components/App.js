@@ -11,8 +11,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    console.log("In constructor");
-
     const cookies = new Cookies();
 
     this.state = {
@@ -20,6 +18,8 @@ class App extends Component {
       email: cookies.get('userEmail'),
       authenticated: cookies.get('authenticated')
     };
+
+    this.authenticateUser();
 
     this.authenticateUser = this.authenticateUser.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -61,9 +61,7 @@ class App extends Component {
                                 password={this.state.password}
                                 onEmailChange={this.handleEmailChange}
                                 onPasswordChange={this.handlePasswordChange}
-                                onUserAuthenticated={this.handleUserAuthenticated}
-                                authenticateUser={this.authenticateUser}
-                                cookies={this.state.cookies}/>
+                                onUserAuthenticated={this.handleUserAuthenticated}/>
     }
 
     return (

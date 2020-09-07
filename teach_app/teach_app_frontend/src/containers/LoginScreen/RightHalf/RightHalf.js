@@ -86,11 +86,6 @@ class RightHalf extends Component {
         }
     }
 
-    componentWillMount(){
-        console.log("Component is going to mount");
-        this.props.authenticateUser();
-    }
-
     render(){
         var inputMode;
 
