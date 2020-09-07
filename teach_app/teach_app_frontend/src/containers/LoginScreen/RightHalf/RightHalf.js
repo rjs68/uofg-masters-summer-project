@@ -12,8 +12,11 @@ class RightHalf extends Component {
             mode: "login"
         };
 
-        console.log(props.cookies.get('csrftoken'));
-        axios.defaults.headers.post['X-CSRF-Token'] = props.cookies.get('csrftoken');
+        // axios.defaults.xsrfCookieName = 'csrftoken'
+        // axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+        // axios.defaults.headers.common['X-CSRF-TOKEN'] = props.cookies.get('csrftoken');
+        // console.log(props.cookies.get('csrftoken'))
+        // axios.defaults.headers.post['X-CSRF-Token'] = props.cookies.get('csrftoken');
 
         this.handleModeChange = this.handleModeChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -37,6 +40,7 @@ class RightHalf extends Component {
     }
 
     loginHandler() {
+        axios.defaults.xsrfCookieName = 'csrftoken'
         axios.defaults.headers.post['X-CSRF-Token'] = this.props.cookies.get('csrftoken');
         axios.post('/login/', {
             email: this.props.email,
