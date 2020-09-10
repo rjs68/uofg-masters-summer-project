@@ -8,3 +8,14 @@
     padding: 10px;
     margin: 10px;
 }
+
+.AssignmentBox h1 {
+    margin-left: 40px;
+    font-size: 20px;
+}
+
+.AssignmentBox h2 {
+    margin-left: 40px;
+    font-size: 16px;
+    font-weight: normal;
+}
