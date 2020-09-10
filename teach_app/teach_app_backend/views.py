@@ -74,6 +74,18 @@ def get_assignment_specification(request):
         return HttpResponse("Specification not found")
 
 
+def get_assignment_specification_name(request):
+    data = json.loads(request.body)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    specification_path = assignment.specification.name
+    specification_path_array = specification_path.split('/')
+    specification_name = specification_path_array[-1]
+    print(specification_name)
+    specification_name = json.dumps(specification_name)
+    return HttpResponse(specification_name)
+
+
 def upload_assignment_specification(request):
     specification = request.FILES['specification']
     specification_name = specification.name.split('-')

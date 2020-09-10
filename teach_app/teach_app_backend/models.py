@@ -5,7 +5,7 @@ from teach_app_backend.managers import TeachUserManager
 
 
 class University(models.Model):
-    university_name = models.CharField(max_length=128, unique=True)
+    university_name = models.CharField(primary_key=True, max_length=128, unique=True)
     teacher_enrol_key = models.CharField(max_length=16, unique=True)
     student_enrol_key = models.CharField(max_length=16, unique=True)
 

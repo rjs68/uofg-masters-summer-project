@@ -11,6 +11,8 @@ class CreateAssignmentForm extends Component {
         super(props);
         this.state = {};
 
+        axios.defaults.headers.post['X-CSRFToken'] = this.props.cookies.get('csrftoken');
+
         this.handleInputChange = this.handleInputChange.bind(this);
         this.getUnits = this.getUnits.bind(this);
         this.resetThenSet = this.resetThenSet.bind(this);
