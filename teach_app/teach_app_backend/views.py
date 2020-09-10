@@ -332,17 +332,20 @@ def get_quiz(request):
     unit = Unit.objects.get(unit_code=data['unitCode'])
     lecture = Lecture.objects.get(unit=unit,
                                     event_name=data['lectureName'])
-    quiz = Quiz.objects.filter(lecture=lecture)[0]
-    if(quiz):
-        quiz_data = {}
-        questions = Question.objects.filter(quiz=quiz)
-        for question in questions:
-            answer_data = __get_answers(question)
-            quiz_data[question.question] = answer_data
-        quiz_data = json.dumps(quiz_data)
-        return HttpResponse(quiz_data)
-    else:
-        return HttpRespons("No quiz available")
+    quiz = False
+    try:
+        quiz = Quiz.objects.filter(lecture=lecture)[0]
+    finally:
+        if(quiz):
+            quiz_data = {}
+            questions = Question.objects.filter(quiz=quiz)
+            for question in questions:
+                answer_data = __get_answers(question)
+                quiz_data[question.question] = answer_data
+            quiz_data = json.dumps(quiz_data)
+            return HttpResponse(quiz_data)
+        else:
+            return HttpResponse("No quiz available")
 
 
 def submit_user_answer(request):

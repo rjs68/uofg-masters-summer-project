@@ -77,6 +77,7 @@ class Lectures extends Component {
         var pageContent;
         if(this.state.lectureSelected){
             pageContent = <Lecture lecture={this.state.selectedLecture['lecture_name']} 
+                                    lectureTime={this.state.selectedLecture['lecture_time']}
                                     unitCode={this.state.selectedLecture['unit_code']}
                                     userEmail={this.props.email}
                                     userType={this.props.userType} />

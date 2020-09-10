@@ -5,6 +5,7 @@
     justify-content: space-between;
     align-items: center;
     width: 220px;
+    margin: 0 auto;
 }
 
 .CreateAssignmentForm input {
