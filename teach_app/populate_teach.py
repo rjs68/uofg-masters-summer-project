@@ -302,6 +302,8 @@ def add_lecture(unit_code, event_name, date_time, link):
                                             event_name=event_name,
                                             date_time=date_time,
                                             link=link)
+    
+    return lecture
 
 
 def add_quiz(unit_code, event_name, total_mark):

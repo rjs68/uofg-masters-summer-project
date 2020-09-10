@@ -76,7 +76,9 @@ class Assignments extends Component {
                                                     closeForm={this.handleChangeStatus}
                                                     cookies={this.props.cookies} />
                         </Modal>
-                        <Button clicked={this.handleChangeStatus}>Create Assignment</Button>
+                        <div>
+                            <Button clicked={this.handleChangeStatus}>Create Assignment</Button>
+                        </div>
                     </Aux>;
         }
 

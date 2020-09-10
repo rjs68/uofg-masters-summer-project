@@ -15,7 +15,7 @@ from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledU
                                         Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
-                            add_user_quiz_performance)
+                            add_user_quiz_performance, add_lecture)
 
 
 def get_user_units(request):
@@ -235,6 +235,21 @@ def create_assignment(request):
         return HttpResponse("Assignment Created Successfully")
     else:
         return HttpResponse("Assignment Not Created")
+
+
+def create_lecture(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    event_name = data['lectureName']
+    time_string = data['time']
+    time = datetime.strptime(time_string, "%Y-%m-%dT%H:%M")
+
+    lecture = add_lecture(unit_code, event_name, time, "")
+
+    if(lecture):
+        return HttpResponse("Lecture Created Successfully")
+    else:
+        return HttpResponse("Lecture Not Created")
 
 
 def unit_enrolment(request):

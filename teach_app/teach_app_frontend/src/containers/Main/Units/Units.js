@@ -69,7 +69,9 @@ class Units extends Component {
         return (
             <div className={classes.PageContent}>
                 <Modal show={this.state.unitChangeHandling}>{form}</Modal>
-                <Button clicked={this.handleChangeStatus}>{button}</Button>
+                <div>
+                    <Button clicked={this.handleChangeStatus}>{button}</Button>
+                </div>
                 {units}
             </div>
         )
