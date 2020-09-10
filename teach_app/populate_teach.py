@@ -2,7 +2,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 from django.core.exceptions import ObjectDoesNotExist
-# django.setup()
+django.setup()
 from datetime import datetime
 from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)

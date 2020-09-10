@@ -20,6 +20,7 @@ urlpatterns = [
     path('specification-name/', views.get_assignment_specification_name, name='specification name'),
     path('upload-specification/', views.upload_assignment_specification, name='upload-specification'),
     path('submission/', views.get_submission, name='submission'),
+    path('submission-name/', views.get_submission_name, name='submission-name'),
     path('upload-submission/', views.upload_submission, name='upload-submission'),
     path('student-submissions/', views.get_student_submissions, name='student-submissions'),
     path('student-grade/', views.edit_student_grade, name='student-grade'),

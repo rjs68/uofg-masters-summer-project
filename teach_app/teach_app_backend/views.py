@@ -81,7 +81,6 @@ def get_assignment_specification_name(request):
     specification_path = assignment.specification.name
     specification_path_array = specification_path.split('/')
     specification_name = specification_path_array[-1]
-    print(specification_name)
     specification_name = json.dumps(specification_name)
     return HttpResponse(specification_name)
 
@@ -92,8 +91,15 @@ def upload_assignment_specification(request):
     unit = Unit.objects.get(unit_code=specification_name[1])
     assignment_name = specification_name[2].split('.')
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name[0])
+
+    directory_name = os.path.join(settings.MEDIA_ROOT, "assignments")
+    file_path = os.path.join(directory_name, specification.name)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     assignment.specification = specification
     assignment.save()
+
     if(assignment.specification):
         return HttpResponse("Upload Successful")
     else:
@@ -112,6 +118,19 @@ def get_submission(request):
         return HttpResponse(submission_data)
     else:
         return HttpResponse("Submission not found")
+
+
+def get_submission_name(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['userEmail'])
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    submission = __get_submission_object(user, assignment)
+    submission_path = submission.submission.name
+    submission_path_array = submission_path.split('/')
+    submission_name = submission_path_array[-1]
+    submission_name = json.dumps(submission_name)
+    return HttpResponse(submission_name)
 
 
 def get_student_submissions(request):
@@ -230,11 +249,6 @@ def unit_enrolment(request):
             return HttpResponse("User Enrolled")
     else:
         return HttpResponse("User Not Enrolled")
-
-
-# def authenticate_user(request):
-#     csrf_token = get_token(request)
-#     return HttpResponse(csrf_token)
 
 
 @ensure_csrf_cookie
@@ -424,8 +438,13 @@ def __get_submission_data(submission):
     else:
         submission_time = None
     
+    submission_path = submission.submission.name
+    submission_path_array = submission_path.split('/')
+    submission_name = submission_path_array[-1]
+    
     return {
         "user": submission.user.email,
+        "submission_name": submission_name,
         "submission_time": submission_time,
         "grade": submission.grade,
         "feedback": submission.feedback
