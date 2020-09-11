@@ -48,7 +48,7 @@ class QuestionEditor extends Component {
         const newAnswer = event.target.value;
         event.target.name = newAnswer;
         delete newAnswers[oldAnswer];
-        if(oldAnswer===this.state.correctAnswer){
+        if(oldAnswer===this.state.correctAnswer || this.props.question==="Add Question"){
             newAnswers[newAnswer] = true;
             this.setState({
                 correctAnswer: newAnswer
@@ -65,8 +65,8 @@ class QuestionEditor extends Component {
     render() {
         const editAnswers = [];
         var index = 0;
+        var style;
         for(const answer in this.props.answers){
-            var style;
             if(index===this.state.correctAnswerIndex){
                 style=classes.CorrectAnswer;
             }else{
@@ -82,7 +82,12 @@ class QuestionEditor extends Component {
             editAnswers.push(editAnswer);
             index++;
         };
-        const addAnswer = <div key={index}>
+        if(this.props.question==="Add Question"){
+            style=classes.CorrectAnswer;
+        }else{
+            style=null;
+        }
+        const addAnswer = <div key={index} className={style}>
                                 <input index={index}
                                         onChange={this.onAnswerChange}
                                         type="text" 

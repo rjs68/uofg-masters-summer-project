@@ -61,6 +61,10 @@ class PreLectureScreen extends Component {
                                                             updateQuestion={this.updateQuestion} />
                     editQuizContent.push(questionEditor);
                 }
+                const addQuestion = <QuestionEditor key="addQuestion"
+                                                    question="Add Question"
+                                                    updateQuestion={this.updateQuestion} />
+                editQuizContent.push(addQuestion);
             }
         }
 
