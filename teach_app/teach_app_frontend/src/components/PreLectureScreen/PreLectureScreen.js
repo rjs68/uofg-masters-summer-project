@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
 
+import QuestionEditor from '../QuestionEditor/QuestionEditor';
+
 class PreLectureScreen extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            newQuestions: {},
-            newAnswers: {}
-        };
+        this.state = {};
 
         this.onQuestionChange = this.onQuestionChange.bind(this);
     }
 
     onQuestionChange(event) {
+        var newQuizData;
+        if(this.state.newQuizData){
+            newQuizData = {...this.state.newQuizData};
+        }else{
+            newQuizData = {...this.props.quizData};
+        }
+        const questions = Object.keys(newQuizData);
         const questionIndex = event.target.name;
+        const oldQuestion = questions[questionIndex];
+        const answers = newQuizData[oldQuestion];
         const newQuestion = event.target.value;
-        const newQuestions = this.state.newQuestions;
-        newQuestions[questionIndex] = newQuestion;
+
+        delete newQuizData[oldQuestion];
+        newQuizData[newQuestion] = answers;
         this.setState({
-            newQuestions: newQuestions
+            newQuizData: newQuizData
         });
     }
 
@@ -48,26 +57,29 @@ class PreLectureScreen extends Component {
         var editQuizContent=[];
         if(this.props.userType==="teacher"){
             if(this.props.quizAvailable){
-                const questions = Object.keys(this.props.quizData)
-                for(const questionNumber in this.props.quizData){
-                    const question = questions[questionNumber];
-                    const inputName = "question " + questionNumber;
-                    const editQuestionInput = <input onChange={this.onQuestionChange}
-                                                    key={questionNumber}
-                                                    type="text" 
-                                                    name={questionNumber}
-                                                    value={question} />
-                    editQuizContent.push(editQuestionInput);
+                var quizData;
+                if(this.state.newQuizData){
+                    quizData = this.state.newQuizData;
+                }else{
+                    quizData = this.props.quizData;
+                }
+                const questions = Object.keys(quizData);
+                for(const question in quizData){
+                    const questionEditor = <QuestionEditor key={question}
+                                                            question={question}
+                                                            answers={quizData[question]}/>
+                    editQuizContent.push(questionEditor);
                 }
             }
-            const nextQuestionNumber = this.props.quizData ? Object.keys(this.props.quizData).length : 0;
-            const inputName = "question " + nextQuestionNumber;
-            const addQuestionInput = <input onChange={this.onQuestionChange}
-                                            key={nextQuestionNumber}
-                                            type="text" 
-                                            name={nextQuestionNumber}
-                                            placeholder="Add question" />
-            editQuizContent.push(addQuestionInput);
+            // const nextQuestionNumber = this.props.quizAvailable && this.state.newQuizData ? 
+            //                                 Object.keys(this.state.newQuizData).length : 
+            //                                     this.props.quizAvailable ? Object.keys(this.props.quizData).length : 0;
+            // const addQuestionInput = <input onChange={this.onQuestionChange}
+            //                                 key={nextQuestionNumber}
+            //                                 type="text" 
+            //                                 name={nextQuestionNumber}
+            //                                 placeholder="Add question" />
+            // editQuizContent.push(addQuestionInput);
         }
 
         return (
