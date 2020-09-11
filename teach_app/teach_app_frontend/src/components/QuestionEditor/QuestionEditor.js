@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import { recomposeColor } from '@material-ui/core';
+
+import Button from '../UI/Button/Button';
 
 class QuestionEditor extends Component {
     constructor(props){
         super(props);
-        this.state = {};
+        this.state = {
+            oldQuestion: props.question,
+            newQuestion: props.question,
+            newAnswers: props.answers
+        };
 
         this.onQuestionChange = this.onQuestionChange.bind(this);
         this.onAnswerChange = this.onAnswerChange.bind(this);
@@ -60,6 +65,9 @@ class QuestionEditor extends Component {
                 <div id="answer">
                     {editAnswers}
                 </div>
+                <Button clicked={() => {this.props.updateQuestion(this.state.oldQuestion, this.state.newQuestion, this.state.newAnswers)}}>
+                    Update Question
+                </Button>
             </div>
         )
     }

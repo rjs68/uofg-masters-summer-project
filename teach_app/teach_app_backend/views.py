@@ -15,7 +15,7 @@ from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledU
                                         Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
-                            add_user_quiz_performance, add_lecture)
+                            add_user_quiz_performance, add_lecture, add_quiz)
 
 
 def get_user_units(request):
@@ -399,6 +399,35 @@ def get_quiz_results(request):
     
     user_performances = json.dumps(user_performances)
     return HttpResponse(user_performances)
+
+
+def update_quiz(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    event_name = data['lectureName']
+    oldQuestion = data['oldQuestion']
+    newQuestion = data['newQuestion']
+    newAnswers = data['newAnswers']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    try:
+        quiz = Quiz.objects.filter(lecture=lecture)[0]
+    except ObjectDoesNotExist:
+        quiz = add_quiz(unit_code, event_name, 1)
+
+    try:
+        Question.objects.filter(quiz=quiz, question=oldQuestion).delete()
+    finally:
+        question = Question.objects.create(quiz=quiz, question=newQuestion)
+    
+    for answer in newAnswers.keys():
+        is_correct = newAnswers[answer]
+        answer = Answer.objects.create(question=question, answer=answer, is_correct=is_correct)
+
+    return HttpResponse("Update succesful")
+
 
 
 def __get_user_units(user):

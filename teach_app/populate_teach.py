@@ -312,6 +312,8 @@ def add_quiz(unit_code, event_name, total_mark):
                                   event_name=event_name)
     quiz = Quiz.objects.get_or_create(lecture=lecture,
                                       total_mark=total_mark)
+    
+    return quiz
 
 
 def add_question(unit_code, event_name, question):

@@ -29,6 +29,7 @@ urlpatterns = [
     path('quiz/', views.get_quiz, name='quiz'),
     path('submit-answer/', views.submit_user_answer, name='submit-answer'),
     path('quiz-results/', views.get_quiz_results, name='quiz-results'),
+    path('update-quiz/', views.update_quiz, name='update-quiz'),
     path('admin/', admin.site.urls),
     path('favicon.ico/', RedirectView.as_view(url='/teach_app_frontend/static/frontend/favicon.ico/'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

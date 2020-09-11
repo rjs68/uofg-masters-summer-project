@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import QuestionEditor from '../QuestionEditor/QuestionEditor';
 
@@ -7,26 +8,19 @@ class PreLectureScreen extends Component {
         super(props);
         this.state = {};
 
-        this.onQuestionChange = this.onQuestionChange.bind(this);
+        this.updateQuestion = this.updateQuestion.bind(this);
     }
 
-    onQuestionChange(event) {
-        var newQuizData;
-        if(this.state.newQuizData){
-            newQuizData = {...this.state.newQuizData};
-        }else{
-            newQuizData = {...this.props.quizData};
-        }
-        const questions = Object.keys(newQuizData);
-        const questionIndex = event.target.name;
-        const oldQuestion = questions[questionIndex];
-        const answers = newQuizData[oldQuestion];
-        const newQuestion = event.target.value;
-
-        delete newQuizData[oldQuestion];
-        newQuizData[newQuestion] = answers;
-        this.setState({
-            newQuizData: newQuizData
+    updateQuestion(oldQuestion, newQuestion, newAnswers){
+        axios.post('/update-quiz/', {
+            unitCode: this.props.unitCode,
+            lectureName: this.props.lecture,
+            oldQuestion: oldQuestion,
+            newQuestion: newQuestion,
+            newAnswers: newAnswers
+        })
+        .then((response) => {
+            console.log(response.data);
         });
     }
 
@@ -57,29 +51,15 @@ class PreLectureScreen extends Component {
         var editQuizContent=[];
         if(this.props.userType==="teacher"){
             if(this.props.quizAvailable){
-                var quizData;
-                if(this.state.newQuizData){
-                    quizData = this.state.newQuizData;
-                }else{
-                    quizData = this.props.quizData;
-                }
-                const questions = Object.keys(quizData);
+                const quizData = this.props.quizData;
                 for(const question in quizData){
                     const questionEditor = <QuestionEditor key={question}
                                                             question={question}
-                                                            answers={quizData[question]}/>
+                                                            answers={quizData[question]}
+                                                            updateQuestion={this.updateQuestion} />
                     editQuizContent.push(questionEditor);
                 }
             }
-            // const nextQuestionNumber = this.props.quizAvailable && this.state.newQuizData ? 
-            //                                 Object.keys(this.state.newQuizData).length : 
-            //                                     this.props.quizAvailable ? Object.keys(this.props.quizData).length : 0;
-            // const addQuestionInput = <input onChange={this.onQuestionChange}
-            //                                 key={nextQuestionNumber}
-            //                                 type="text" 
-            //                                 name={nextQuestionNumber}
-            //                                 placeholder="Add question" />
-            // editQuizContent.push(addQuestionInput);
         }
 
         return (
