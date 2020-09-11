@@ -1,0 +1,16 @@
+.PreLectureScreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.PreLectureScreen h1 {
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.PreLectureScreen p {
+    font-family: sans-serif;
+    font-size: 20px;
+}

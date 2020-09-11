@@ -61,7 +61,7 @@ class Lectures extends Component {
 
     render() {
         var form;
-        if(this.props.userType === "teacher"){
+        if(this.props.userType === "teacher" && !this.state.lectureSelected){
             form = <Aux>
                         <Modal show={this.state.createLectureHandling}>
                             <CreateLectureForm email={this.props.email}

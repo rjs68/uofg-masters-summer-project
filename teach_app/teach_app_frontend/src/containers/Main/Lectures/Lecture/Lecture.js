@@ -442,7 +442,8 @@ class Lecture extends Component {
                                     unitCode={this.props.unitCode}
                                     userType={this.props.userType}
                                     quizAvailable={this.state.quizAvailable}
-                                    quizData={this.state.quizData}/>
+                                    quizData={this.state.quizData}
+                                    updateQuizData={this.getQuiz}/>
         }
     }
 }

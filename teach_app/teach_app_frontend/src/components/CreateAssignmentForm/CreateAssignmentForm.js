@@ -30,16 +30,16 @@ class CreateAssignmentForm extends Component {
           .then((response) => {
               var index = 0;
               var units = response.data.map(unit => {
-                  const id = index;
-                  index++;
-                  return {
-                      id: id,
-                      unit: unit,
-                      title: unit['unit_name'],
-                      selected: false,
-                      key: 'unit'
-                  }
-              })
+                                                const id = index;
+                                                index++;
+                                                return {
+                                                    id: id,
+                                                    unit: unit,
+                                                    title: unit['unit_name'],
+                                                    selected: false,
+                                                    key: 'unit'
+                                                }
+                                            })
               this.setState({units: units});
           });
     }

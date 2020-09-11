@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
 
 import Button from '../UI/Button/Button';
+import classes from './QuestionEditor.module.css';
 
 class QuestionEditor extends Component {
     constructor(props){
         super(props);
+        
+        var correctAnswer;
+        var correctAnswerIndex;
+        var index=0;
+        for(const answer in props.answers){
+            if(props.answers[answer]){
+                correctAnswer = answer;
+                correctAnswerIndex = index;
+            };
+            index++;
+        };
+
         this.state = {
             oldQuestion: props.question,
             newQuestion: props.question,
-            newAnswers: props.answers
+            newAnswers: props.answers,
+            correctAnswer: correctAnswer,
+            correctAnswerIndex: correctAnswerIndex
         };
 
         this.onQuestionChange = this.onQuestionChange.bind(this);
@@ -33,7 +48,15 @@ class QuestionEditor extends Component {
         const newAnswer = event.target.value;
         event.target.name = newAnswer;
         delete newAnswers[oldAnswer];
-        newAnswers[newAnswer] = false;
+        if(oldAnswer===this.state.correctAnswer){
+            newAnswers[newAnswer] = true;
+            this.setState({
+                correctAnswer: newAnswer
+            });
+        }else{
+            newAnswers[newAnswer] = false;
+        }
+        
         this.setState({
             newAnswers: newAnswers
         })
@@ -43,26 +66,38 @@ class QuestionEditor extends Component {
         const editAnswers = [];
         var index = 0;
         for(const answer in this.props.answers){
-            const editAnswer = <input key={index}
-                                        index={index}
-                                        onChange={this.onAnswerChange}
-                                        type="text" 
-                                        name={answer}
-                                        placeholder={answer} />
+            var style;
+            if(index===this.state.correctAnswerIndex){
+                style=classes.CorrectAnswer;
+            }else{
+                style=null;
+            }
+            const editAnswer = <div className={style} key={index}>
+                                    <input index={index}
+                                            onChange={this.onAnswerChange}
+                                            type="text" 
+                                            name={answer}
+                                            placeholder={answer} />
+                                </div>
             editAnswers.push(editAnswer);
             index++;
         };
+        const addAnswer = <div key={index}>
+                                <input index={index}
+                                        onChange={this.onAnswerChange}
+                                        type="text" 
+                                        name="addAnswer"
+                                        placeholder="Add Answer" />
+                            </div>
+        editAnswers.push(addAnswer);
 
         return (
-            <div>
-                <label htmlFor={this.props.question}>Question</label>
+            <div className={classes.QuestionEditor}>
                 <input onChange={this.onQuestionChange}
-                        id={this.props.question}
                         type="text" 
                         name="question"
                         placeholder={this.props.question} />
-                <label htmlFor="answers">Answers</label>
-                <div id="answer">
+                <div>
                     {editAnswers}
                 </div>
                 <Button clicked={() => {this.props.updateQuestion(this.state.oldQuestion, this.state.newQuestion, this.state.newAnswers)}}>

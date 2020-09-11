@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import QuestionEditor from '../QuestionEditor/QuestionEditor';
+import classes from './PreLectureScreen.module.css';
 
 class PreLectureScreen extends Component {
     constructor(props){
@@ -20,7 +21,8 @@ class PreLectureScreen extends Component {
             newAnswers: newAnswers
         })
         .then((response) => {
-            console.log(response.data);
+            this.props.updateQuizData();
+            this.render();
         });
     }
 
@@ -63,7 +65,7 @@ class PreLectureScreen extends Component {
         }
 
         return (
-            <div>
+            <div className={classes.PreLectureScreen}>
                 <h1>The lecture hasn't started yet</h1>
                 <p>{lectureTimeDisplay}</p>
                 {editQuizContent}
