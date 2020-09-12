@@ -12,13 +12,14 @@ class Assignment extends Component{
         this.state = {
             specificationUploaded: false,
             specificationName: "specification-"+this.props.assignment['unit_code']
-                                +"-"+this.props.assignment['assignment_name']+".pdf",
+                                +"-"+this.props.assignment['assignment_name']+".",
             submissionUploaded: false,
             submissionName: this.props.email+"-"+this.props.assignment['unit_code']
-                            +"-"+this.props.assignment['assignment_name']+".pdf",
+                            +"-"+this.props.assignment['assignment_name']+".",
         };
 
         this.getAssignmentSpecification = this.getAssignmentSpecification.bind(this);
+        this.getAssignmentSpecificationName = this.getAssignmentSpecificationName.bind(this);
         this.handleSpecificationUpload = this.handleSpecificationUpload.bind(this);
         this.uploadSpecificationHandler = this.uploadSpecificationHandler.bind(this);
         this.getSubmission = this.getSubmission.bind(this);
@@ -35,17 +36,33 @@ class Assignment extends Component{
             .then((response) => {
                 if(response.data === "Specification found"){
                     this.setState({specificationUploaded: true});
+                    this.getAssignmentSpecificationName();
                 }else if(response.data === "Specification not found"){
                     this.setState({specificationUploaded: false});
                 }
             });
     }
 
+    getAssignmentSpecificationName(){
+        axios.post('/specification-name/', {
+            unitCode: this.props.assignment['unit_code'],
+            assignmentName: this.props.assignment['assignment_name']
+        })
+            .then((response) => {
+                this.setState({specificationName: response.data});
+            });
+    }
+
     handleSpecificationUpload(event){
         const specification = event.target.files[0];
+        const specificationNameSplit = specification.name.split('.');
+        const specificationExtension = specificationNameSplit.pop();
+        const previousSpecificationName = this.state.specificationName.split('.');
+        const specificationName = previousSpecificationName[0] + '.' + specificationExtension;
+        console.log(specificationName);
         Object.defineProperty(specification, 'name', {
             writable: true,
-            value: event.target.name
+            value: specificationName
         })
         this.setState({specification: specification});
     }
@@ -77,6 +94,17 @@ class Assignment extends Component{
                         submissionData: response.data
                     });
                 } 
+            });
+    }
+
+    getSubmissionName(){
+        axios.post('/submission-name/', {
+            userEmail: this.props.email,
+            unitCode: this.props.assignment['unit_code'],
+            assignmentName: this.props.assignment['assignment_name']
+        })
+            .then((response) => {
+                this.setState({subsmissionName: response.data});
             });
     }
 
@@ -120,23 +148,31 @@ class Assignment extends Component{
     }
 
     render() {
-        var specification;
+        var specification = [];
         if(this.state.specificationUploaded){
             const specificationPath = "/media/assignments/" + this.state.specificationName + "/";
-            specification = <a  href={specificationPath} download> Download Specification </a>;
+            specification.push(<a  key='download' href={specificationPath} download> Download Specification </a>);
+            if(this.props.userType === "teacher"){
+                specification.push(<Aux key='edit specification'>
+                                    <input onChange={this.handleSpecificationUpload}
+                                            type="file" 
+                                            name={this.state.specificationName} />
+                                    <Button clicked={this.uploadSpecificationHandler}>Edit Specification</Button>
+                                </Aux>)
+            }
         }else if(this.props.userType === "teacher") { 
-            specification = <Aux>
+            specification.push(<Aux key='upload specification'>
                                 <p>Upload the specification here</p>
                                 <input onChange={this.handleSpecificationUpload}
                                         type="file" 
                                         name={this.state.specificationName} />
                                 <Button clicked={this.uploadSpecificationHandler}>Upload Assignment</Button>
-                            </Aux>
+                            </Aux>)
         }else{
-            specification = <p>
+            specification.push(<p key='no specification'>
                                 We couldn't find the specification. 
                                 Please check that your lecturer has uploaded it.
-                            </p>
+                            </p>)
         }
 
         var submission;
@@ -148,8 +184,7 @@ class Assignment extends Component{
                                 <a href={submissionPath} download> Download Submission </a>
                                 <p>You can change your submission here</p>
                                 <input onChange={this.handleSubmissionUpload}
-                                        type="file" 
-                                        name={this.state.submissionName} />
+                                        type="file" />
                                 <Button clicked={this.uploadSubmissionHandler}>Edit Submission</Button>
                                 <p>Grade: {this.state.submissionData['grade']}</p>
                                 <p>Feedback: {this.state.submissionData['feedback']}</p>
@@ -168,9 +203,7 @@ class Assignment extends Component{
                 submission = [];
                 for(const studentSubmission in this.state.studentSubmissions){
                     const studentEmail = this.state.studentSubmissions[studentSubmission]['user'];
-                    const submissionName = (studentEmail+"-"+this.props.assignment['unit_code']
-                                            +"-"+this.props.assignment['assignment_name']+".pdf")
-                                            .replace('@', '');
+                    const submissionName = this.state.studentSubmissions[studentSubmission]['submission_name'];
                     const submissionPath = "media/submissions/" + submissionName + "/";
                     var grade = this.state.studentSubmissions[studentSubmission]['grade'];
                     if(grade === null){

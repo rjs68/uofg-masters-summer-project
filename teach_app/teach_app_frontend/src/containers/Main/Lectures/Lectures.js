@@ -3,17 +3,23 @@ import axios from 'axios';
 
 import LectureBox from './LectureBox/LectureBox';
 import Lecture from './Lecture/Lecture';
+import CreateLectureForm from '../../../components/CreateLectureForm/CreateLectureForm';
 import classes from '../PageContent.module.css';
+import Aux from '../../../hoc/Auxiliary/Auxiliary';
+import Modal from '../../../components/UI/Modal/Modal';
+import Button from '../../../components/UI/Button/Button';
 
 class Lectures extends Component {
     constructor(props) {
         super(props);
         this.state = {
           lectures: {},
-          lectureSelected: false
+          lectureSelected: false,
+          createLectureHandling: false
         };
 
         this.getLectures = this.getLectures.bind(this);
+        this.handleChangeStatus = this.handleChangeStatus.bind(this);
         this.selectLectureHandler = this.selectLectureHandler.bind(this);
     }
 
@@ -33,6 +39,15 @@ class Lectures extends Component {
           });
     }
 
+    handleChangeStatus() {
+        if(this.state.createLectureHandling === true){
+            this.setState({createLectureHandling: false});
+            this.getLectures();
+        }else{
+            this.setState({createLectureHandling: true});
+        }
+    }
+
     selectLectureHandler(index){
         this.setState({
             lectureSelected: true,
@@ -45,29 +60,42 @@ class Lectures extends Component {
     }
 
     render() {
-        var pageContent;
+        var form;
+        if(this.props.userType === "teacher" && !this.state.lectureSelected){
+            form = <Aux>
+                        <Modal show={this.state.createLectureHandling}>
+                            <CreateLectureForm email={this.props.email}
+                                                    closeForm={this.handleChangeStatus}
+                                                    cookies={this.props.cookies} />
+                        </Modal>
+                        <div>
+                            <Button clicked={this.handleChangeStatus}>Create Lecture</Button>
+                        </div>
+                    </Aux>;
+        }
 
+        var pageContent;
         if(this.state.lectureSelected){
             pageContent = <Lecture lecture={this.state.selectedLecture['lecture_name']} 
+                                    lectureTime={this.state.selectedLecture['lecture_time']}
                                     unitCode={this.state.selectedLecture['unit_code']}
                                     userEmail={this.props.email}
                                     userType={this.props.userType} />
         }else{
             pageContent = []
             if(this.state.lectures !== {}){
-                var index = 0;
                 for(const lecture in this.state.lectures){
-                    pageContent.push(<LectureBox key={index}
-                                                index={index} 
+                    pageContent.push(<LectureBox key={lecture}
+                                                index={lecture} 
                                                 lecture={this.state.lectures[lecture]} 
                                                 clicked={this.selectLectureHandler} />);
-                    index += 1;
                 }
             }
         }
 
         return (
             <div className={classes.PageContent}>
+                {form}
                 {pageContent}
             </div>
         );

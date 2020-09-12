@@ -2,7 +2,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 from django.core.exceptions import ObjectDoesNotExist
-# django.setup()
+django.setup()
 from datetime import datetime
 from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
@@ -78,13 +78,13 @@ submissions = [
 ]
 
 lectures = [
-    {'unit': 1, 'event_name': 'Lecture1', 'date_time': datetime(2020, 7, 10, 10), 'link': 'link1'},
-    {'unit': 1, 'event_name': 'Lecture2', 'date_time': datetime(2020, 7, 17, 10), 'link': 'link2'},
-    {'unit': 2, 'event_name': 'Lecture1', 'date_time': datetime(2020, 8, 23, 9), 'link': 'link1'},
-    {'unit': 3, 'event_name': 'Lecture1', 'date_time': datetime(2020, 8, 1, 15), 'link': 'link1'},
-    {'unit': 3, 'event_name': 'Lecture2', 'date_time': datetime(2020, 7, 30, 16), 'link': 'link1'},
-    {'unit': 3, 'event_name': 'Lecture3', 'date_time': datetime(2020, 8, 2, 9), 'link': 'link2'},
-    {'unit': 2, 'event_name': 'Lecture2', 'date_time': datetime(2020, 8, 15, 12), 'link': 'link1'},
+    {'unit': 1, 'event_name': 'Lecture1', 'date_time': datetime(2020, 10, 10, 10), 'link': 'link1'},
+    {'unit': 1, 'event_name': 'Lecture2', 'date_time': datetime(2020, 10, 17, 10), 'link': 'link2'},
+    {'unit': 2, 'event_name': 'Lecture1', 'date_time': datetime(2020, 11, 23, 9), 'link': 'link1'},
+    {'unit': 3, 'event_name': 'Lecture1', 'date_time': datetime(2020, 12, 1, 15), 'link': 'link1'},
+    {'unit': 3, 'event_name': 'Lecture2', 'date_time': datetime(2020, 11, 30, 16), 'link': 'link1'},
+    {'unit': 3, 'event_name': 'Lecture3', 'date_time': datetime(2020, 10, 2, 9), 'link': 'link2'},
+    {'unit': 2, 'event_name': 'Lecture2', 'date_time': datetime(2020, 11, 15, 12), 'link': 'link1'},
 ]
 
 quizzes = [
@@ -302,6 +302,8 @@ def add_lecture(unit_code, event_name, date_time, link):
                                             event_name=event_name,
                                             date_time=date_time,
                                             link=link)
+    
+    return lecture
 
 
 def add_quiz(unit_code, event_name, total_mark):
@@ -310,6 +312,8 @@ def add_quiz(unit_code, event_name, total_mark):
                                   event_name=event_name)
     quiz = Quiz.objects.get_or_create(lecture=lecture,
                                       total_mark=total_mark)
+    
+    return quiz
 
 
 def add_question(unit_code, event_name, question):

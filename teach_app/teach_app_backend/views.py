@@ -15,7 +15,7 @@ from teach_app_backend.models import (TeachUser, University, Unit, UserEnrolledU
                                         Lecture, Quiz, Question, Answer, UserAnswer)
 from teach_app_backend.serializers import TeachUserSerializer, UnitSerializer
 from populate_teach import (add_user, add_unit, add_unit_enrolled, add_assignment, add_user_answer, 
-                            add_user_quiz_performance)
+                            add_user_quiz_performance, add_lecture, add_quiz)
 
 
 def get_user_units(request):
@@ -74,14 +74,32 @@ def get_assignment_specification(request):
         return HttpResponse("Specification not found")
 
 
+def get_assignment_specification_name(request):
+    data = json.loads(request.body)
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    specification_path = assignment.specification.name
+    specification_path_array = specification_path.split('/')
+    specification_name = specification_path_array[-1]
+    specification_name = json.dumps(specification_name)
+    return HttpResponse(specification_name)
+
+
 def upload_assignment_specification(request):
     specification = request.FILES['specification']
     specification_name = specification.name.split('-')
     unit = Unit.objects.get(unit_code=specification_name[1])
     assignment_name = specification_name[2].split('.')
     assignment = Assignment.objects.get(unit=unit, event_name=assignment_name[0])
+
+    directory_name = os.path.join(settings.MEDIA_ROOT, "assignments")
+    file_path = os.path.join(directory_name, specification.name)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     assignment.specification = specification
     assignment.save()
+
     if(assignment.specification):
         return HttpResponse("Upload Successful")
     else:
@@ -100,6 +118,19 @@ def get_submission(request):
         return HttpResponse(submission_data)
     else:
         return HttpResponse("Submission not found")
+
+
+def get_submission_name(request):
+    data = json.loads(request.body)
+    user = TeachUser.objects.get(email=data['userEmail'])
+    unit = Unit.objects.get(unit_code=data['unitCode'])
+    assignment = Assignment.objects.get(unit=unit, event_name=data['assignmentName'])
+    submission = __get_submission_object(user, assignment)
+    submission_path = submission.submission.name
+    submission_path_array = submission_path.split('/')
+    submission_name = submission_path_array[-1]
+    submission_name = json.dumps(submission_name)
+    return HttpResponse(submission_name)
 
 
 def get_student_submissions(request):
@@ -206,6 +237,21 @@ def create_assignment(request):
         return HttpResponse("Assignment Not Created")
 
 
+def create_lecture(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    event_name = data['lectureName']
+    time_string = data['time']
+    time = datetime.strptime(time_string, "%Y-%m-%dT%H:%M")
+
+    lecture = add_lecture(unit_code, event_name, time, "")
+
+    if(lecture):
+        return HttpResponse("Lecture Created Successfully")
+    else:
+        return HttpResponse("Lecture Not Created")
+
+
 def unit_enrolment(request):
     data = json.loads(request.body)
     unit_enrol_key = data['unitEnrolmentKey']
@@ -218,11 +264,6 @@ def unit_enrolment(request):
             return HttpResponse("User Enrolled")
     else:
         return HttpResponse("User Not Enrolled")
-
-
-# def authenticate_user(request):
-#     csrf_token = get_token(request)
-#     return HttpResponse(csrf_token)
 
 
 @ensure_csrf_cookie
@@ -291,17 +332,20 @@ def get_quiz(request):
     unit = Unit.objects.get(unit_code=data['unitCode'])
     lecture = Lecture.objects.get(unit=unit,
                                     event_name=data['lectureName'])
-    quiz = Quiz.objects.filter(lecture=lecture)[0]
-    if(quiz):
-        quiz_data = {}
-        questions = Question.objects.filter(quiz=quiz)
-        for question in questions:
-            answer_data = __get_answers(question)
-            quiz_data[question.question] = answer_data
-        quiz_data = json.dumps(quiz_data)
-        return HttpResponse(quiz_data)
-    else:
-        return HttpRespons("No quiz available")
+    quiz = False
+    try:
+        quiz = Quiz.objects.filter(lecture=lecture)[0]
+    finally:
+        if(quiz):
+            quiz_data = {}
+            questions = Question.objects.filter(quiz=quiz)
+            for question in questions:
+                answer_data = __get_answers(question)
+                quiz_data[question.question] = answer_data
+            quiz_data = json.dumps(quiz_data)
+            return HttpResponse(quiz_data)
+        else:
+            return HttpResponse("No quiz available")
 
 
 def submit_user_answer(request):
@@ -355,6 +399,35 @@ def get_quiz_results(request):
     
     user_performances = json.dumps(user_performances)
     return HttpResponse(user_performances)
+
+
+def update_quiz(request):
+    data = json.loads(request.body)
+    unit_code = data['unitCode']
+    event_name = data['lectureName']
+    oldQuestion = data['oldQuestion']
+    newQuestion = data['newQuestion']
+    newAnswers = data['newAnswers']
+
+    unit = Unit.objects.get(unit_code=unit_code)
+    lecture = Lecture.objects.get(unit=unit,
+                                    event_name=event_name)
+    try:
+        quiz = Quiz.objects.filter(lecture=lecture)[0]
+    except ObjectDoesNotExist:
+        quiz = add_quiz(unit_code, event_name, 1)
+
+    try:
+        Question.objects.filter(quiz=quiz, question=oldQuestion).delete()
+    finally:
+        question = Question.objects.create(quiz=quiz, question=newQuestion)
+    
+    for answer in newAnswers.keys():
+        is_correct = newAnswers[answer]
+        answer = Answer.objects.create(question=question, answer=answer, is_correct=is_correct)
+
+    return HttpResponse("Update succesful")
+
 
 
 def __get_user_units(user):
@@ -412,8 +485,13 @@ def __get_submission_data(submission):
     else:
         submission_time = None
     
+    submission_path = submission.submission.name
+    submission_path_array = submission_path.split('/')
+    submission_name = submission_path_array[-1]
+    
     return {
         "user": submission.user.email,
+        "submission_name": submission_name,
         "submission_time": submission_time,
         "grade": submission.grade,
         "feedback": submission.feedback

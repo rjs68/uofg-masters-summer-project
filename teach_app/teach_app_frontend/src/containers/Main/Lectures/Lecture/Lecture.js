@@ -9,15 +9,19 @@ import classes from './Lecture.module.css';
 import Aux from '../../../../hoc/Auxiliary/Auxiliary';
 import Button from '../../../../components/UI/Button/Button';
 import Modal from '../../../../components/UI/Modal/Modal';
+import PreLectureScreen from '../../../../components/PreLectureScreen/PreLectureScreen';
 
 class Lecture extends Component {
     constructor(props){
         super(props);
         this.state = {
-            username: this.props.userEmail,
+            username: props.userEmail,
+            lectureTime: new Date(props.lectureTime),
+            timeNow: new Date(),
             sendDisabled: true,
             peerConnections: {},
             questions: [],
+            quizAvailable: false,
             quizLaunched: false,
             quizLength: 10
         }
@@ -328,7 +332,7 @@ class Lecture extends Component {
             lectureName: this.props.lecture
         })
         .then((response) => {
-            if(response.data==="No quiz avaiable"){
+            if(response.data==="No quiz available"){
                 this.setState({
                     quizAvailable: false
                 });
@@ -365,70 +369,82 @@ class Lecture extends Component {
 
     componentDidMount(){
         this.getQuiz();
-        this.getToken();
-        if(this.props.userType==="teacher"){
-            this.getLocalVideoStream();
+        if(this.state.lectureTime<=this.state.timeNow){
+            this.getToken();
+            if(this.props.userType==="teacher"){
+                this.getLocalVideoStream();
+            };
         };
     }
 
     render() {
-        var lectureVideo;
-        if(this.state.lectureStream){
-            lectureVideo = <LectureVideo lectureStream={this.state.lectureStream}/>
-        }
-
-        var quizModal;
-        var bottomComponent;
-        if(this.props.userType==="student"){
-            bottomComponent = <SubmitQuestion peerConnections={this.state.peerConnections}
-                                                username={this.state.username} 
-                                                addLocalQuestion={this.addLocalQuestion}/>
-        }
-
-        var quizContent;
-        if(this.state.quizLaunched){
-            quizContent = <Quiz quizData={this.state.quizData} 
-                                quizLength={this.state.quizLength}
-                                unitCode={this.props.unitCode}
-                                lectureName={this.props.lecture}
-                                userEmail={this.props.userEmail} 
-                                userType={this.props.userType} />
-        }
-        if(this.state.quizAvailable){
-            quizModal = <Modal show={this.state.quizLaunched}>
-                            {quizContent}
-                        </Modal>
-            if(this.props.userType==="teacher"){
-                bottomComponent = <div>
-                                        <label>
-                                            Quiz Length: 
-                                            <input type="number" 
-                                                    name="quizLength"
-                                                    onChange={this.handleQuizLengthChange}
-                                                    placeholder={this.state.quizLength} />
-                                             minutes
-                                        </label>
-                                        <Button clicked={this.launchQuiz}>Launch Quiz</Button>
-                                </div>
+        if(this.state.lectureTime<=this.state.timeNow){
+            var lectureVideo;
+            if(this.state.lectureStream){
+                lectureVideo = <LectureVideo lectureStream={this.state.lectureStream}/>
             }
-        }
 
-        return (
-            <div className={classes.Lecture}>
-                {quizModal}
-                <div className={classes.LectureVideoQuestions}>
-                    <div>
-                        {lectureVideo}
+            var quizModal;
+            var bottomComponent;
+            if(this.props.userType==="student"){
+                bottomComponent = <SubmitQuestion peerConnections={this.state.peerConnections}
+                                                    username={this.state.username} 
+                                                    addLocalQuestion={this.addLocalQuestion}/>
+            }
+
+            var quizContent;
+            if(this.state.quizLaunched){
+                quizContent = <Quiz quizData={this.state.quizData} 
+                                    quizLength={this.state.quizLength}
+                                    unitCode={this.props.unitCode}
+                                    lectureName={this.props.lecture}
+                                    userEmail={this.props.userEmail} 
+                                    userType={this.props.userType} />
+            }
+            if(this.state.quizAvailable){
+                quizModal = <Modal show={this.state.quizLaunched}>
+                                {quizContent}
+                            </Modal>
+                if(this.props.userType==="teacher"){
+                    bottomComponent = <div>
+                                            <label>
+                                                Quiz Length: 
+                                                <input type="number" 
+                                                        name="quizLength"
+                                                        onChange={this.handleQuizLengthChange}
+                                                        placeholder={this.state.quizLength} />
+                                                minutes
+                                            </label>
+                                            <Button clicked={this.launchQuiz}>Launch Quiz</Button>
+                                    </div>
+                }
+            }
+
+            return (
+                <div className={classes.Lecture}>
+                    {quizModal}
+                    <div className={classes.LectureVideoQuestions}>
+                        <div>
+                            {lectureVideo}
+                        </div>
+                        <Aux>
+                            <Questions questions={this.state.questions} />
+                        </Aux>
                     </div>
-                    <Aux>
-                        <Questions questions={this.state.questions} />
-                    </Aux>
+                    <div className={classes.LectureBottomComponent}>
+                        {bottomComponent}
+                    </div>
                 </div>
-                <div className={classes.LectureBottomComponent}>
-                    {bottomComponent}
-                </div>
-            </div>
-        )
+            )
+        }else{
+            return <PreLectureScreen lecture={this.props.lecture}
+                                    lectureTime={this.props.lectureTime}
+                                    unitCode={this.props.unitCode}
+                                    userType={this.props.userType}
+                                    quizAvailable={this.state.quizAvailable}
+                                    quizData={this.state.quizData}
+                                    updateQuizData={this.getQuiz}/>
+        }
     }
 }
 

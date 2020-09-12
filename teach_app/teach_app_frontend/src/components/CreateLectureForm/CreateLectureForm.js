@@ -4,9 +4,9 @@ import axios from 'axios';
 import {Dropdown} from 'reactjs-dropdown-component';
 import TextField from '@material-ui/core/TextField';
 import Button from '../UI/Button/Button';
-import classes from './CreateAssignmentForm.module.css';
+import classes from './CreateLectureForm.module.css';
 
-class CreateAssignmentForm extends Component {
+class CreateLectureForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -16,7 +16,7 @@ class CreateAssignmentForm extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.getUnits = this.getUnits.bind(this);
         this.resetThenSet = this.resetThenSet.bind(this);
-        this.createAssignmentHandler = this.createAssignmentHandler.bind(this);
+        this.createLectureHandler = this.createLectureHandler.bind(this);
     }
 
     handleInputChange(event) {
@@ -30,16 +30,16 @@ class CreateAssignmentForm extends Component {
           .then((response) => {
               var index = 0;
               var units = response.data.map(unit => {
-                                                const id = index;
-                                                index++;
-                                                return {
-                                                    id: id,
-                                                    unit: unit,
-                                                    title: unit['unit_name'],
-                                                    selected: false,
-                                                    key: 'unit'
-                                                }
-                                            })
+                  const id = index;
+                  index++;
+                  return {
+                      id: id,
+                      unit: unit,
+                      title: unit['unit_name'],
+                      selected: false,
+                      key: 'unit'
+                  }
+              })
               this.setState({units: units});
           });
     }
@@ -54,12 +54,11 @@ class CreateAssignmentForm extends Component {
         });
     }
 
-    createAssignmentHandler() {
-        axios.post("/create-assignment/", {
+    createLectureHandler() {
+        axios.post("/create-lecture/", {
             unitCode: this.state.unit['unit_code'],
-            assignmentName: this.state.assignmentName,
-            deadline: this.state.deadline,
-            weight: this.state.weight
+            lectureName: this.state.lectureName,
+            time: this.state.time
         })
           .then((response) => {
             console.log(response);
@@ -85,28 +84,24 @@ class CreateAssignmentForm extends Component {
         }
 
         return (
-            <div className={classes.CreateAssignmentForm}>
+            <div className={classes.CreateLectureForm}>
                 {unitDropdown}
                 <input onChange={this.handleInputChange}
                                 type="text" 
-                                name="assignmentName" 
-                                placeholder="Assignment Name" />
+                                name="lectureName" 
+                                placeholder="Lecture Name" />
                 <TextField onChange={this.handleInputChange}
                                 type="datetime-local"
-                                name="deadline" 
-                                label="Deadline"
+                                name="time" 
+                                label="Lecture Time"
                                 defaultValue="2020-12-31T00:00" 
                                 InputLabelProps={{
                                     shrink: true,
                                   }} />
-                <input onChange={this.handleInputChange}
-                                type="number" 
-                                name="weight" 
-                                placeholder="Assignment Weight" />
-                <Button clicked={this.createAssignmentHandler}>Create</Button>
+                <Button clicked={this.createLectureHandler}>Create</Button>
             </div>
         )
     }
 }
 
-export default CreateAssignmentForm;
+export default CreateLectureForm;

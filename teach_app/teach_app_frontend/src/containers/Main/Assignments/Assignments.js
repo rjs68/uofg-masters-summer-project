@@ -73,9 +73,12 @@ class Assignments extends Component {
             form = <Aux>
                         <Modal show={this.state.createAssignmentHandling}>
                             <CreateAssignmentForm email={this.props.email}
-                                                    closeForm={this.handleChangeStatus} />
+                                                    closeForm={this.handleChangeStatus}
+                                                    cookies={this.props.cookies} />
                         </Modal>
-                        <Button clicked={this.handleChangeStatus}>Create Assignment</Button>
+                        <div>
+                            <Button clicked={this.handleChangeStatus}>Create Assignment</Button>
+                        </div>
                     </Aux>;
         }
 
