@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 from teach_app_backend.managers import TeachUserManager
 
@@ -47,6 +49,20 @@ class Unit(models.Model):
     unit_enrol_key = models.CharField(max_length=16)
     number_of_credits = models.IntegerField()
 
+    def save(self, *args, **kwargs):
+        unit_code_unique = False
+        while not unit_code_unique:
+            try:
+                unit = Unit.objects.get(unit_code=self.unit_code)
+                self.unit_code += 1
+            except ObjectDoesNotExist:
+                unit_code_unique = True
+        
+        if self.number_of_credits<1:
+            self.number_of_credits=1
+        
+        super(Unit, self).save(*args, **kwargs)
+
     class Meta:
         unique_together = ('unit_name', 'teacher')
 
@@ -81,6 +97,14 @@ class Assignment(Event):
     specification = models.FileField(upload_to='assignments')
     weight = models.DecimalField(max_digits=3, decimal_places=2)
 
+    def save(self, *args, **kwargs):
+        if self.weight<=0:
+            self.weight=0.01
+        elif self.weight>1:
+            self.weight=1
+        
+        super(Assignment, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.unit.__str__() + "_" + self.event_name
 
@@ -90,8 +114,16 @@ class Submission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     submission = models.FileField(upload_to='submissions')
     submission_time = models.DateTimeField(blank=True, null=True)
-    grade = models.DecimalField(blank=True, null=True, default=None, max_digits=4, decimal_places=2)
+    grade = models.DecimalField(blank=True, null=True, default=None, max_digits=5, decimal_places=2)
     feedback = models.TextField(blank=True, null=True, default=None)
+
+    def save(self, *args, **kwargs):
+        if self.grade<0:
+            self.grade=0.00
+        elif self.grade>100:
+            self.grade=100.00
+        
+        super(Submission, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ('user', 'assignment')
@@ -111,6 +143,12 @@ class Quiz(models.Model):
     lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
     total_mark = models.IntegerField()
 
+    def save(self, *args, **kwargs):
+        if self.total_mark<0:
+            self.total_mark=0
+        
+        super(Quiz, self).save(*args, **kwargs)
+
     def __str__(self):
         return "quiz_" + str(self.id)
 
@@ -118,6 +156,15 @@ class Quiz(models.Model):
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     question = models.TextField()
+
+    def save(self, *args, **kwargs):
+        previous_number_of_questions = Question.objects.filter(quiz=self.quiz).count()
+        new_quiz_mark = previous_number_of_questions + 1
+        self.quiz.total_mark = new_quiz_mark
+        self.quiz.save()
+        
+        super(Question, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return "question_" + str(self.id)
@@ -128,6 +175,15 @@ class Answer(models.Model):
     answer = models.TextField()
     is_correct = models.BooleanField()
 
+    def save(self, *args, **kwargs):
+        if(self.is_correct==True):
+            answers = Answer.objects.filter(question=self.question)
+            for answer in answers:
+                if answer.is_correct:
+                    self.is_correct=False
+        
+        super(Answer, self).save(*args, **kwargs)
+
     def __str__(self):
         return self.answer
 
@@ -136,6 +192,14 @@ class UserAnswer(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        try:
+            user_answer = UserAnswer.objects.get(user=self.user, question=self.question).delete()
+        except ObjectDoesNotExist:
+            pass
+        finally:
+            super(UserAnswer, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ('user', 'question')
@@ -148,6 +212,18 @@ class UserQuizPerformance(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     grade = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        if(self.grade>self.quiz.total_mark):
+            self.grade=self.quiz.total_mark
+        elif(self.grade<0):
+            self.grade=0
+        try:
+            user_quiz_performance = UserQuizPerformance.objects.get(user=self.user, quiz=self.quiz).delete()
+        except ObjectDoesNotExist:
+            pass
+        finally:
+            super(UserQuizPerformance, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = ('user', 'quiz')
