@@ -28,8 +28,9 @@ class GradeEditor extends Component {
             grade: this.state.grade
         })
             .then((response) => {
-                console.log(response);
                 this.setState({studentSubmissions: response.data});
+                this.props.handleGradeEditorStatus();
+                this.props.getStudentSubmissions();
             });
     }
 

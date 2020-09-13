@@ -25,6 +25,7 @@ class UnitEnrolmentForm extends Component {
           })
           .then((response) => {
             console.log(response);
+            this.props.handleChangeStatus();
           }, (error) => {
             console.log(error);
           });

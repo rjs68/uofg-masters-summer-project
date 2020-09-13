@@ -96,12 +96,16 @@ class StudentSubmission extends Component {
                 <Modal show={this.state.showGradeModal}>
                     <GradeEditor assignment={this.props.assignment}
                                 studentEmail={this.props.studentEmail}
-                                grade={this.props.grade}/>
+                                grade={this.props.grade}
+                                getStudentSubmissions={this.props.getStudentSubmissions} 
+                                handleGradeEditorStatus={this.handleGradeEditorStatus}/>
                 </Modal>
                 <Modal show={this.state.showFeedbackModal}>
                     <FeedbackEditor assignment={this.props.assignment}
                                     studentEmail={this.props.studentEmail}
-                                    feedback={this.props.feedback}/>
+                                    feedback={this.props.feedback}
+                                    getStudentSubmissions={this.props.getStudentSubmissions} 
+                                    handleFeedbackEditorStatus={this.handleFeedbackEditorStatus}/>
                 </Modal>
                 <div>
                     <div className={classes.Email}>{this.props.studentEmail}</div>

@@ -28,7 +28,8 @@ class FeedbackEditor extends Component {
             feedback: this.state.feedback
         })
             .then((response) => {
-                console.log(response);
+                this.props.handleFeedbackEditorStatus();
+                this.props.getStudentSubmissions();
             });
     }
 
