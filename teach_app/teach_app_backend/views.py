@@ -310,7 +310,7 @@ def upload_submission(request):
         if os.path.exists(file_path):
             os.remove(file_path)
         submission.submission = submission_file
-        submission.submission_time = datetime.now()
+        submission.submission_time = make_aware(datetime.now())
         submission.save()
 
         if(submission.submission):
@@ -351,7 +351,7 @@ def edit_student_grade(request):
 
         submission.grade = data['grade']
         submission.save()
-        if(submission.grade == data['grade']):
+        if(submission.grade == float(data['grade'])):
             return HttpResponse("Grade Edit Successful")
         else:
             return HttpResponse("Grade Edit Unsuccessful")

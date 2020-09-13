@@ -59,7 +59,6 @@ class Assignment extends Component{
         const specificationExtension = specificationNameSplit.pop();
         const previousSpecificationName = this.state.specificationName.split('.');
         const specificationName = previousSpecificationName[0] + '.' + specificationExtension;
-        console.log(specificationName);
         Object.defineProperty(specification, 'name', {
             writable: true,
             value: specificationName
@@ -75,7 +74,6 @@ class Assignment extends Component{
             this.state.specification, 
             this.state.specification.name 
         ); 
-        console.log(this.state.specification.name);
         axios.post('/upload-specification/', formData);
     }
 
@@ -104,7 +102,7 @@ class Assignment extends Component{
             assignmentName: this.props.assignment['assignment_name']
         })
             .then((response) => {
-                this.setState({subsmissionName: response.data});
+                this.setState({submissionName: response.data});
             });
     }
 
@@ -120,11 +118,18 @@ class Assignment extends Component{
 
     handleSubmissionUpload(event){
         const submission = event.target.files[0];
+        const submissionNameSplit = submission.name.split('.');
+        const submissionExtension = submissionNameSplit.pop();
+        const submissionName = this.props.email+"-"+this.props.assignment['unit_code']+"-"
+                                +this.props.assignment['assignment_name']+"."+ submissionExtension;
         Object.defineProperty(submission, 'name', {
             writable: true,
-            value: event.target.name
+            value: submissionName
         })
-        this.setState({submission: submission});
+        this.setState({
+            submission: submission,
+            submissionName: submissionName
+        });
     }
 
     uploadSubmissionHandler() {
@@ -135,13 +140,18 @@ class Assignment extends Component{
             this.state.submission, 
             this.state.submission.name 
         ); 
-        axios.post('/upload-submission/', formData);
+        axios.post('/upload-submission/', formData)
+            .then((response) => {
+                this.getSubmission();
+                this.getSubmissionName();
+            });
     }
 
     componentDidMount() {
         this.getAssignmentSpecification();
         if(this.props.userType === "student"){
             this.getSubmission();
+            this.getSubmissionName();
         }else{
             this.getStudentSubmissions();
         }
@@ -178,13 +188,14 @@ class Assignment extends Component{
         var submission;
         if(this.props.userType === "student"){
             if(this.state.submissionUploaded){
-                const submissionName = this.state.submissionName.replace('@', '');
+                const submissionName = this.state.submissionName.replace('@', '').replace(' ', '_');
                 const submissionPath = "media/submissions/" + submissionName + "/";
                 submission = <Aux>
                                 <a href={submissionPath} download> Download Submission </a>
                                 <p>You can change your submission here</p>
                                 <input onChange={this.handleSubmissionUpload}
-                                        type="file" />
+                                        type="file" 
+                                        name={this.state.submissionName} />
                                 <Button clicked={this.uploadSubmissionHandler}>Edit Submission</Button>
                                 <p>Grade: {this.state.submissionData['grade']}</p>
                                 <p>Feedback: {this.state.submissionData['feedback']}</p>
@@ -215,7 +226,8 @@ class Assignment extends Component{
                                                         grade={grade}
                                                         feedback={this.state.studentSubmissions[studentSubmission]['feedback']}
                                                         assignment={this.props.assignment}
-                                                        submissionTime={this.state.studentSubmissions[studentSubmission]['submission_time']}/>)
+                                                        submissionTime={this.state.studentSubmissions[studentSubmission]['submission_time']}
+                                                        getStudentSubmissions={this.getStudentSubmissions}/>)
                 }
             }
         }

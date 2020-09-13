@@ -119,6 +119,8 @@ class Submission(models.Model):
 
     def save(self, *args, **kwargs):
         if self.grade:
+            if isinstance(self.grade, str):
+                self.grade = float(self.grade) 
             if self.grade<0:
                 self.grade=0.00
             elif self.grade>100:
