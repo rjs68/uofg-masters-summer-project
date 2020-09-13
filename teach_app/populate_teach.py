@@ -2,7 +2,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 from django.core.exceptions import ObjectDoesNotExist
-django.setup()
+# django.setup()
 from datetime import datetime
 from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
@@ -66,23 +66,23 @@ units_enrolled = [
 ]
 
 assignments = [
-    {'unit': 1, 'assignment_name': 'Basic Programming', 'deadline': make_aware(datetime(2020, 10, 6, 14)), 
+    {'unit': 1, 'assignment_name': 'Basic Programming', 'deadline': make_aware(datetime(2020, 10, 6, 14)),
         'weight': 0.2},
-    {'unit': 1, 'assignment_name': 'Advanced Programming', 'deadline': make_aware(datetime(2020, 11, 1, 18)), 
+    {'unit': 1, 'assignment_name': 'Advanced Programming', 'deadline': make_aware(datetime(2020, 11, 1, 18)),
         'weight': 0.1},
-    {'unit': 2, 'assignment_name': 'Database Normalisation', 'deadline': make_aware(datetime(2020, 10, 17, 12)), 
+    {'unit': 2, 'assignment_name': 'Database Normalisation', 'deadline': make_aware(datetime(2020, 10, 17, 12)),
         'weight': 0.2},
-    {'unit': 2, 'assignment_name': 'SQL Statements', 'deadline': make_aware(datetime(2020, 12, 29, 6)), 
+    {'unit': 2, 'assignment_name': 'SQL Statements', 'deadline': make_aware(datetime(2020, 12, 29, 6)),
         'weight': 0.5},
-    {'unit': 3, 'assignment_name': 'Finding O(n)', 'deadline': make_aware(datetime(2020, 10, 11, 16)), 
+    {'unit': 3, 'assignment_name': 'Finding O(n)', 'deadline': make_aware(datetime(2020, 10, 11, 16)),
         'weight': 0.3},
-    {'unit': 4, 'assignment_name': 'Structure Design', 'deadline': make_aware(datetime(2020, 10, 11, 16)), 
+    {'unit': 4, 'assignment_name': 'Structure Design', 'deadline': make_aware(datetime(2020, 10, 11, 16)),
         'weight': 0.3},
-    {'unit': 5, 'assignment_name': 'System Architecture', 'deadline': make_aware(datetime(2020, 10, 11, 16)), 
+    {'unit': 5, 'assignment_name': 'System Architecture', 'deadline': make_aware(datetime(2020, 10, 11, 16)),
         'weight': 0.3},
-    {'unit': 5, 'assignment_name': 'Application Design', 'deadline': make_aware(datetime(2020, 10, 11, 16)), 
+    {'unit': 5, 'assignment_name': 'Application Design', 'deadline': make_aware(datetime(2020, 10, 11, 16)),
         'weight': 0.3},
-    {'unit': 6, 'assignment_name': 'My Favourite Meme', 'deadline': make_aware(datetime(2020, 9, 14, 18)), 
+    {'unit': 6, 'assignment_name': 'My Favourite Meme', 'deadline': make_aware(datetime(2020, 9, 14, 18)),
         'weight': 1},
 ]
 
@@ -103,31 +103,31 @@ submissions = []
 # ]
 
 lectures = [
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'date_time': make_aware(datetime(2020, 10, 10, 10)), 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'date_time': make_aware(datetime(2020, 10, 10, 10)),
         'link': 'link1'},
-    {'unit': 1, 'event_name': 'Object Orientated Programming', 'date_time': make_aware(datetime(2020, 10, 17, 10)), 
+    {'unit': 1, 'event_name': 'Object Orientated Programming', 'date_time': make_aware(datetime(2020, 10, 17, 10)),
         'link': 'link1'},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'date_time': make_aware(datetime(2020, 11, 23, 9)), 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'date_time': make_aware(datetime(2020, 11, 23, 9)),
         'link': 'link1'},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'date_time': make_aware(datetime(2020, 12, 1, 15)), 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'date_time': make_aware(datetime(2020, 12, 1, 15)),
         'link': 'link1'},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'date_time': make_aware(datetime(2020, 11, 30, 16)), 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'date_time': make_aware(datetime(2020, 11, 30, 16)),
         'link': 'link1'},
-    {'unit': 3, 'event_name': 'Analysis Algorithm Efficiency', 'date_time': make_aware(datetime(2020, 10, 2, 9)), 
+    {'unit': 3, 'event_name': 'Analysis Algorithm Efficiency', 'date_time': make_aware(datetime(2020, 10, 2, 9)),
         'link': 'link2'},
-    {'unit': 4, 'event_name': 'Introduction to Data Structure', 'date_time': make_aware(datetime(2020, 11, 15, 12)), 
+    {'unit': 4, 'event_name': 'Introduction to Data Structure', 'date_time': make_aware(datetime(2020, 11, 15, 12)),
         'link': 'link1'},
-    {'unit': 4, 'event_name': 'Choosing a Data Structure', 'date_time': make_aware(datetime(2020, 11, 21, 12)), 
+    {'unit': 4, 'event_name': 'Choosing a Data Structure', 'date_time': make_aware(datetime(2020, 11, 21, 12)),
         'link': 'link1'},
-    {'unit': 5, 'event_name': 'What is the Internet?', 'date_time': make_aware(datetime(2020, 11, 15, 12)), 
+    {'unit': 5, 'event_name': 'What is the Internet?', 'date_time': make_aware(datetime(2020, 11, 15, 12)),
         'link': 'link1'},
-    {'unit': 5, 'event_name': 'Designing Web Applications', 'date_time': make_aware(datetime(2020, 11, 24, 12)), 
+    {'unit': 5, 'event_name': 'Designing Web Applications', 'date_time': make_aware(datetime(2020, 11, 24, 12)),
         'link': 'link1'},
-    {'unit': 6, 'event_name': 'Introduction to Memes', 'date_time': make_aware(datetime(2020, 11, 15, 12)), 
+    {'unit': 6, 'event_name': 'Introduction to Memes', 'date_time': make_aware(datetime(2020, 11, 15, 12)),
         'link': 'link1'},
-    {'unit': 6, 'event_name': 'Obtaining Memes from Reliable Sources', 'date_time': make_aware(datetime(2020, 11, 27, 12)), 
+    {'unit': 6, 'event_name': 'Obtaining Memes from Reliable Sources', 'date_time': make_aware(datetime(2020, 11, 27, 12)),
         'link': 'link1'},
-    {'unit': 6, 'event_name': 'Analysing the Comedy Value of a Meme', 'date_time': make_aware(datetime(2020, 12, 7, 12)), 
+    {'unit': 6, 'event_name': 'Analysing the Comedy Value of a Meme', 'date_time': make_aware(datetime(2020, 12, 7, 12)),
         'link': 'link1'},
 ]
 
@@ -153,69 +153,69 @@ questions = [
 ]
 
 answers = [
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?',
         'answer': 'Very Cool', 'is_correct': True},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?',
         'answer': 'Kinda Cool', 'is_correct': False},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How cool is programming?',
         'answer': 'Not Cool', 'is_correct': False},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?',
         'answer': 'Yes', 'is_correct': False},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?',
         'answer': 'No', 'is_correct': False},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?',
         'answer': 'Maybe', 'is_correct': True},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Is programming hard?',
         'answer': 'Not Sure', 'is_correct': False},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How long will this course last?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How long will this course last?',
         'answer': '6 months', 'is_correct': True},
-    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How long will this course last?', 
+    {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'How long will this course last?',
         'answer': 'Until the end of time', 'is_correct': False},
     {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is an entity?',
         'answer': 'A representation of a real thing', 'is_correct': True},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is an entity?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is an entity?',
         'answer': 'A random thing some guy made up', 'is_correct': False},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?',
         'answer': 'A connection between entities', 'is_correct': True},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?',
         'answer': 'Love', 'is_correct': False},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'What is a relationship?',
         'answer': 'A social construct', 'is_correct': False},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?',
         'answer': 'A pretty crayon drawing', 'is_correct': False},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?',
         'answer': 'A playdough model', 'is_correct': False},
-    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?', 
+    {'unit': 2, 'event_name': 'Entities and Relationships', 'question': 'How do we display entities and relationships?',
         'answer': 'An ER diagram', 'is_correct': True},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?',
         'answer': 'Ummmm..... what?', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?',
         'answer': 'Yes, of course', 'is_correct': True},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Can we compare an algorithm to a shopping trip?',
         'answer': 'No, don\'t be stupid', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'What is an algorithm?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'What is an algorithm?',
         'answer': 'Some really confusing technical things', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'What is an algorithm?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'What is an algorithm?',
         'answer': 'A set of steps to complete a task', 'is_correct': True},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?',
         'answer': 'Generally, unless written by the UK government to determine A-Level results', 'is_correct': True},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?',
         'answer': 'Yes', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?',
         'answer': 'No', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?', 
+    {'unit': 3, 'event_name': 'Algorithms in the Real World', 'question': 'Are algorithms useful?',
         'answer': 'Maybe', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?',
         'answer': 'Just start coding it and hope for the best', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?',
         'answer': 'Don\'t bother, it sounds too hard', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'How should we start designing an algorithm?',
         'answer': 'Write down the steps using pen and paper', 'is_correct': True},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?',
         'answer': 'Yes', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?',
         'answer': 'Some', 'is_correct': False},
-    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?', 
+    {'unit': 3, 'event_name': 'Designing Algorithms', 'question': 'Does algorithm design require coding?',
         'answer': 'None', 'is_correct': True},
 ]
 
@@ -257,7 +257,7 @@ def populate():
     for university in universities:
         add_university(university['university_name'], university['teacher_enrol_key'],
                        university['student_enrol_key'])
-    
+
     university = University.objects.get(university_name="University of Glasgow")
     admin = TeachUser.objects.create_superuser(email="admin@email.com",
                                                 password="adminpassword",
@@ -307,7 +307,7 @@ def populate():
         add_user_quiz_performance(user['unit'], user['event_name'], user['user'])
 
 
-def add_university(university_name, teacher_enrol_key, student_enrol_key): 
+def add_university(university_name, teacher_enrol_key, student_enrol_key):
     university = University.objects.get_or_create(university_name=university_name,
                                                   teacher_enrol_key=teacher_enrol_key,
                                                   student_enrol_key=student_enrol_key)
@@ -321,7 +321,7 @@ def add_user(email, password, first_name, last_name, university_name, is_teacher
                                          last_name=last_name,
                                          university=university,
                                          is_teacher=is_teacher)
-    
+
     return user
 
 
@@ -342,7 +342,7 @@ def add_unit_enrolled(user_email, unit_code):
 
     unit_enrolled = UserEnrolledUnit.objects.get_or_create(user=user,
                                                             unit=unit)
-    
+
     return unit_enrolled
 
 
@@ -352,7 +352,7 @@ def add_assignment(unit_code, assignment_name, deadline, weight):
                                                   event_name=assignment_name,
                                                   date_time=deadline,
                                                   weight=weight)
-    
+
     return assignment
 
 
@@ -374,7 +374,7 @@ def add_lecture(unit_code, event_name, date_time, link):
                                             event_name=event_name,
                                             date_time=date_time,
                                             link=link)
-    
+
     return lecture
 
 
@@ -384,7 +384,7 @@ def add_quiz(unit_code, event_name, total_mark):
                                   event_name=event_name)
     quiz = Quiz.objects.get_or_create(lecture=lecture,
                                       total_mark=total_mark)
-    
+
     return quiz
 
 
@@ -429,7 +429,7 @@ def add_user_answer(unit_code, event_name, question, answer, user_email):
         user_answer = UserAnswer.objects.create(user=user,
                                                 question=question,
                                                 answer=answer)
-    
+
     return user_answer
 
 
