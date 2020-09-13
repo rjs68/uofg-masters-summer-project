@@ -118,10 +118,11 @@ class Submission(models.Model):
     feedback = models.TextField(blank=True, null=True, default=None)
 
     def save(self, *args, **kwargs):
-        if self.grade<0:
-            self.grade=0.00
-        elif self.grade>100:
-            self.grade=100.00
+        if self.grade:
+            if self.grade<0:
+                self.grade=0.00
+            elif self.grade>100:
+                self.grade=100.00
         
         super(Submission, self).save(*args, **kwargs)
 
