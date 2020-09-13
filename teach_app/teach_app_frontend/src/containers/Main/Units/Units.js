@@ -38,6 +38,7 @@ class Units extends Component {
     handleChangeStatus() {
         if(this.state.unitChangeHandling === true){
             this.setState({unitChangeHandling: false});
+            this.getUnits();
         }else{
             this.setState({unitChangeHandling: true});
         }
@@ -56,7 +57,8 @@ class Units extends Component {
             form = <CreateUnitForm email={this.props.email} />;
         }else{
             button = "Enrol in a Unit";
-            form = <UnitEnrolmentForm email={this.props.email} />;
+            form = <UnitEnrolmentForm email={this.props.email} 
+                                        handleChangeStatus={this.handleChangeStatus} />;
         }
 
         var units = []
