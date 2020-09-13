@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Alert } from 'react-alert';
 import axios from 'axios';
 
 import classes from './Assignment.module.css';
@@ -142,6 +143,11 @@ class Assignment extends Component{
         ); 
         axios.post('/upload-submission/', formData)
             .then((response) => {
+                if(response.data==="Upload Successful"){
+                    alert("Your submission has been uploaded!")
+                }else{
+                    alert("Something went wrong... please try again")
+                }
                 this.getSubmission();
                 this.getSubmissionName();
             });
@@ -163,26 +169,26 @@ class Assignment extends Component{
             const specificationPath = "/media/assignments/" + this.state.specificationName + "/";
             specification.push(<a  key='download' href={specificationPath} download> Download Specification </a>);
             if(this.props.userType === "teacher"){
-                specification.push(<Aux key='edit specification'>
+                specification.push(<div key='edit specification'>
+                                        <input onChange={this.handleSpecificationUpload}
+                                                type="file" 
+                                                name={this.state.specificationName} />
+                                        <Button clicked={this.uploadSpecificationHandler}>Edit Specification</Button>
+                                    </div>)
+            }
+        }else if(this.props.userType === "teacher") { 
+            specification.push(<div key='upload specification'>
+                                    <p>Upload the specification here</p>
                                     <input onChange={this.handleSpecificationUpload}
                                             type="file" 
                                             name={this.state.specificationName} />
-                                    <Button clicked={this.uploadSpecificationHandler}>Edit Specification</Button>
-                                </Aux>)
-            }
-        }else if(this.props.userType === "teacher") { 
-            specification.push(<Aux key='upload specification'>
-                                <p>Upload the specification here</p>
-                                <input onChange={this.handleSpecificationUpload}
-                                        type="file" 
-                                        name={this.state.specificationName} />
-                                <Button clicked={this.uploadSpecificationHandler}>Upload Assignment</Button>
-                            </Aux>)
+                                    <Button clicked={this.uploadSpecificationHandler}>Upload Assignment</Button>
+                                </div>)
         }else{
             specification.push(<p key='no specification'>
-                                We couldn't find the specification. 
-                                Please check that your lecturer has uploaded it.
-                            </p>)
+                                    We couldn't find the specification. 
+                                    Please check that your lecturer has uploaded it.
+                                </p>)
         }
 
         var submission;
@@ -235,7 +241,9 @@ class Assignment extends Component{
         return (
             <div className={classes.Assignment}>
                 <h1>{this.props.assignment['unit']} - {this.props.assignment['assignment_name']}</h1>
-                {specification}
+                <div className={classes.SpecificationDiv}>
+                    {specification}
+                </div>
                 <br />
                 {submission}
             </div>

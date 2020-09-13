@@ -28,3 +28,21 @@
     font-weight: 400;
     width: 200px;
 }
+
+.SpecificationDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.SpecificationDiv div{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 100px;
+}
+
+.SpecificationDiv input{
+    padding-bottom: 5px;
+}
