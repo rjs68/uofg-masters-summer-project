@@ -1,8 +1,17 @@
 .NavigationItem {
-    width: 100px;
+    height: 56px;
+    width: 120px;
     color: white;
+    cursor: pointer;
     font: sans-serif;
     font-family: sans-serif;
     font-size: 16px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.NavigationItem:hover, .NavigationItem:active {
+    background-color: white;
+    color: darkslategray;
 }

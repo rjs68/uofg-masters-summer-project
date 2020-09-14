@@ -13,3 +13,9 @@
     font-weight: 400;
     width: 150px;
 }
+
+.Button:hover, .Button:active {
+    background-color: lightgray;
+    color: darkslategrey;
+    border: darkslategray;
+}

@@ -17,6 +17,7 @@
     cursor: pointer;
     font: sans-serif;
     text-decoration: none;
+    text-align: center;
     padding: 5px;
     margin: 0px;
     border: darkslategray;
@@ -27,6 +28,11 @@
     font-size: 16px;
     font-weight: 400;
     width: 200px;
+}
+
+.Assignment a:hover{
+    background-color: darkslategray;
+    color: lightgray;
 }
 
 .SpecificationDiv{
