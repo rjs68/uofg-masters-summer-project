@@ -1,0 +1,25 @@
+.NextLectureBox {
+    font-family: sans-serif;
+    font-size: 16px;
+    width: 90%;
+    height: 150px;
+    border-style: outset;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.NextLectureBox h1 {
+    margin-left: 40px;
+    font-size: 20px;
+}
+
+.NextLectureBox h2 {
+    margin-left: 40px;
+    font-size: 18px;
+}
+
+.NextLectureBox p {
+    margin-left: 40px;
+    font-size: 16px;
+}

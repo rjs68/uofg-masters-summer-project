@@ -14,6 +14,7 @@ urlpatterns = [
     path('create-unit/', views.create_unit, name='create-unit'),
     path('unit-enrol/', views.unit_enrolment, name='unit-enrol'),
     path('lectures/', views.get_user_lectures, name='lectures'),
+    path('next-lecture/', views.get_next_lecture, name='next-lecture'),
     path('create-lecture/', views.create_lecture, name='create-lecture'),
     path('assignments/', views.get_user_assignments, name='assignments'),
     path('create-assignment/', views.create_assignment, name='create-assignment'),
