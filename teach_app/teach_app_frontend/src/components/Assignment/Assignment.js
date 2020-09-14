@@ -75,7 +75,14 @@ class Assignment extends Component{
             this.state.specification, 
             this.state.specification.name 
         ); 
-        axios.post('/upload-specification/', formData);
+        axios.post('/upload-specification/', formData)
+            .then((response) => {
+                if(response.data === "Upload Successful"){
+                    alert("The specification has been uploaded!")
+                }else{
+                    alert("Something went wrong... please try again")
+                }
+            });
     }
 
     getSubmission(){

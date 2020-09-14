@@ -7,6 +7,12 @@
     border-radius: 20px;
     padding: 10px;
     margin: 10px;
+    cursor: pointer;
+}
+
+.LectureBox:hover {
+    background-color: darkslategray;
+    color: white;
 }
 
 .LectureBox h1 {
