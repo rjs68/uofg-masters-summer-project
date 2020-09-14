@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Alert } from 'react-alert';
 
 import LoginInput from '../../../components/LoginInput/LoginInput';
 import SignUpInput from '../../../components/SignUpInput/SignUpInput';
@@ -48,18 +49,20 @@ class RightHalf extends Component {
             }else if(response.data === "Student Login Successful"){
                 this.props.onUserAuthenticated("student");
             }else{
-                console.log(response.data);
+                alert("Login unsuccesful - please check your email and password and try again")
             }
           }, (error) => {
-            console.log(error);
+            alert("Login unsuccesful - please check your email and password and try again")
           });
     }
 
     signUpHandler() {
         const email = this.props.email
         const password = this.state.password
-        if(email!=this.state.confirmEmail || password!=this.state.confirmPassword){
-            console.log("Emails or passwords do not match")
+        if(email!=this.state.confirmEmail){
+            alert("Emails do not match")
+        }else if(password!=this.state.confirmPassword){
+            alert("Passwords do not match")
         }else{
             axios.post('/signup/', {
                 email: email,
@@ -78,10 +81,10 @@ class RightHalf extends Component {
                 }else if(response.data === "Student Creation Successful"){
                     this.props.onUserAuthenticated("student");
                 }else{
-                    console.log(response.data);
+                    alert("Sign up unsuccesful - please check your enrolment key and try again")
                 }
               }, (error) => {
-                console.log(error);
+                alert("Sign up unsuccesful - please check your enrolment key and try again")
               });
         }
     }

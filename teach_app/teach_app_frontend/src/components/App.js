@@ -17,7 +17,7 @@ class App extends Component {
       cookies: cookies,
       email: cookies.get('userEmail'),
       userType: cookies.get('userType'),
-      authenticated: cookies.get('authenticated')
+      authenticated: cookies.get('authenticated') || false
     };
 
     this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -33,7 +33,7 @@ class App extends Component {
   handleUserAuthenticated(userType){
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
     this.state.cookies.set('userType', userType, { path: '/' });
-    this.state.cookies.set('authenticated', true, { path: '/' });
+    this.state.cookies.set('authenticated', true, { path: '/', maxAge: 3600 });
     this.setState({
         authenticated: true,
         userType: userType

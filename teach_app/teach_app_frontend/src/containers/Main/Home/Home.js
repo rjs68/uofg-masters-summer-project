@@ -1,10 +1,12 @@
 import React from 'react';
 
+import NextLectureBox from './NextLectureBox/NextLectureBox';
 import classes from '../PageContent.module.css';
 
-const home = () => (
+const home = props => (
     <div className={classes.PageContent}>
-        Home
+        <NextLectureBox email={props.email}
+                        cookies={props.cookies}/>
     </div>
 )
 

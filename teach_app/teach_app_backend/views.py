@@ -153,6 +153,30 @@ def get_user_lectures(request):
         return HttpResponse("Not a valid request", status=400)
 
 
+def get_next_lecture(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user = TeachUser.objects.get(email=data['email'])
+
+        user_units = __get_user_units(user)
+        next_lecture = None
+        for user_unit in user_units:
+            unit_lectures = Lecture.objects.filter(unit=user_unit).exclude(date_time__lt=datetime.now()).order_by('date_time')
+            next_unit_lecture = unit_lectures.first()
+            if next_lecture:
+                if next_unit_lecture.date_time < next_lecture.date_time:
+                    next_lecture = next_unit_lecture
+            else:
+                next_lecture = next_unit_lecture
+        
+        next_lecture_data = __get_lecture_data(next_lecture)
+        data = json.dumps(next_lecture_data)
+        return HttpResponse(data)
+    else:
+        return HttpResponse("Not a valid request", status=400)
+            
+
+
 def create_lecture(request):
     if request.method == 'POST':
         data = json.loads(request.body)
