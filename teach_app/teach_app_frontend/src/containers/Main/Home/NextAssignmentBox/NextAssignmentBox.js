@@ -55,10 +55,10 @@ class NextAssignmentBox extends Component {
             }else if(timeDifference>=60){
                 timeDifference=timeDifference/60;
                 assignmentDateDisplay = "Today at " + assignmentDate.getHours() + ":" + assignmentMinutes
-                                    +  " (" + Math.round(timeDifference) + " hours to go";
+                                    +  " (" + Math.round(timeDifference) + " hours to go)";
             }else{
                 assignmentDateDisplay = "Today at " + assignmentDate.getHours() + ":" + assignmentMinutes
-                                    +  " (" + Math.round(timeDifference) + " minutes to go";
+                                    +  " (" + Math.round(timeDifference) + " minutes to go)";
             }
             pageContent = <div> 
                                 <h1>Next Assignment</h1>

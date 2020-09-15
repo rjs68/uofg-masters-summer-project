@@ -44,10 +44,10 @@ class PreLectureScreen extends Component {
         }else if(timeDifference>=60){
             timeDifference=timeDifference/60;
             lectureTimeDisplay = "Today at " + lectureTime.getHours() + ":" + lectureMinutes
-                                + lectureMinutes + " (" + Math.round(timeDifference) + " hours to go";
+                                + lectureMinutes + " (" + Math.round(timeDifference) + " hours to go)";
         }else{
             lectureTimeDisplay = "Today at " + lectureTime.getHours() + ":" + lectureMinutes
-                                +  " (" + Math.round(timeDifference) + " minutes to go";
+                                +  " (" + Math.round(timeDifference) + " minutes to go)";
         }
 
         var editQuizContent=[];
@@ -66,6 +66,10 @@ class PreLectureScreen extends Component {
                                                     updateQuestion={this.updateQuestion} />
                 editQuizContent.push(addQuestion);
             }
+            const addQuestion = <QuestionEditor key="addQuestion"
+                                                    question="Add Question"
+                                                    updateQuestion={this.updateQuestion} />
+            editQuizContent.push(addQuestion);
         }
 
         return (

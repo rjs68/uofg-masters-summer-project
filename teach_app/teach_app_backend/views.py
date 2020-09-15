@@ -523,10 +523,7 @@ def update_quiz(request):
         unit = Unit.objects.get(unit_code=unit_code)
         lecture = Lecture.objects.get(unit=unit,
                                         event_name=event_name)
-        try:
-            quiz = Quiz.objects.filter(lecture=lecture)[0]
-        except ObjectDoesNotExist:
-            quiz = add_quiz(unit_code, event_name, 1)
+        quiz = Quiz.objects.get_or_create(lecture=lecture)[0]
 
         try:
             Question.objects.filter(quiz=quiz, question=oldQuestion).delete()
