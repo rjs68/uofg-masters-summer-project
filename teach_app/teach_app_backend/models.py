@@ -147,8 +147,11 @@ class Quiz(models.Model):
     total_mark = models.IntegerField()
 
     def save(self, *args, **kwargs):
-        if self.total_mark<0:
-            self.total_mark=0
+        if self.total_mark:
+            if self.total_mark<0:
+                self.total_mark=0
+        else:
+            self.total_mark = 0
         
         super(Quiz, self).save(*args, **kwargs)
 
