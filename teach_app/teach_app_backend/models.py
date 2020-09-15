@@ -90,7 +90,7 @@ class Event(models.Model):
         unique_together = ('unit', 'event_name')
 
     def __str__(self):
-        return self.unit + "_" + self.event_name
+        return self.unit.__str__() + "_" + self.event_name
 
 
 class Assignment(Event):
