@@ -17,6 +17,7 @@ urlpatterns = [
     path('next-lecture/', views.get_next_lecture, name='next-lecture'),
     path('create-lecture/', views.create_lecture, name='create-lecture'),
     path('assignments/', views.get_user_assignments, name='assignments'),
+    path('next-assignment/', views.get_next_assignment, name='next-assignment'),
     path('create-assignment/', views.create_assignment, name='create-assignment'),
     path('assignment-specification/', views.get_assignment_specification, name='assignment-specification'),
     path('specification-name/', views.get_assignment_specification_name, name='specification name'),
