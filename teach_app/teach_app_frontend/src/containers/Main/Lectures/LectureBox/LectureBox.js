@@ -25,10 +25,10 @@ const lectureBox = (props) => {
         }else if(timeDifference>=60){
             timeDifference=timeDifference/60;
             lectureDateDisplay = "Today at " + lectureDate.getHours() + ":" + lectureMinutes
-                                +  " (" + Math.round(timeDifference) + " hours to go";
+                                +  " (" + Math.round(timeDifference) + " hours to go)";
         }else{
             lectureDateDisplay = "Today at " + lectureDate.getHours() + ":" + lectureMinutes
-                                +  " (" + Math.round(timeDifference) + " minutes to go";
+                                +  " (" + Math.round(timeDifference) + " minutes to go)";
         }
     }
 
