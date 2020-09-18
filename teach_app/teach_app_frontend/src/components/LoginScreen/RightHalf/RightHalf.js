@@ -23,6 +23,7 @@ class RightHalf extends Component {
     };
 
     handleModeChange(){
+        //allows users to toggle between logging in and signing up
         const mode = this.state.mode;
         var newMode;
         if(mode === "login"){
@@ -44,11 +45,13 @@ class RightHalf extends Component {
           })
           .then((response) => {
             this.setState({password: ""});
+            //determines if user is a teacher or student
             if(response.data === "Teacher Login Successful"){
                 this.props.onUserAuthenticated("teacher");
             }else if(response.data === "Student Login Successful"){
                 this.props.onUserAuthenticated("student");
             }else{
+                //displays an alert if login is not succesful
                 alert("Login unsuccesful - please check your email and password and try again")
             }
           }, (error) => {
@@ -59,6 +62,7 @@ class RightHalf extends Component {
     signUpHandler() {
         const email = this.props.email
         const password = this.state.password
+        //displays an alert if email or password fields do not have the same value
         if(email!=this.state.confirmEmail){
             alert("Emails do not match")
         }else if(password!=this.state.confirmPassword){
@@ -72,15 +76,18 @@ class RightHalf extends Component {
                 lastName: this.state.lastName
             })
             .then((response) => {
+                //resets password state for security
                 this.setState({
                     password: "",
                     confirmPassword: ""
                 });
+                //determines if user has signed up as a student or teacher
                 if(response.data === "Teacher Creation Successful"){
                     this.props.onUserAuthenticated("teacher");
                 }else if(response.data === "Student Creation Successful"){
                     this.props.onUserAuthenticated("student");
                 }else{
+                    //alerts user if their sign up has been unsuccesful
                     alert("Sign up unsuccesful - please check your enrolment key and try again")
                 }
               }, (error) => {

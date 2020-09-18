@@ -29,6 +29,7 @@ class Units extends Component {
               this.setState({units: response.data});
           }, (error) => {
             if(error.response.status===403){
+                //reloads window to update csrf token
                 window.location.reload(false);
             }else{
                 console.log(error);
@@ -36,6 +37,7 @@ class Units extends Component {
           });
     }
 
+    //determines if unit form should be displayed
     handleChangeStatus() {
         if(this.state.unitChangeHandling === true){
             this.setState({unitChangeHandling: false});
@@ -53,6 +55,7 @@ class Units extends Component {
         var button;
         var form;
 
+        //teacher form creates unit and student form enrols in a unit
         if(this.props.userType === "teacher"){
             button = "Create Unit";
             form = <CreateUnitForm email={this.props.email} />;
@@ -62,6 +65,7 @@ class Units extends Component {
                                         handleChangeStatus={this.handleChangeStatus} />;
         }
 
+        //creates a list of available units
         var units = []
         if(this.state.units !== {}){
             for(const unit in this.state.units){
@@ -69,6 +73,7 @@ class Units extends Component {
             }
         }
 
+        //determines if backdrop should be shown
         var showBackdrop = false;
         var backdropClicked;
         if(this.state.unitChangeHandling){

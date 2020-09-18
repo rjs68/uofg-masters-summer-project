@@ -29,6 +29,7 @@ class CreateLectureForm extends Component {
           })
           .then((response) => {
               var index = 0;
+              //map units to objects in form required for Dropdown menu
               var units = response.data.map(unit => {
                   const id = index;
                   index++;
@@ -45,6 +46,7 @@ class CreateLectureForm extends Component {
     }
 
     resetThenSet(id) {
+        //deselects all units then selects new unit
         const temp = JSON.parse(JSON.stringify(this.state.units));
         temp.forEach(item => item.selected = false);
         temp[id].selected = true;
@@ -75,7 +77,10 @@ class CreateLectureForm extends Component {
     render() {
         var unitDropdown;
         if(this.state.units){
-            //https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+            /*
+                Dropdown menu component obtained from 
+                //https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+            */
             unitDropdown = <Dropdown searchable={["Search for Unit", "No matching unit"]}
                                         title="Select Unit"
                                         list={this.state.units}
@@ -83,6 +88,7 @@ class CreateLectureForm extends Component {
                                         />
         }
 
+        //editable input fields for teacher to set lecture information
         return (
             <div className={classes.CreateLectureForm}>
                 {unitDropdown}

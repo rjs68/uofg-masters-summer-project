@@ -13,6 +13,7 @@ class Main extends Component {
         super(props);
         this.state = {
           content: props.cookies.get('page') || "home",
+          //dictionary of all the pages and the components to be displayed
           contentPages: {
                 "home": <Home email={this.props.email} 
                                 userType={this.props.userType} 
@@ -36,6 +37,7 @@ class Main extends Component {
     }
 
     navigationHandler(page) {
+        //sets the new page as a cookie so users are guided back here on reload
         this.props.cookies.set('page', page, { path: '/'});
         this.setState({
             content: page
@@ -45,6 +47,7 @@ class Main extends Component {
     render() {
         const pageContent = this.state.contentPages[this.state.content];
 
+        //displays toolbar and the selected page
         return (
             <Aux>
                 <Toolbar navigation={this.navigationHandler}/>

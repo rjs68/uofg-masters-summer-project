@@ -38,6 +38,7 @@ class QuestionEditor extends Component {
 
     onAnswerChange(event) {
         var newAnswers;
+        //retrieve all the current answers
         if(this.state.newAnswers){
             newAnswers = {...this.state.newAnswers};
         }else{
@@ -47,7 +48,9 @@ class QuestionEditor extends Component {
         const oldAnswer = event.target.name;
         const newAnswer = event.target.value;
         event.target.name = newAnswer;
+        //delete old answer from the list
         delete newAnswers[oldAnswer];
+        //add new answer to the list
         if(oldAnswer===this.state.correctAnswer || this.props.question==="Add Question"){
             newAnswers[newAnswer] = true;
             this.setState({
@@ -63,6 +66,8 @@ class QuestionEditor extends Component {
     }
 
     render() {
+        //provides input fields to edit questions and answers
+        //correct answers are highlighted 
         const editAnswers = [];
         var index = 0;
         var style;

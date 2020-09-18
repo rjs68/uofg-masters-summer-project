@@ -4,6 +4,7 @@ import classes from './LoginInput.module.css';
 import Button from '../../../UI/Button/Button';
 
 const loginInput = props => (
+    //input fields allowing user to provide their login details
     <div className={classes.LoginInput}>
         <input onChange={props.onEmailChange}
                 type="text" 

@@ -16,6 +16,7 @@ class NextAssignmentBox extends Component {
     }
 
     getNextAssignment() {
+        //retrieve assignment with the closest deadline
         axios.post('/next-assignment/', {
             email: this.props.email,
         })
@@ -40,6 +41,7 @@ class NextAssignmentBox extends Component {
         var pageContent = <h1>No Assignments Scheduled</h1>;
 
         if(this.state.nextAssignment){
+            //logic to determine time left before assignment is due
             const assignmentDate = new Date(this.state.nextAssignment['deadline']);
             const currentDate = new Date();
             var timeDifference = (assignmentDate - currentDate)/1000/60;

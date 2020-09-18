@@ -33,6 +33,7 @@ class Lectures extends Component {
               this.setState({lectures: response.data});
           }, (error) => {
             if(error.response.status===403){
+                //reloads window to update csrf token
                 window.location.reload(false);
             }else{
                 console.log(error);
@@ -41,6 +42,7 @@ class Lectures extends Component {
     }
 
     handleChangeStatus() {
+        //changes whether lecture creation form is displayed
         if(this.state.createLectureHandling === true){
             this.setState({createLectureHandling: false});
             this.getLectures();
@@ -50,6 +52,7 @@ class Lectures extends Component {
     }
 
     selectLectureHandler(index){
+        //sets selected lecture
         this.setState({
             lectureSelected: true,
             selectedLecture: this.state.lectures[index]
@@ -62,6 +65,7 @@ class Lectures extends Component {
 
     render() {
         var form;
+        //create lecture form only available to teachers
         if(this.props.userType === "teacher" && !this.state.lectureSelected){
             form = <Aux>
                         <Modal show={this.state.createLectureHandling}>
@@ -75,6 +79,7 @@ class Lectures extends Component {
                     </Aux>;
         }
 
+        //either displays lecture screen or list of available lectures
         var pageContent;
         if(this.state.lectureSelected){
             pageContent = <Lecture lecture={this.state.selectedLecture['lecture_name']} 
@@ -94,6 +99,7 @@ class Lectures extends Component {
             }
         }
 
+        //determines if backdrop should be shown 
         var showBackdrop = false;
         var backdropClicked;
         if(this.state.createLectureHandling){

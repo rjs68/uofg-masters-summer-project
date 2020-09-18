@@ -29,6 +29,7 @@ class CreateAssignmentForm extends Component {
           })
           .then((response) => {
               var index = 0;
+              //creates unit objects in format required for Dropdown
               var units = response.data.map(unit => {
                                                 const id = index;
                                                 index++;
@@ -45,6 +46,7 @@ class CreateAssignmentForm extends Component {
     }
 
     resetThenSet(id) {
+        //resets selection status of all units then sets new selected new
         const temp = JSON.parse(JSON.stringify(this.state.units));
         temp.forEach(item => item.selected = false);
         temp[id].selected = true;
@@ -75,8 +77,12 @@ class CreateAssignmentForm extends Component {
 
     render() {
         var unitDropdown;
+        //creates dropdown menu of units where the user is the teacher
         if(this.state.units){
-            //https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+            /* 
+                Makes use of Dropdown component available from
+                https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+            */
             unitDropdown = <Dropdown searchable={["Search for Unit", "No matching unit"]}
                                         title="Select Unit"
                                         list={this.state.units}
@@ -84,6 +90,7 @@ class CreateAssignmentForm extends Component {
                                         />
         }
 
+        //editable input fields to provide information about the assignment
         return (
             <div className={classes.CreateAssignmentForm}>
                 {unitDropdown}
@@ -98,7 +105,7 @@ class CreateAssignmentForm extends Component {
                                 defaultValue="2020-12-31T00:00" 
                                 InputLabelProps={{
                                     shrink: true,
-                                  }} />
+                                }} />
                 <input onChange={this.handleInputChange}
                                 type="number" 
                                 name="weight" 

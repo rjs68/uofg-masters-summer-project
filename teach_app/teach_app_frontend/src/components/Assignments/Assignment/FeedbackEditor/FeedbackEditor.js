@@ -21,6 +21,7 @@ class FeedbackEditor extends Component {
     }
 
     editFeedbackHandler() {
+        //saves updated student feedback to the database
         axios.post('/student-feedback/', {
             unitCode: this.props.assignment['unit_code'],
             assignmentName: this.props.assignment['assignment_name'],
@@ -28,12 +29,14 @@ class FeedbackEditor extends Component {
             feedback: this.state.feedback
         })
             .then((response) => {
+                //retrieves new values and updates the screen
                 this.props.handleFeedbackEditorStatus();
                 this.props.getStudentSubmissions();
             });
     }
 
     render() {
+        //text area to allow teachers to edit student feedback
         return(
             <div>
                 <textarea onChange={this.handleFeedbackChange}

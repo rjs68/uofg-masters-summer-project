@@ -6,6 +6,7 @@ import RightHalf from '../../components/LoginScreen/RightHalf/RightHalf';
 
 class LoginScreen extends Component {
     render() {
+        //component that displays the login screen
         return (
             <Aux>
                 <LeftHalf />

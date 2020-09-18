@@ -46,6 +46,7 @@ class StudentSubmission extends Component {
     render() {
         var submittedDiv;
         var submissionTimeObject;
+        //if a submission exists display the time of submission
         if(this.props.submissionTime){
             var submissionTimeString = this.props.submissionTime;
             submissionTimeObject = new Date(submissionTimeString);
@@ -55,6 +56,8 @@ class StudentSubmission extends Component {
         }
 
         var deadlineComparisonDiv;
+        //logic to compare submission time to assignment deadline
+        //displays time difference and whether the submission was early or late
         if(this.props.assignment['deadline'] && submissionTimeObject){
             var assignmentTimeString = this.props.assignment['deadline'];
             const assignmentTimeObject = new Date(assignmentTimeString);
@@ -82,6 +85,7 @@ class StudentSubmission extends Component {
 
         var showBackdrop = false;
         var backdropClicked;
+        //show clickable backdrop if either feedback or grade editing modal are open
         if(this.state.showFeedbackModal){
             showBackdrop = true;
             backdropClicked = this.handleFeedbackEditorStatus;

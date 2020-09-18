@@ -32,6 +32,7 @@ class UnitEnrolmentForm extends Component {
     }
 
     render() {
+        //input fields that allow a student to enrol in a unit
         return (
             <div className={classes.UnitEnrolmentForm}>
                 <input onChange={this.handleInputChange}

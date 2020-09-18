@@ -33,6 +33,7 @@ class CreateUnitForm extends Component {
     }
     
     render() {
+        //input fields that allow a teacher to create a new unit
         return (
             <div className={classes.CreateUnitForm}>
                 <input onChange={this.handleInputChange}

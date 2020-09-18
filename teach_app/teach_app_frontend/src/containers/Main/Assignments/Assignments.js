@@ -33,6 +33,7 @@ class Assignments extends Component {
               this.setState({assignments: response.data});
           }, (error) => {
             if(error.response.status===403){
+                //reloads window to update csrf token
                 window.location.reload(false);
             }else{
                 console.log(error);
@@ -41,6 +42,7 @@ class Assignments extends Component {
     }
 
     handleChangeStatus() {
+        //changes whether create assignment modal is shown or not
         if(this.state.createAssignmentHandling === true){
             this.setState({createAssignmentHandling: false});
             this.getAssignments();
@@ -50,6 +52,7 @@ class Assignments extends Component {
     }
 
     handleAssignmentSelectedStatus(index) {
+        //changes whether individual assignment modal is shown
         if(this.state.assignmentSelected){
             this.setState({
                 assignmentSelected: false,
@@ -69,6 +72,7 @@ class Assignments extends Component {
 
     render() {
         var form;
+        //only provides create assignment form to teachers
         if(this.props.userType === "teacher"){
             form = <Aux>
                         <Modal show={this.state.createAssignmentHandling}>
@@ -82,6 +86,7 @@ class Assignments extends Component {
                     </Aux>;
         }
 
+        //displays all user's assignments
         var assignments = []
         if(this.state.assignments !== {}){
             var index = 0;
@@ -94,6 +99,7 @@ class Assignments extends Component {
             }
         }
 
+        //displays a modal if an assignment is selected
         var selectedAssignment;
         if(this.state.assignmentSelected){
             selectedAssignment = <Modal show={this.state.assignmentSelected}>
@@ -103,6 +109,7 @@ class Assignments extends Component {
                                     </Modal>
         }
 
+        //creates a backdrop for modal components
         var showBackdrop = false;
         var backdropClicked;
         if(this.state.createAssignmentHandling){

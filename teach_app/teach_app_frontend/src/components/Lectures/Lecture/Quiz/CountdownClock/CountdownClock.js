@@ -9,9 +9,13 @@ class CountdownClock extends Component {
         };
     }
 
-    //https://medium.com/better-programming/building-a-simple-countdown-timer-with-react-4ca32763dda7
+    /*
+        Methodology for countdown clock obtained from 
+        https://medium.com/better-programming/building-a-simple-countdown-timer-with-react-4ca32763dda7
+    */  
 
     componentDidMount() {
+        //counts down in 1000 millisecond (1 second) intervals
         this.myInterval = setInterval(() => {
             const { seconds, minutes } = this.state;
 
@@ -35,6 +39,7 @@ class CountdownClock extends Component {
     }
 
     render(){
+        //displays time remaining
         const {minutes, seconds} = this.state;
 
         return (

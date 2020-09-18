@@ -3,6 +3,7 @@ import React from 'react';
 import classes from './Unit.module.css';
 
 const unit = (props) => {
+    //creates a box that displays information about a unit
     const teacherEmail = props.unit['teacher'];
     const mailToString = "mailto:" + teacherEmail;
     return(

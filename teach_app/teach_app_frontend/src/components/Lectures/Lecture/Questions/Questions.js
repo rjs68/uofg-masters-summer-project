@@ -4,6 +4,7 @@ import Question from './Question/Question';
 import classes from './Questions.module.css';
 
 const questions = props => {
+    //displays student questions on the lecture screen
     const questionComponents = [];
     for(const question in props.questions){
         const questionComponent = <Question key={question}

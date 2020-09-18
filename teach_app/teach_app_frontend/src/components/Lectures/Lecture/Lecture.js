@@ -50,6 +50,7 @@ class Lecture extends Component {
     }
 
     getToken() {
+        //retrieve authentication token from Xirsys server
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = ($evt) => {
             if(xhr.readyState == 4 && xhr.status == 200){
@@ -68,6 +69,7 @@ class Lecture extends Component {
     }
 
     getSocketServer() {
+        //retrieve socket from Xirsys server for best performance
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = ($evt) => {
             if(xhr.readyState == 4 && xhr.status == 200){
@@ -99,6 +101,7 @@ class Lecture extends Component {
     }
 
     onSocketMessage(event) {
+        //event handler for messages received from the socket
         const data = JSON.parse(event.data);
         var f;
         var desc;
@@ -145,6 +148,7 @@ class Lecture extends Component {
     }
 
     getIceCandidates() {
+        //retrieves the ICE candidates to be used in peer connections
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = ($evt) => {
             if(xhr.readyState == 4 && xhr.status == 200){
@@ -214,6 +218,7 @@ class Lecture extends Component {
     }
 
     onDataChannel(event) {
+        //sets up data channels to allow media to be send over streams
         const dataChannel = event.channel;
         const keys = Object.keys(this.state.peerConnections);
         var comp;
@@ -244,6 +249,7 @@ class Lecture extends Component {
     }
 
     callPeer(peer) {
+        //creates a direct connection to a remote peer
         if(peer!==this.state.username){
             var pc = this.createNewPeerConnection(peer);
             var dataChannel = pc.createDataChannel("data");
@@ -254,6 +260,7 @@ class Lecture extends Component {
     }
 
     onDataMessage(event) {
+        //handles messages received offer data channels
         const messagePacket = JSON.parse(event.data);
         if(messagePacket.type==="question"){
             const questions = this.state.questions;
@@ -285,6 +292,7 @@ class Lecture extends Component {
     }
      
     getUsernameByRemoteDescription(sdp) {
+        //retrives username stored within peer connection descriptions
         const keys = Object.keys(this.state.peerConnections);
         var pc;
         for(var i = 0; i < keys.length; i++) {
@@ -297,6 +305,7 @@ class Lecture extends Component {
     }
 
     getLocalVideoStream() {
+        //retrieves webcam video and audio from teacher machines
         const constraints = { audio: true, video: true };
         navigator.mediaDevices.getUserMedia(constraints)
             .then(stream => {
@@ -361,6 +370,7 @@ class Lecture extends Component {
         };
         const keys = Object.keys(this.state.peerConnections);
         for(var i = 0; i < keys.length; i++) {
+            //sends message to all peers telling them to launch the quiz
             const peer = this.state.peerConnections[keys[i]];
             const dataChannel = peer.dc;
             dataChannel.send(JSON.stringify(messagePacket));
@@ -369,6 +379,7 @@ class Lecture extends Component {
 
     componentDidMount(){
         this.getQuiz();
+        //establish connection if lecture has started
         if(this.state.lectureTime<=this.state.timeNow){
             this.getToken();
             if(this.props.userType==="teacher"){
@@ -378,6 +389,7 @@ class Lecture extends Component {
     }
 
     render() {
+        //screen displays different content if lecture has not started
         if(this.state.lectureTime<=this.state.timeNow){
             var lectureVideo;
             if(this.state.lectureStream){

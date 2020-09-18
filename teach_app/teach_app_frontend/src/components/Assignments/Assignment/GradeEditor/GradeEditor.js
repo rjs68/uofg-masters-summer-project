@@ -21,6 +21,7 @@ class GradeEditor extends Component {
     }
 
     editGradeHandler() {
+        //saves updated student grade to the database
         axios.post('/student-grade/', {
             unitCode: this.props.assignment['unit_code'],
             assignmentName: this.props.assignment['assignment_name'],
@@ -28,6 +29,7 @@ class GradeEditor extends Component {
             grade: this.state.grade
         })
             .then((response) => {
+                //retrieves new values and updates the screen
                 this.setState({studentSubmissions: response.data});
                 this.props.handleGradeEditorStatus();
                 this.props.getStudentSubmissions();
@@ -35,6 +37,7 @@ class GradeEditor extends Component {
     }
 
     render() {
+        //number input to allow teachers to update grades
         return(
             <div>
                 <input onChange={this.handleGradeChange}

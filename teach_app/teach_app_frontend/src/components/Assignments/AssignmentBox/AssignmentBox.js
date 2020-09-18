@@ -3,6 +3,9 @@ import React from 'react';
 import classes from './AssignmentBox.module.css';
 
 const assignment = (props) => {
+    //component for displaying assignments
+
+    //logic calculates time remaining before an assignment is due
     const deadline = new Date(props.assignment['deadline']);
     const currentDate = new Date();
     var timeDifference = (deadline - currentDate)/1000/60;
@@ -23,6 +26,7 @@ const assignment = (props) => {
         timeUnit = " hours";
     }
 
+    //ensures display of minutes looks correct
     var deadlineMinutes = deadline.getMinutes();
     if(deadlineMinutes<10){
         deadlineMinutes = '0' + deadlineMinutes;

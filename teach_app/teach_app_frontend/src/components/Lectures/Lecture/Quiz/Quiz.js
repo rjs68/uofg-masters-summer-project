@@ -22,6 +22,7 @@ class Quiz extends Component {
     }
 
     nextQuestion() {
+        //moves screen display onto the next question
         const nextQuestion = this.state.question + 1;
         if(nextQuestion<this.state.numberOfQuestions){
             this.setState({
@@ -36,12 +37,14 @@ class Quiz extends Component {
     }
 
     finishQuiz() {
+        //user confirms that they have finished the quiz
         this.setState({
             quizFinished: true
         });
     }
 
     quizTimeUp() {
+        //called when quiz countdown reaches 0
         this.setState({
             timeUp: true
         });
@@ -49,6 +52,7 @@ class Quiz extends Component {
 
     render() {
         var quizContent;
+        //displays quiz questions or results depending on time remaining
         if(this.state.timeUp){
             quizContent = <QuizResults unitCode={this.props.unitCode}
                                         lectureName={this.props.lectureName} 

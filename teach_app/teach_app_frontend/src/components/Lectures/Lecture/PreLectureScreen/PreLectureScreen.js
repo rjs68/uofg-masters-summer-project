@@ -13,6 +13,7 @@ class PreLectureScreen extends Component {
     }
 
     updateQuestion(oldQuestion, newQuestion, newAnswers){
+        //updates quiz data in the database
         axios.post('/update-quiz/', {
             unitCode: this.props.unitCode,
             lectureName: this.props.lecture,
@@ -21,6 +22,7 @@ class PreLectureScreen extends Component {
             newAnswers: newAnswers
         })
         .then((response) => {
+            //obtain updated data and render on screen
             this.props.updateQuizData();
             this.render();
         });
@@ -32,10 +34,12 @@ class PreLectureScreen extends Component {
         var timeDifference = (lectureTime - currentTime)/1000/60;
 
         var lectureMinutes = lectureTime.getMinutes();
+        //ensure display of minutes less than 10 retains 2 digits
         if(lectureMinutes<10){
             lectureMinutes = '0' + lectureMinutes;
         }
 
+        //logic to display how long is left until lecture starts
         var lectureTimeDisplay;
         if(timeDifference>=60*24){
             timeDifference=(timeDifference/60)/24;
@@ -50,6 +54,7 @@ class PreLectureScreen extends Component {
                                 +  " (" + Math.round(timeDifference) + " minutes to go)";
         }
 
+        //components allow teachers to update and add quiz questions
         var editQuizContent=[];
         if(this.props.userType==="teacher"){
             if(this.props.quizAvailable){

@@ -16,6 +16,7 @@ class NextLectureBox extends Component {
     }
 
     getNextLecture() {
+        //retrieve the next upcoming lecture
         axios.post('/next-lecture/', {
             email: this.props.email,
         })
@@ -38,6 +39,7 @@ class NextLectureBox extends Component {
         var pageContent = <h1>No Lectures Scheduled</h1>;
 
         if(this.state.nextLecture){
+            //logic to determine how long until next lecture starts
             const lectureDate = new Date(this.state.nextLecture['lecture_time']);
             const currentDate = new Date();
             var timeDifference = (lectureDate - currentDate)/1000/60;

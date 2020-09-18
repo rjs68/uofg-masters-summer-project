@@ -17,6 +17,7 @@ class QuizQuestion extends Component {
 
     selectAnswer(answerId){
         if(this.props.userType==="student"){
+            //set selected answer for styling in QuizAnswer
             this.setState({
                 selectedAnswer: answerId
             });
@@ -24,9 +25,11 @@ class QuizQuestion extends Component {
     }
 
     getNextQuestion(){
+        //allows student to move forward through the quiz
         if(this.props.userType==="student"){
             this.submitAnswer();
         }else{
+            //answers aren't submitted for teachers
             if(this.props.isLastQuestion){
                 this.props.finishQuiz();
             }else{
@@ -49,6 +52,7 @@ class QuizQuestion extends Component {
                     this.setState({
                         selectedAnswer: null
                     })
+                    //only moves to next question if previous answers is submitted successfully
                     if(this.props.isLastQuestion){
                         this.props.finishQuiz();
                     }else{
@@ -77,6 +81,7 @@ class QuizQuestion extends Component {
             quizAnswers.push(answerComponent);
         }
 
+        //button text changes for last question in the quiz
         var buttonText = "Next";
         if(this.props.isLastQuestion){
             buttonText = "Finish Quiz";

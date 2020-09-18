@@ -30,9 +30,11 @@ class QuizResults extends Component {
         const numberOfUsers = Object.keys(this.state.quizResults).length
         var cumulativeScore = 0;
         for(const result in this.state.quizResults){
+            //adds individual scores to cumulative scores
             const resultScore = this.state.quizResults[result];
             cumulativeScore += resultScore;
         }
+        //calculates average quiz score
         const averageScore = Math.round(cumulativeScore/numberOfUsers);
         this.setState({
             averageScore: averageScore
@@ -47,6 +49,7 @@ class QuizResults extends Component {
         var quizResults;
         if(this.state.quizResults){
             if(this.props.userType==="teacher"){
+                //displays all user results for teachers
                 const userScores = [];
                 for(const user in this.state.quizResults){
                     userScores.push(
@@ -58,6 +61,7 @@ class QuizResults extends Component {
                                     {userScores}
                             </div>
             }else{
+                //students are only shown the average and their own score
                 quizResults = <div>
                                     <h1>Average Score: {this.state.averageScore}</h1>
                                     <h1>Your Score: {this.state.quizResults[this.props.userEmail]}</h1>
