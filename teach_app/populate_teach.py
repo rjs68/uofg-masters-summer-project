@@ -2,12 +2,17 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teach_app.settings')
 import django
 from django.core.exceptions import ObjectDoesNotExist
-django.setup()
+#setup commented out as this clashes with deployed application
+# django.setup()
 from datetime import datetime
 from teach_app_backend.models import (University, TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
 from django.utils.timezone import make_aware
 
+
+'''
+Python script that prepopulates the database with data
+'''
 
 universities = [
     {'university_name': 'University of Glasgow', 'teacher_enrol_key': 'uog_teacher',
@@ -87,20 +92,6 @@ assignments = [
 ]
 
 submissions = []
-# submissions = [
-#     {'user': 'student1@email.com', 'unit': 1, 'assignment_name': 'Basic Programming',
-#         'submission_time': datetime(2020, 7, 3, 16, 32), 'grade': 20, 'feedback': 'Good'},
-#     {'user': 'student2@email.com', 'unit': 1, 'assignment_name': 'Assign2',
-#         'submission_time': datetime(2020, 8, 30, 11, 4), 'grade': 17, 'feedback': 'Good'},
-#     {'user': 'student3@email.com', 'unit': 2, 'assignment_name': 'Assign3',
-#         'submission_time': datetime(2020, 8, 17, 13, 30), 'grade': 14, 'feedback': 'Late'},
-#     {'user': 'student4@email.com', 'unit': 3, 'assignment_name': 'Assign5',
-#         'submission_time': datetime(2020, 10, 11, 16), 'grade': 21, 'feedback': 'Great'},
-#     {'user': 'student5@email.com', 'unit': 3, 'assignment_name': 'Assign5',
-#         'submission_time': datetime(2020, 10, 9, 16, 53), 'grade': 18, 'feedback': 'Good'},
-#     {'user': 'student1@email.com', 'unit': 2, 'assignment_name': 'Assign4',
-#         'submission_time': datetime(2020, 9, 20, 22, 10), 'grade': 22, 'feedback': 'Amazing'},
-# ]
 
 lectures = [
     {'unit': 1, 'event_name': 'Introduction to Programming', 'date_time': make_aware(datetime(2020, 10, 10, 10)), 
@@ -220,44 +211,17 @@ answers = [
 ]
 
 user_answers = []
-# user_answers = [
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question1', 'answer': 'Answer1',
-#         'user': 'student1@email.com'},
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question2', 'answer': 'Answer4',
-#         'user': 'student1@email.com'},
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question3', 'answer': 'Answer1',
-#         'user': 'student1@email.com'},
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question4', 'answer': 'Answer2',
-#         'user': 'student1@email.com'},
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question1', 'answer': 'Answer1',
-#         'user': 'student2@email.com'},
-#     {'unit': 1, 'event_name': 'Introduction to Programming', 'question': 'Question2', 'answer': 'Answer3',
-#         'user': 'student2@email.com'},
-#     {'unit': 1, 'event_name': 'Lecture1', 'question': 'Question3', 'answer': 'Answer2',
-#         'user': 'student2@email.com'},
-#     {'unit': 1, 'event_name': 'Lecture1', 'question': 'Question4', 'answer': 'Answer3',
-#         'user': 'student2@email.com'},
-#     {'unit': 2, 'event_name': 'Lecture1', 'question': 'Question1', 'answer': 'Answer2',
-#         'user': 'student3@email.com'},
-#     {'unit': 2, 'event_name': 'Lecture1', 'question': 'Question2', 'answer': 'Answer1',
-#      'user': 'student3@email.com'},
-#     {'unit': 2, 'event_name': 'Lecture1', 'question': 'Question3', 'answer': 'Answer1',
-#      'user': 'student3@email.com'},
-# ]
 
 user_quiz_performances = []
-# user_quiz_performances = [
-#     {'unit': 1, 'event_name': 'Lecture1', 'user': 'student1@email.com'},
-#     {'unit': 1, 'event_name': 'Lecture1', 'user': 'student2@email.com'},
-#     {'unit': 2, 'event_name': 'Lecture1', 'user': 'student3@email.com'},
-# ]
 
 
 def populate():
+    #iterate through all data dictionaries and add them to the database
     for university in universities:
         add_university(university['university_name'], university['teacher_enrol_key'],
                        university['student_enrol_key'])
     
+    #create an admin superuser
     university = University.objects.get(university_name="University of Glasgow")
     admin = TeachUser.objects.create_superuser(email="admin@email.com",
                                                 password="adminpassword",
@@ -306,6 +270,10 @@ def populate():
     for user in user_quiz_performances:
         add_user_quiz_performance(user['unit'], user['event_name'], user['user'])
 
+
+'''
+Methods to create new database objects
+'''
 
 def add_university(university_name, teacher_enrol_key, student_enrol_key): 
     university = University.objects.get_or_create(university_name=university_name,
@@ -421,11 +389,13 @@ def add_user_answer(unit_code, event_name, question, answer, user_email):
     user = TeachUser.objects.get(email=user_email)
 
     try:
+        #try to retrieve and update existing user answer
         user_answer = UserAnswer.objects.get(user=user,
                                             question=question)
         user_answer.answer = answer
         user_answer.save()
     except ObjectDoesNotExist:
+        #if there is no user answer create a new database object
         user_answer = UserAnswer.objects.create(user=user,
                                                 question=question,
                                                 answer=answer)
@@ -448,16 +418,19 @@ def add_user_quiz_performance(unit_code, event_name, user_email):
             quiz_answers.append(answer)
 
     user_quiz_grade = 0
+    #calculate user quiz grade
     for answer in quiz_answers:
         if UserAnswer.objects.filter(user=user, answer=answer).count() > 0 and answer.is_correct:
             user_quiz_grade += 1
 
     try:
+        #tries to retrieve and update an existing user quiz performance
         user_quiz_performance = UserQuizPerformance.objects.get(user=user,
                                                                 quiz=quiz)
         user_quiz_performance.grade = user_quiz_grade
         user_quiz_performance.save()
     except ObjectDoesNotExist:
+        #if there is no existing performance create a new database object
         user_quiz_performance = UserQuizPerformance.objects.create(user=user,
                                                                     quiz=quiz,
                                                                     grade=user_quiz_grade)
@@ -465,6 +438,7 @@ def add_user_quiz_performance(unit_code, event_name, user_email):
     return user_quiz_performance
 
 
+#defines method that is called when population script is run
 if __name__ == '__main__':
     print('Starting Teach population script...')
     populate()

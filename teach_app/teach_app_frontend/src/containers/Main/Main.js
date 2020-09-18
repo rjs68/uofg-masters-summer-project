@@ -38,7 +38,7 @@ class Main extends Component {
 
     navigationHandler(page) {
         //sets the new page as a cookie so users are guided back here on reload
-        this.props.cookies.set('page', page, { path: '/'});
+        this.props.cookies.set('page', page, { path: '/', maxAge: 3600 });
         this.setState({
             content: page
         });

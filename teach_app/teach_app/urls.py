@@ -5,8 +5,10 @@ from django.conf.urls.static import static
 from teach_app_backend import views
 from django.views.generic import RedirectView
 
+#registers url endpoints to be called by the frontend
+#including static endpoint to retrieve media files
+
 urlpatterns = [
-    path('', include('teach_app_backend.urls')),
     path('', include('teach_app_frontend.urls')),
     path('login/', views.user_login, name='login'),
     path('signup/', views.user_signup, name='signup'),
