@@ -5,6 +5,10 @@ from datetime import datetime
 from django.utils.timezone import make_aware
 import simplejson as json
 
+'''
+Unit tests for database models
+'''
+
 class UnitModelTests(TestCase):
     def test_ensure_unit_code_is_unique(self):
         university = University(university_name="University")
@@ -15,11 +19,13 @@ class UnitModelTests(TestCase):
                             university=university)
         teacher.save()
 
+        #attempts to create two units with the same unit_code
         unit1 = Unit(unit_code=1, unit_name="unit1", teacher=teacher, number_of_credits=10)
         unit1.save()
         unit2 = Unit(unit_code=1, unit_name="unit2", teacher=teacher, number_of_credits=10)
         unit2.save()
 
+        #ensures unit2 is given a unique unit_code
         self.assertNotEqual(unit1.unit_code, unit2.unit_code)
     
     def test_ensure_number_of_credits_is_positive(self):
@@ -31,9 +37,11 @@ class UnitModelTests(TestCase):
                             university=university)
         teacher.save()
 
+        #attempts to create a unit with a negative number of credits
         unit = Unit(unit_code=1, unit_name="unit", teacher=teacher, number_of_credits=-10)
         unit.save()
 
+        #ensures number of credits is positive
         self.assertEqual(unit.number_of_credits>0, True)
 
 
@@ -49,12 +57,14 @@ class AssignmentModelTest(TestCase):
         unit = Unit(unit_code=1, unit_name="unit", teacher=teacher, number_of_credits=10)
         unit.save()
 
+        #attempts to create an assignment with a negative weight
         assignment = Assignment(unit=unit, 
                                 event_name="Assignment", 
                                 date_time=make_aware(datetime.now()), 
                                 weight=-0.5)
         assignment.save()
 
+        #ensures weight is positive
         self.assertEqual(assignment.weight>0, True)
     
     def test_ensure_weight_not_greater_than_one(self):
@@ -68,12 +78,14 @@ class AssignmentModelTest(TestCase):
         unit = Unit(unit_code=1, unit_name="unit", teacher=teacher, number_of_credits=10)
         unit.save()
 
+        #attempts to create an assignment with weight greater than 1 (100%)
         assignment = Assignment(unit=unit, 
                                 event_name="Assignment", 
                                 date_time=make_aware(datetime.now()), 
                                 weight=1.5)
         assignment.save()
 
+        #ensures assignment weight is set as less than or equal to 1
         self.assertEqual(assignment.weight<=1, True)
 
 
@@ -99,9 +111,11 @@ class SubmissionModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to create a submission with a negative grade
         submission = Submission(user=student, assignment=assignment, grade=-10)
         submission.save()
 
+        #ensure grade is not negative
         self.assertEqual(submission.grade>=0, True)
     
     def test_grade_maximum_is_100(self):
@@ -125,9 +139,11 @@ class SubmissionModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to create a submission with a grade greater than 100
         submission = Submission(user=student, assignment=assignment, grade=110)
         submission.save()
 
+        #ensures grade is set as less than or equal to 100
         self.assertEqual(submission.grade<=100, True)
 
 
@@ -145,9 +161,11 @@ class QuizModelTest(TestCase):
         lecture = Lecture(unit=unit, event_name="Lecture", date_time=make_aware(datetime.now()))
         lecture.save()
 
+        #attempts to create a quiz with a negative total mark
         quiz = Quiz(lecture=lecture, total_mark=-5)
         quiz.save()
 
+        #ensures total mark is not negative
         self.assertEqual(quiz.total_mark>=0, True)
     
 
@@ -164,6 +182,7 @@ class QuizModelTest(TestCase):
         lecture = Lecture(unit=unit, event_name="Lecture", date_time=make_aware(datetime.now()))
         lecture.save()
 
+        #creates a quiz with 2 questions
         quiz = Quiz(lecture=lecture, total_mark=0)
         quiz.save()
         question1 = Question(quiz=quiz, question="Question1")
@@ -171,6 +190,7 @@ class QuizModelTest(TestCase):
         question2 = Question(quiz=quiz, question="Question2")
         question2.save()
 
+        #ensure the total mark is equal to the number of questions
         self.assertEqual(quiz.total_mark==2, True)
 
 
@@ -192,11 +212,13 @@ class AnswerModelTest(TestCase):
         question = Question(quiz=quiz, question="Question")
         question.save()
 
+        #attempts to set 2 correct answers for the same question
         answer1 = Answer(question=question, answer="Answer1", is_correct=True)
         answer1.save()
         answer2 = Answer(question=question, answer="Answer2", is_correct=True)
         answer2.save()
 
+        #ensures answer2 is not set as correct
         self.assertEqual(answer2.is_correct, False)
 
 
@@ -227,6 +249,7 @@ class UserAnswerModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to create 2 user answers for the same question
         user_answer1 = UserAnswer(user=student, question=question, answer=answer1)
         user_answer1.save()
         user_answer2 = UserAnswer(user=student, question=question, answer=answer2)
@@ -234,6 +257,7 @@ class UserAnswerModelTest(TestCase):
         
         user_answer = UserAnswer.objects.get(user=student, question=question)
 
+        #ensures that only the most recent user answer is saved
         self.assertEqual(user_answer.answer==answer2, True)
 
 
@@ -262,6 +286,7 @@ class UserQuizPerformanceModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to set 2 user performances for the same quiz
         user_quiz_performance1 = UserQuizPerformance(user=student, quiz=quiz, grade=1)
         user_quiz_performance1.save()
         user_quiz_performance2 = UserQuizPerformance(user=student, quiz=quiz, grade=2)
@@ -269,6 +294,7 @@ class UserQuizPerformanceModelTest(TestCase):
 
         user_quiz_performance = UserQuizPerformance.objects.get(user=student, quiz=quiz)
 
+        #ensures only the most recent performance is recorded
         self.assertEqual(user_quiz_performance.grade==2, True)
     
     def test_grade_not_greater_than_total_mark(self):
@@ -295,9 +321,11 @@ class UserQuizPerformanceModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to create a user performance with a grade greater than the total number of questions
         user_quiz_performance = UserQuizPerformance(user=student, quiz=quiz, grade=3)
         user_quiz_performance.save()
 
+        #ensure the grade is reduced to the total mark
         self.assertEqual(user_quiz_performance.grade==2, True)
     
     def test_grade_not_less_than_0(self):
@@ -324,14 +352,22 @@ class UserQuizPerformanceModelTest(TestCase):
                             university=university)
         student.save()
 
+        #attempts to assign a negative grade for a user performance
         user_quiz_performance = UserQuizPerformance(user=student, quiz=quiz, grade=-1)
         user_quiz_performance.save()
 
+        #ensures grade is increased to 0
         self.assertEqual(user_quiz_performance.grade==0, True)
 
 
+
+
+'''
+Unit tests for views
+'''
 class LoginSignupTest(TestCase):
     def test_ensure_post_request(self):
+        #ensures get requests return the correct error status
         client = Client()
 
         response = client.get('/login/')
@@ -356,6 +392,7 @@ class LoginSignupTest(TestCase):
         login_info["email"] = "teacher@email.com"
         login_info["password"] = "teacherpassword"
 
+        #ensures that a teacher can login with the correct credential
         response = client.post('/login/', content_type='application/json', data=login_info)
 
         self.assertEqual(response.status_code, 200)
@@ -363,6 +400,7 @@ class LoginSignupTest(TestCase):
 
         login_info["password"] = "studentpassword"
 
+        #ensures that correct error status is returned if credentials are incorrect
         response = client.post('/login/', content_type='application/json', data=login_info)
         self.assertEqual(response.status_code, 401)
     
@@ -383,6 +421,7 @@ class LoginSignupTest(TestCase):
             "password": "studentpassword"
         }
 
+        #ensures that a student can login with the correct credentials
         response = client.post('/login/', content_type='application/json', data=login_info)
 
         self.assertEqual(response.status_code, 200)
@@ -390,6 +429,7 @@ class LoginSignupTest(TestCase):
 
         login_info["password"] = "teacherpassword"
 
+        #ensures that correct error status is returned if credentials are incorrect
         response = client.post('/login/', content_type='application/json', data=login_info)
 
         self.assertEqual(response.status_code, 401)
@@ -407,6 +447,7 @@ class LoginSignupTest(TestCase):
             "lastName": "teacher"
         }
         
+        #ensures that a user can sign up with the correct enrolment key
         response = client.post('/signup/', content_type='application/json', data=signup_info)
 
         self.assertEqual(response.status_code, 200)
@@ -414,6 +455,7 @@ class LoginSignupTest(TestCase):
 
         signup_info["enrolmentKey"] = "studentenrol"
 
+        #ensure correct error status is set if enrolment key is incorrect
         response = client.post('/signup/', content_type='application/json', data=signup_info)
 
         self.assertEqual(response.status_code, 401)
@@ -431,6 +473,7 @@ class LoginSignupTest(TestCase):
             "lastName": "student"
         }
         
+        #ensures that a user can sign up with the correct enrolment key
         response = client.post('/signup/', content_type='application/json', data=signup_info)
 
         self.assertEqual(response.status_code, 200)
@@ -438,6 +481,7 @@ class LoginSignupTest(TestCase):
 
         signup_info["enrolmentKey"] = "teacherenrol"
 
+        #ensure correct error status is set if enrolment key is incorrect
         response = client.post('/signup/', content_type='application/json', data=signup_info)
 
         self.assertEqual(response.status_code, 401)
@@ -445,6 +489,7 @@ class LoginSignupTest(TestCase):
 
 class UnitFunctionalityTest(TestCase):
     def test_ensure_post_request(self):
+        #ensures attempted get requests return the correct error status
         client = Client()
 
         response = client.get('/units/')
@@ -481,6 +526,7 @@ class UnitFunctionalityTest(TestCase):
             "email": "student@email.com"
         }
 
+        #ensures that the correct unit data is returned for a user
         response = client.post('/units/', content_type='application/json', data=user_info)
 
         expected_response = [{
@@ -512,6 +558,7 @@ class UnitFunctionalityTest(TestCase):
             "numberOfCredits": 10
         }
 
+        #ensures that a unit can be created succesfully and response is correct
         response = client.post('/create-unit/', content_type='application/json', data=unit_info)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Unit Created Successfully")
@@ -541,12 +588,14 @@ class UnitFunctionalityTest(TestCase):
             "unitCode": 1
         }
 
+        #ensures that a user can enrol correctly and response is correct
         response = client.post('/unit-enrol/', content_type='application/json', data=enrollment_info)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "User Enrolled")
 
 class LectureFunctionalityTest(TestCase):
     def test_ensure_post_request(self):
+        #ensures attempted get requests return correct error status code
         client = Client()
 
         response = client.get('/lectures/')
@@ -583,6 +632,7 @@ class LectureFunctionalityTest(TestCase):
             "email": "student@email.com",
         }
 
+        #ensures that the correct lecture data is returned for a user
         response = client.post('/lectures/', content_type='application/json', data=user_info)
 
         expected_response = [{
@@ -613,6 +663,7 @@ class LectureFunctionalityTest(TestCase):
             "time": datetime.now().strftime("%Y-%m-%dT%H:%M")
         }
 
+        #ensures that a lecture can be created correctly and the correct response is returned
         response = client.post('/create-lecture/', content_type='application/json', data=lecture_info)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Lecture Created Successfully")
@@ -620,6 +671,7 @@ class LectureFunctionalityTest(TestCase):
 
 class AssignmentFunctionalityTest(TestCase):
     def test_ensure_post_request(self):
+        #ensures attempted get requests return the correct error status code
         client = Client()
 
         response = client.get('/assignments/')
@@ -668,6 +720,7 @@ class AssignmentFunctionalityTest(TestCase):
             "email": "student@email.com",
         }
 
+        #ensure the correct assignment data is returned for a user
         response = client.post('/assignments/', content_type='application/json', data=user_info)
 
         expected_response = [{
@@ -700,6 +753,7 @@ class AssignmentFunctionalityTest(TestCase):
             "weight": 0.5
         }
 
+        #ensures that an assignment can be created correctly and the correct response is returned
         response = client.post('/create-assignment/', content_type='application/json', data=assignment_info)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Assignment Created Successfully")
@@ -707,6 +761,7 @@ class AssignmentFunctionalityTest(TestCase):
 
 class SubmissionFunctionalityTest(TestCase):
     def test_ensure_post_request(self):
+        #ensure attempted get requests return the correct error status code
         client = Client()
 
         response = client.get('/submission/')
@@ -764,6 +819,7 @@ class SubmissionFunctionalityTest(TestCase):
             "assignmentName": "assignment"
         }
 
+        #ensures that correct student submission data is retrieved
         response = client.post('/student-submissions/', content_type='application/json', data=submission_info)
 
         expected_response = [{
@@ -815,6 +871,7 @@ class SubmissionFunctionalityTest(TestCase):
             "grade": 80
         }
 
+        #ensures that student grade is edited correctly and correct response is sent
         response = client.post('/student-grade/', content_type='application/json', data=submission_info)
 
         self.assertEqual(response.status_code, 200)
@@ -862,6 +919,7 @@ class SubmissionFunctionalityTest(TestCase):
             "feedback": "amazing"
         }
 
+        #ensures that feedback is updated correctly and correct response is returned
         response = client.post('/student-feedback/', content_type='application/json', data=submission_info)
 
         self.assertEqual(response.status_code, 200)
@@ -873,6 +931,7 @@ class SubmissionFunctionalityTest(TestCase):
 
 class QuizFunctionalityTest(TestCase):
     def test_ensure_post_request(self):
+        #ensures attempted get requests return the correct error status code
         client = Client()
 
         response = client.get('/quiz/')
@@ -914,6 +973,7 @@ class QuizFunctionalityTest(TestCase):
             "lectureName": "lecture"
         }
 
+        #ensures that the correct quiz data is returned for a lecture
         response = client.post('/quiz/', content_type='application/json', data=quiz_info)
 
         expected_response = {
@@ -958,6 +1018,7 @@ class QuizFunctionalityTest(TestCase):
             "userEmail": "student@email.com"
         }
 
+        #ensures that a user answer is submitted correctly
         response = client.post('/submit-answer/', content_type='application/json', data=answer_info)
 
         self.assertEqual(response.status_code, 200)
@@ -1000,6 +1061,7 @@ class QuizFunctionalityTest(TestCase):
             "lectureName": "lecture"
         }
 
+        #ensures that the correct quiz result data is returned
         response = client.post('/quiz-results/', content_type='application/json', data=quiz_info)
 
         expected_response = {
@@ -1038,6 +1100,7 @@ class QuizFunctionalityTest(TestCase):
             "newAnswers": {"newAnswers": True},
         }
 
+        #ensures that the quiz is updated correctly
         response = client.post('/update-quiz/', content_type='application/json', data=quiz_info)
 
         self.assertEqual(response.status_code, 200)

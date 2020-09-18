@@ -1,11 +1,8 @@
-import json
-
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 
+#index view returns application entrypoint, ensures csrf cookie is set for security
 @ensure_csrf_cookie
 def index(request):
     return render(request, 'frontend/index.html')

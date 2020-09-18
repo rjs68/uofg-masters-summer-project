@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 from teach_app_backend.managers import TeachUserManager
@@ -16,26 +15,32 @@ class University(models.Model):
 
 
 class TeachUser(AbstractBaseUser):
+    #custom user model overwritting template provided by Django
     email = models.EmailField(primary_key=True, unique=True)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures')
 
+    #sets default admin privileges
     is_teacher = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+    #methods to determine user permissions
     def has_perm(self, perm, obj=None):
         return self.is_superuser
 
     def has_module_perms(self, app_label):
         return self.is_superuser
 
+    #set username field as email
     USERNAME_FIELD = 'email'
 
+    #sets required fields, password included in base model
     REQUIRED_FIELDS = ['first_name', 'last_name', 'university']
 
+    #points to manager which determines how users should be created
     objects = TeachUserManager()
 
     def __str__(self):
@@ -50,6 +55,8 @@ class Unit(models.Model):
     number_of_credits = models.IntegerField()
 
     def save(self, *args, **kwargs):
+        #overwritten save method to ensure unit_code is unique and 
+        #number_of_credits is at least 1
         unit_code_unique = False
         while not unit_code_unique:
             try:
@@ -64,6 +71,7 @@ class Unit(models.Model):
         super(Unit, self).save(*args, **kwargs)
 
     class Meta:
+        #ensure teacher cannot teach 2 units with the same name
         unique_together = ('unit_name', 'teacher')
 
     def __str__(self):
@@ -75,6 +83,7 @@ class UserEnrolledUnit(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
 
     class Meta:
+        #sets primary key as combination of user and unit
         unique_together = ('user', 'unit')
 
     def __str__(self):
@@ -87,6 +96,7 @@ class Event(models.Model):
     date_time = models.DateTimeField()
 
     class Meta:
+        #sets primary key as combination of unit and event_name
         unique_together = ('unit', 'event_name')
 
     def __str__(self):
@@ -98,6 +108,7 @@ class Assignment(Event):
     weight = models.DecimalField(max_digits=3, decimal_places=2)
 
     def save(self, *args, **kwargs):
+        #overwritten save method ensuring assignment weight is between 0 and 1
         if self.weight<=0:
             self.weight=0.01
         elif self.weight>1:
@@ -112,12 +123,14 @@ class Assignment(Event):
 class Submission(models.Model):
     user = models.ForeignKey(TeachUser, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    #files upload to submissions folder in media
     submission = models.FileField(upload_to='submissions')
     submission_time = models.DateTimeField(blank=True, null=True)
     grade = models.DecimalField(blank=True, null=True, default=None, max_digits=5, decimal_places=2)
     feedback = models.TextField(blank=True, null=True, default=None)
 
     def save(self, *args, **kwargs):
+        #overwritten save method to ensure grade is between 0 and 100
         if self.grade:
             if isinstance(self.grade, str):
                 self.grade = float(self.grade) 
@@ -129,6 +142,7 @@ class Submission(models.Model):
         super(Submission, self).save(*args, **kwargs)
 
     class Meta:
+        #sets primary key as a combination of user and assignment
         unique_together = ('user', 'assignment')
 
     def __str__(self):
@@ -147,6 +161,7 @@ class Quiz(models.Model):
     total_mark = models.IntegerField()
 
     def save(self, *args, **kwargs):
+        #overwritten save method to ensure total_mark is not negative
         if self.total_mark:
             if self.total_mark<0:
                 self.total_mark=0
@@ -164,6 +179,7 @@ class Question(models.Model):
     question = models.TextField()
 
     def save(self, *args, **kwargs):
+        #overwritten save method updates the total_mark of the quiz
         previous_number_of_questions = Question.objects.filter(quiz=self.quiz).count()
         new_quiz_mark = previous_number_of_questions + 1
         self.quiz.total_mark = new_quiz_mark
@@ -182,6 +198,7 @@ class Answer(models.Model):
     is_correct = models.BooleanField()
 
     def save(self, *args, **kwargs):
+        #overwritten save method ensures only one answer is correct
         if(self.is_correct==True):
             answers = Answer.objects.filter(question=self.question)
             for answer in answers:
@@ -200,6 +217,7 @@ class UserAnswer(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
+        #overwritten save method ensures user only has one answer for a question
         try:
             user_answer = UserAnswer.objects.get(user=self.user, question=self.question).delete()
         except ObjectDoesNotExist:
@@ -208,6 +226,7 @@ class UserAnswer(models.Model):
             super(UserAnswer, self).save(*args, **kwargs)
 
     class Meta:
+        #sets primary key as combination between user and question
         unique_together = ('user', 'question')
 
     def __str__(self):
@@ -220,6 +239,8 @@ class UserQuizPerformance(models.Model):
     grade = models.IntegerField()
 
     def save(self, *args, **kwargs):
+        #overwritten save method ensures grade is between 0 and the total quiz mark
+        #and user only has one performance for a quiz
         if(self.grade>self.quiz.total_mark):
             self.grade=self.quiz.total_mark
         elif(self.grade<0):
@@ -232,6 +253,7 @@ class UserQuizPerformance(models.Model):
             super(UserQuizPerformance, self).save(*args, **kwargs)
 
     class Meta:
+        #sets primary key as a combination of user and quiz
         unique_together = ('user', 'quiz')
 
     def __str__(self):

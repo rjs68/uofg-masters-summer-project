@@ -4,6 +4,7 @@ import classes from './Modal.module.css';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
 
 class Modal extends Component {
+    //creates a modal that appears over the main screen content
     render() {
         return (
             <Aux>

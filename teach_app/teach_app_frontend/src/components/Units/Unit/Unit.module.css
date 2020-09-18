@@ -1,0 +1,34 @@
+.Unit {
+    font-family: sans-serif;
+    font-size: 16px;
+    width: 90%;
+    height: 100px;
+    border-style: outset;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.Unit h1 {
+    margin-left: 40px;
+    font-size: 20px;
+}
+
+.Unit div {
+    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.Unit h2{
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.Unit a {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: normal;
+}
