@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import LectureBox from './LectureBox/LectureBox';
-import Lecture from './Lecture/Lecture';
-import CreateLectureForm from '../../../components/CreateLectureForm/CreateLectureForm';
+import LectureBox from '../../../components/Lectures/LectureBox/LectureBox';
+import Lecture from '../../../components/Lectures/Lecture/Lecture';
+import CreateLectureForm from '../../../components/Lectures/CreateLectureForm/CreateLectureForm';
 import classes from '../PageContent.module.css';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
 import Modal from '../../../components/UI/Modal/Modal';
 import Button from '../../../components/UI/Button/Button';
+import Backdrop from '../../../components/UI/Backdrop/Backdrop';
 
 class Lectures extends Component {
     constructor(props) {
@@ -93,8 +94,16 @@ class Lectures extends Component {
             }
         }
 
+        var showBackdrop = false;
+        var backdropClicked;
+        if(this.state.createLectureHandling){
+            showBackdrop = true;
+            backdropClicked = this.handleChangeStatus;
+        };
+
         return (
             <div className={classes.PageContent}>
+                <Backdrop show={showBackdrop} clicked={backdropClicked}/>
                 {form}
                 {pageContent}
             </div>

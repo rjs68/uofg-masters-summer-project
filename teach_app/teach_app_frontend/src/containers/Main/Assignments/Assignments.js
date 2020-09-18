@@ -3,12 +3,12 @@ import axios from 'axios';
 
 import classes from '../PageContent.module.css';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
-import AssignmentBox from './AssignmentBox/AssignmentBox';
-import Assignment from '../../../components/Assignment/Assignment';
+import AssignmentBox from '../../../components/Assignments/AssignmentBox/AssignmentBox';
+import Assignment from '../../../components/Assignments/Assignment/Assignment';
 import Button from '../../../components/UI/Button/Button';
 import Modal from '../../../components/UI/Modal/Modal';
 import Backdrop from '../../../components/UI/Backdrop/Backdrop';
-import CreateAssignmentForm from '../../../components/CreateAssignmentForm/CreateAssignmentForm';
+import CreateAssignmentForm from '../../../components/Assignments/CreateAssignmentForm/CreateAssignmentForm';
 
 class Assignments extends Component {
     constructor(props) {

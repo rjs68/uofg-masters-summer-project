@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
-import LeftHalf from '../LoginScreen/LeftHalf/LeftHalf';
-import RightHalf from '../LoginScreen/RightHalf/RightHalf';
+import LeftHalf from '../../components/LoginScreen/LeftHalf/LeftHalf';
+import RightHalf from '../../components/LoginScreen/RightHalf/RightHalf';
 
 class LoginScreen extends Component {
     render() {

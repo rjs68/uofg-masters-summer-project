@@ -1,7 +1,7 @@
 import React from 'react';
 
-import NextLectureBox from './NextLectureBox/NextLectureBox';
-import NextAssignmentBox from './NextAssignmentBox/NextAssignmentBox';
+import NextLectureBox from '../../../components/Home/NextLectureBox/NextLectureBox';
+import NextAssignmentBox from '../../../components/Home/NextAssignmentBox/NextAssignmentBox';
 import classes from '../PageContent.module.css';
 
 const home = props => (
