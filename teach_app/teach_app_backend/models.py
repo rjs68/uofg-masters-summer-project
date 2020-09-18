@@ -109,6 +109,8 @@ class Assignment(Event):
 
     def save(self, *args, **kwargs):
         #overwritten save method ensuring assignment weight is between 0 and 1
+        if isinstance(self.weight, str):
+                self.weight = float(self.weight) 
         if self.weight<=0:
             self.weight=0.01
         elif self.weight>1:
