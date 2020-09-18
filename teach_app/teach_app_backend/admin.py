@@ -2,6 +2,9 @@ from django.contrib import admin
 from teach_app_backend.models import (TeachUser, Unit, UserEnrolledUnit, Assignment, Submission,
                                       Lecture, Quiz, Question, Answer, UserAnswer, UserQuizPerformance)
 
+'''
+    Registers database models for admin site with custom columns
+'''
 
 @admin.register(TeachUser)
 class TeachUserAdmin(admin.ModelAdmin):

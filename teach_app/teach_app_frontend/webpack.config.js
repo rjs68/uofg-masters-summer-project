@@ -1,3 +1,5 @@
+//configuration to ensure webpack can build files correctly
+
 module.exports = {
   module: {
     rules: [

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 import Aux from '../hoc/Auxiliary/Auxiliary';
 import LoginScreen from "../containers/LoginScreen/LoginScreen";
 import Main from "../containers/Main/Main";
+
+//Entrypoint container for application
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends Component {
 
     this.state = {
       cookies: cookies,
+      //attempt to retrieve previously logged in user from cookies
       email: cookies.get('userEmail'),
       userType: cookies.get('userType'),
       authenticated: cookies.get('authenticated') || false
@@ -31,6 +33,7 @@ class App extends Component {
   }
 
   handleUserAuthenticated(userType){
+    //set cookies to keep user logged in
     this.state.cookies.set('userEmail', this.state.email, { path: '/'});
     this.state.cookies.set('userType', userType, { path: '/' });
     this.state.cookies.set('authenticated', true, { path: '/', maxAge: 3600 });
@@ -66,5 +69,6 @@ class App extends Component {
 
 export default App;
 
+//select element in index.html to contain the application
 const container = document.getElementById("app");
 render(<App />, container);
